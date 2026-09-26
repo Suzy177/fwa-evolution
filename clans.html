@@ -121,18 +121,6 @@
       border-radius: 14px;
       overflow: hidden;
       margin-bottom: 16px;
-      background: var(--surface-2);
-    }
-
-    .clan-art img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    /* framed variant: no custom artwork yet, so we build a graphic frame in CSS */
-    .clan-art.framed {
       background:
         radial-gradient(circle at 50% 32%, rgba(255,156,42,.22), transparent 62%),
         linear-gradient(160deg, var(--surface-2), var(--bg));
@@ -142,10 +130,11 @@
       justify-content: center;
     }
 
-    .clan-art.framed img {
+    .clan-art img {
       width: 62%;
       height: 62%;
       object-fit: contain;
+      display: block;
       filter: drop-shadow(0 10px 18px rgba(0,0,0,.5));
     }
 
@@ -154,10 +143,7 @@
       width: 20px;
       height: 20px;
       border: 3px solid var(--accent-fwa);
-      display: none;
     }
-
-    .clan-art.framed .corner { display: block; }
 
     .clan-art .corner.tl { top: 6px; left: 6px; border-right: none; border-bottom: none; border-radius: 6px 0 0 0; }
     .clan-art .corner.tr { top: 6px; right: 6px; border-left: none; border-bottom: none; border-radius: 0 6px 0 0; }
@@ -326,21 +312,18 @@
           name: "The Shield",
           href: "/clans/the-shield.html",
           img: "/assets/badges/shield-card.png",
-          framed: false,
           min: 13, max: 18
         },
         {
           name: "InvidiaBandit",
           href: "/clans/invidia-bandit.html",
           img: "/assets/badges/nvidiabandit.png.png",
-          framed: true,
           min: 13, max: 18
         },
         {
           name: "Vi11ageWarriors",
           href: "/clans/village-warriors.html",
           img: "/assets/badges/villagewarriors.png.png",
-          framed: true,
           min: 13, max: 18
         }
       ];
@@ -407,7 +390,6 @@
         clanImg.alt = clan.name;
         clanName.textContent = clan.name;
         clanRange.textContent = "TH" + clan.min + "–TH" + clan.max;
-        clanArt.classList.toggle("framed", clan.framed);
 
         const posInFiltered = filtered.indexOf(currentIndex);
         prevBtn.disabled = filtered.length <= 1;
