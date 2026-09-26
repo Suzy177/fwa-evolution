@@ -23,7 +23,7 @@
       justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 30px;
+      margin-bottom: 34px;
     }
 
     .th-btn {
@@ -51,35 +51,68 @@
       border-color: transparent;
     }
 
+    /* ---------- carousel ---------- */
+    .carousel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    .carousel-arrow {
+      flex-shrink: 0;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 18px;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color .18s ease, color .18s ease, transform .15s ease;
+    }
+
+    .carousel-arrow:hover {
+      border-color: var(--accent-fwa);
+      color: var(--accent-fwa);
+      transform: translateY(-2px);
+    }
+
+    .carousel-arrow:disabled {
+      opacity: .3;
+      cursor: default;
+      transform: none;
+    }
+
+    .carousel-stage {
+      flex: 1;
+      min-width: 0;
+    }
+
     .clan-link {
       text-decoration: none;
       color: inherit;
       display: block;
     }
 
-    .clans-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-    }
-
     .clan-card {
-      height: 100%;
       background: var(--surface);
       border: 1px solid var(--border);
       border-top: 3px solid var(--accent-fwa);
       border-radius: var(--radius);
-      padding: 22px;
+      padding: 16px;
       transition: transform .22s ease, box-shadow .22s ease;
     }
 
     .clan-card:hover {
       transform: translateY(-6px);
       box-shadow: var(--shadow);
-    }
-
-    .clan-card {
-      padding: 16px;
     }
 
     .clan-art {
@@ -116,25 +149,29 @@
       filter: drop-shadow(0 10px 18px rgba(0,0,0,.5));
     }
 
-    .clan-art.framed .corner {
+    .clan-art .corner {
       position: absolute;
       width: 20px;
       height: 20px;
       border: 3px solid var(--accent-fwa);
+      display: none;
     }
 
-    .clan-art.framed .corner.tl { top: 6px; left: 6px; border-right: none; border-bottom: none; border-radius: 6px 0 0 0; }
-    .clan-art.framed .corner.tr { top: 6px; right: 6px; border-left: none; border-bottom: none; border-radius: 0 6px 0 0; }
-    .clan-art.framed .corner.bl { bottom: 6px; left: 6px; border-right: none; border-top: none; border-radius: 0 0 0 6px; }
-    .clan-art.framed .corner.br { bottom: 6px; right: 6px; border-left: none; border-top: none; border-radius: 0 0 6px 0; }
+    .clan-art.framed .corner { display: block; }
+
+    .clan-art .corner.tl { top: 6px; left: 6px; border-right: none; border-bottom: none; border-radius: 6px 0 0 0; }
+    .clan-art .corner.tr { top: 6px; right: 6px; border-left: none; border-bottom: none; border-radius: 0 6px 0 0; }
+    .clan-art .corner.bl { bottom: 6px; left: 6px; border-right: none; border-top: none; border-radius: 0 0 0 6px; }
+    .clan-art .corner.br { bottom: 6px; right: 6px; border-left: none; border-top: none; border-radius: 0 0 6px 0; }
 
     .clan-info {
       padding: 2px 4px 0;
+      text-align: center;
     }
 
     .clan-info h3 {
       margin: 0 0 4px;
-      font-size: 17px;
+      font-size: 18px;
       color: var(--text);
     }
 
@@ -144,12 +181,31 @@
       color: var(--text-dim);
     }
 
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 18px 0 6px;
+    }
+
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--border);
+      transition: background .18s ease, transform .18s ease;
+    }
+
+    .carousel-dot.active {
+      background: var(--accent-fwa);
+      transform: scale(1.3);
+    }
+
     #noClansMessage {
       display: none;
       text-align: center;
       color: var(--text-dim);
-      margin-top: -6px;
-      margin-bottom: 20px;
+      margin-top: 10px;
     }
 
     .discord-cta {
@@ -209,7 +265,7 @@
   <section class="sh2-hero">
     <span class="sh2-eyebrow">Clan Family</span>
     <h1>Our Clans</h1>
-    <p>Three active FWA Evolution clans across TH13–TH18. Filter by Town Hall to find where you fit.</p>
+    <p>Three active FWA Evolution clans across TH13–TH18. Use the arrows to browse, or filter by Town Hall to find where you fit.</p>
   </section>
 
   <section class="sh2-section">
@@ -224,50 +280,29 @@
       <button class="th-btn" data-th="18">TH18</button>
     </div>
 
-    <div class="clans-grid" id="clansGrid">
+    <div class="carousel">
+      <button class="carousel-arrow" id="prevBtn" aria-label="Previous clan">‹</button>
 
-      <a href="/clans/the-shield.html" class="clan-link">
-        <div class="clan-card" data-min-th="13" data-max-th="18">
-          <div class="clan-art">
-            <img src="/assets/badges/shield-card.png" alt="The Shield">
+      <div class="carousel-stage">
+        <a href="#" class="clan-link" id="clanLink">
+          <div class="clan-card">
+            <div class="clan-art" id="clanArt">
+              <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+              <img id="clanImg" src="" alt="">
+            </div>
+            <div class="clan-info">
+              <h3 id="clanName"></h3>
+              <p id="clanRange"></p>
+              <span class="sh2-tag maint" id="clanStatus">Active · Recruiting</span>
+            </div>
           </div>
-          <div class="clan-info">
-            <h3>The Shield</h3>
-            <p>TH13–TH18</p>
-            <span class="sh2-tag maint">Active · Recruiting</span>
-          </div>
-        </div>
-      </a>
+        </a>
+      </div>
 
-      <a href="/clans/invidia-bandit.html" class="clan-link">
-        <div class="clan-card" data-min-th="13" data-max-th="18">
-          <div class="clan-art framed">
-            <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
-            <img src="/assets/badges/nvidiabandit.png.png" alt="InvidiaBandit">
-          </div>
-          <div class="clan-info">
-            <h3>InvidiaBandit</h3>
-            <p>TH13–TH18</p>
-            <span class="sh2-tag maint">Active · Recruiting</span>
-          </div>
-        </div>
-      </a>
-
-      <a href="/clans/village-warriors.html" class="clan-link">
-        <div class="clan-card" data-min-th="13" data-max-th="18">
-          <div class="clan-art framed">
-            <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
-            <img src="/assets/badges/villagewarriors.png.png" alt="Vi11ageWarriors">
-          </div>
-          <div class="clan-info">
-            <h3>Vi11ageWarriors</h3>
-            <p>TH13–TH18</p>
-            <span class="sh2-tag maint">Active · Recruiting</span>
-          </div>
-        </div>
-      </a>
-
+      <button class="carousel-arrow" id="nextBtn" aria-label="Next clan">›</button>
     </div>
+
+    <div class="carousel-dots" id="carouselDots"></div>
 
     <p id="noClansMessage">No FWA clans currently recruit that Town Hall level — try "All" or check back later.</p>
 
@@ -286,36 +321,125 @@
 
   <script>
     (function () {
+      const CLANS = [
+        {
+          name: "The Shield",
+          href: "/clans/the-shield.html",
+          img: "/assets/badges/shield-card.png",
+          framed: false,
+          min: 13, max: 18
+        },
+        {
+          name: "InvidiaBandit",
+          href: "/clans/invidia-bandit.html",
+          img: "/assets/badges/nvidiabandit.png.png",
+          framed: true,
+          min: 13, max: 18
+        },
+        {
+          name: "Vi11ageWarriors",
+          href: "/clans/village-warriors.html",
+          img: "/assets/badges/villagewarriors.png.png",
+          framed: true,
+          min: 13, max: 18
+        }
+      ];
+
       const buttons = document.querySelectorAll("#thFilterGroup .th-btn");
-      const cards = document.querySelectorAll("#clansGrid .clan-link");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const dotsWrap = document.getElementById("carouselDots");
       const noClansMessage = document.getElementById("noClansMessage");
+      const carousel = document.querySelector(".carousel");
 
-      function applyFilter(thValue) {
-        let visibleCount = 0;
+      const clanLink = document.getElementById("clanLink");
+      const clanArt = document.getElementById("clanArt");
+      const clanImg = document.getElementById("clanImg");
+      const clanName = document.getElementById("clanName");
+      const clanRange = document.getElementById("clanRange");
 
-        cards.forEach(link => {
-          const card = link.querySelector(".clan-card");
-          const min = parseInt(card.dataset.minTh, 10);
-          const max = parseInt(card.dataset.maxTh, 10);
+      let thFilter = "all";
+      let currentIndex = 0;
 
-          const matches =
-            thValue === "all" ||
-            (parseInt(thValue, 10) >= min && parseInt(thValue, 10) <= max);
+      function getFiltered() {
+        if (thFilter === "all") return CLANS.map((c, i) => i);
+        const th = parseInt(thFilter, 10);
+        return CLANS.reduce((acc, c, i) => {
+          if (th >= c.min && th <= c.max) acc.push(i);
+          return acc;
+        }, []);
+      }
 
-          link.style.display = matches ? "" : "none";
-          if (matches) visibleCount++;
+      function renderDots(filtered) {
+        dotsWrap.innerHTML = "";
+        filtered.forEach(i => {
+          const dot = document.createElement("span");
+          dot.className = "carousel-dot" + (i === currentIndex ? " active" : "");
+          dot.addEventListener("click", () => {
+            currentIndex = i;
+            render();
+          });
+          dotsWrap.appendChild(dot);
         });
+      }
 
-        noClansMessage.style.display = visibleCount === 0 ? "block" : "none";
+      function render() {
+        const filtered = getFiltered();
+
+        if (filtered.length === 0) {
+          carousel.style.display = "none";
+          dotsWrap.style.display = "none";
+          noClansMessage.style.display = "block";
+          return;
+        }
+
+        if (!filtered.includes(currentIndex)) {
+          currentIndex = filtered[0];
+        }
+
+        carousel.style.display = "flex";
+        dotsWrap.style.display = "flex";
+        noClansMessage.style.display = "none";
+
+        const clan = CLANS[currentIndex];
+        clanLink.href = clan.href;
+        clanImg.src = clan.img;
+        clanImg.alt = clan.name;
+        clanName.textContent = clan.name;
+        clanRange.textContent = "TH" + clan.min + "–TH" + clan.max;
+        clanArt.classList.toggle("framed", clan.framed);
+
+        const posInFiltered = filtered.indexOf(currentIndex);
+        prevBtn.disabled = filtered.length <= 1;
+        nextBtn.disabled = filtered.length <= 1;
+
+        renderDots(filtered);
+
+        prevBtn.onclick = () => {
+          const idx = filtered.indexOf(currentIndex);
+          const prevIdx = (idx - 1 + filtered.length) % filtered.length;
+          currentIndex = filtered[prevIdx];
+          render();
+        };
+
+        nextBtn.onclick = () => {
+          const idx = filtered.indexOf(currentIndex);
+          const nextIdx = (idx + 1) % filtered.length;
+          currentIndex = filtered[nextIdx];
+          render();
+        };
       }
 
       buttons.forEach(btn => {
         btn.addEventListener("click", () => {
           buttons.forEach(b => b.classList.remove("active"));
           btn.classList.add("active");
-          applyFilter(btn.dataset.th);
+          thFilter = btn.dataset.th;
+          render();
         });
       });
+
+      render();
     })();
   </script>
 
