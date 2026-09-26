@@ -22,12 +22,52 @@
       max-width: 860px;
     }
 
+    .guide-toc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+
+    .guide-toc h2 {
+      font-family: "Orbitron", sans-serif;
+      font-size: 15px;
+      margin: 0 0 12px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    .guide-toc ol {
+      margin: 0;
+      padding-left: 20px;
+      columns: 2;
+      column-gap: 24px;
+    }
+
+    .guide-toc li {
+      margin-bottom: 8px;
+      font-size: 14px;
+      break-inside: avoid;
+    }
+
+    .guide-toc a {
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .guide-toc a:hover {
+      color: var(--accent-fwa);
+    }
+
     .guide-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 26px 28px;
       margin-bottom: 20px;
+      scroll-margin-top: 90px;
     }
 
     .guide-card h2 {
@@ -35,6 +75,17 @@
       font-size: 20px;
       margin: 0 0 12px;
       color: var(--text);
+    }
+
+    .guide-card h3 {
+      font-family: "Orbitron", sans-serif;
+      font-size: 14.5px;
+      margin: 18px 0 8px;
+      color: var(--accent-fwa);
+    }
+
+    .guide-card h3:first-of-type {
+      margin-top: 4px;
     }
 
     .guide-card p {
@@ -86,6 +137,48 @@
       font-size: 14px;
     }
 
+    .guide-warn {
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-left: 3px solid #fbbf24;
+      background: rgba(251, 191, 36, .08);
+      border-radius: 0 10px 10px 0;
+      color: var(--text-dim);
+      font-size: 14px;
+    }
+
+    .guide-subgrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-top: 6px;
+    }
+
+    .guide-subcard {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+    }
+
+    .guide-subcard h4 {
+      font-size: 13.5px;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      color: var(--accent-fwa);
+      margin: 0 0 8px;
+    }
+
+    .guide-subcard ul {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 13.5px;
+    }
+
+    .guide-subcard li {
+      margin-bottom: 6px;
+    }
+
     .guide-cta {
       text-align: center;
     }
@@ -134,65 +227,174 @@
   <section class="sh2-hero">
     <span class="sh2-eyebrow">Learn FWA</span>
     <h1>How FWA Works</h1>
-    <p>What Farm War Alliance is, how FWA wars work, and how FWA Evolution helps players farm efficiently without pressure.</p>
+    <p>Farm War Alliance (FWA) is a network of 600+ clans that arrange wars against each other to farm loot and stars instead of fighting for competitive results. This guide covers how the wider FWA system actually runs — bases, sync, weight, and the rules that keep it fair.</p>
   </section>
 
   <section class="sh2-section guide-section">
 
-    <div class="guide-card">
-      <h2>What is Farm War Alliance (FWA)?</h2>
-      <p>Farm War Alliance (FWA) is a war system where clans coordinate wars to maximize loot and upgrades instead of competitive results. Wars are planned, attacks are controlled, and both clans benefit from predictable outcomes.</p>
-      <p>Unlike normal wars, FWA focuses on resource farming, hero upgrades, and stress-free progression.</p>
+    <div class="guide-toc">
+      <h2>On This Page</h2>
+      <ol>
+        <li><a href="#identification">Identification &amp; Recognition</a></li>
+        <li><a href="#roles">Member Responsibilities</a></li>
+        <li><a href="#sync">Band App &amp; Sync Process</a></li>
+        <li><a href="#outcomes">Match Outcomes</a></li>
+        <li><a href="#points">Win Determination</a></li>
+        <li><a href="#bases">Base Design Requirements</a></li>
+        <li><a href="#weight">War Weight</a></li>
+        <li><a href="#flagged">Flagged &amp; Banned Players</a></li>
+        <li><a href="#sanctions">Sanctions &amp; Violations</a></li>
+        <li><a href="#cwl">CWL Participation</a></li>
+        <li><a href="#staff">Staff &amp; Administration</a></li>
+      </ol>
     </div>
 
-    <div class="guide-card">
-      <h2>How Do FWA Wars Work?</h2>
+    <div class="guide-card" id="identification">
+      <h2>Identification &amp; Recognition</h2>
+      <p>FWA clans are recognizable by a shared set of markers so members and opponents can verify a clan is legitimately part of the system:</p>
       <ul>
-        <li>FWA clans are matched against other FWA clans</li>
-        <li>Both sides agree on base layouts and attack rules</li>
-        <li>One clan wins, the other loses</li>
-        <li>Results rotate in future wars to keep things fair</li>
+        <li>Clan location is set to <strong>Lesotho</strong></li>
+        <li>Clan description includes the 💎 emoji</li>
+        <li>War logs are kept public</li>
       </ul>
-      <div class="guide-note">Every player is expected to complete their attacks and follow instructions to keep the system working smoothly.</div>
+      <p>A clan's status can be double-checked against the Proud Clans list, the Chocolate Clash database, or the FWA Leaders Band membership list.</p>
     </div>
 
-    <div class="guide-card">
-      <h2>Why Do FWA Bases Look Strange?</h2>
-      <p>FWA bases are intentionally designed to allow easy attacks. This ensures:</p>
+    <div class="guide-card" id="roles">
+      <h2>Member Responsibilities</h2>
+      <p>FWA runs on everyone doing their part — individual members, leadership, and appointed representatives each have a role:</p>
+      <div class="guide-subgrid">
+        <div class="guide-subcard">
+          <h4>Members</h4>
+          <ul>
+            <li>Keep an FWA-approved war base up</li>
+            <li>Attack properly during wars</li>
+            <li>Never donate to the war clan castle</li>
+            <li>Clear random CC troops before Battle Day</li>
+          </ul>
+        </div>
+        <div class="guide-subcard">
+          <h4>Leaders</h4>
+          <ul>
+            <li>Appoint 3–4 clan representatives</li>
+            <li>Verify members have approved bases</li>
+            <li>Prevent over-starring (e.g. 80-star cap for 40-player wars)</li>
+            <li>Relay match results and arrange translators if needed</li>
+          </ul>
+        </div>
+        <div class="guide-subcard">
+          <h4>Representatives</h4>
+          <ul>
+            <li>Use the Band app to contact opposing clans</li>
+            <li>Confirm win/loss and review bases for violations within 12 hours of prep day</li>
+            <li>Check the blacklist and sanctions tools</li>
+            <li>Max 4 reps per clan (min 2); a rep can cover up to 2 clans as co-leader</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="guide-card" id="sync">
+      <h2>Band App &amp; Sync Process</h2>
+      <p>Coordination happens through the Band app, which hosts several dedicated rooms: General Chat, Chit Chat, War Conflicts, Add/Remove Reps, a Help Desk staffed by admins/OFHs, and an invite-only Sync Band for finding war matches.</p>
+      <p>Every war goes through two steps: finding a sync time, then confirming the clan can make it. Reps join the relevant rooms with an <code>!addme</code> command.</p>
+      <div class="guide-warn">Sync times are confidential. Sharing them outside the Sync Band — in clan chat, Discord, Reddit, or anywhere else — is a serious violation.</div>
+      <p>If a clan goes quiet for 24 hours during sync, admins step in: their reps get removed from the Sync Band until they respond, and clans are expected to stay reachable until war day ends.</p>
+    </div>
+
+    <div class="guide-card" id="outcomes">
+      <h2>Match Outcomes</h2>
+      <h3>Successful Match</h3>
+      <p>Reps from both clans confirm the win/loss over Band within 12 hours of prep day, invite each other to scout bases, and work out any issues found together — escalating to a Conflict Admin only if they can't agree.</p>
+      <h3>Mismatch</h3>
+      <p>If two non-FWA (or incompatible) clans get matched, reps first try to negotiate — a clan wall message using <code>!mismatch</code> works across languages, or a direct visit/friend request. If a deal is reached, both sides honor it; if not, both switch to real war bases for that war, with no grace period to switch back afterward.</p>
+      <h3>Blacklist Clans</h3>
+      <p>Clans that repeatedly and deliberately match FWA on purpose go on a blacklist and can't be negotiated with. Fighting one earns reward points (30+ war bases hit, 60%+ destruction, and a win each add +1), and a clan gets one grace period to fix its bases after a blacklist match.</p>
+    </div>
+
+    <div class="guide-card" id="points">
+      <h2>Win Determination</h2>
+      <p>Match results feed into the FWA© point system, tracked at points.fwafarm.com. A win costs a clan -1 point, a loss earns +1, and mismatches are worth 0. Reward points add to the total and sanctions subtract from it. Clans that have never won start at -100 points. Ties are broken by comparing the first letter of each clan's sync decider name.</p>
+    </div>
+
+    <div class="guide-card" id="bases">
+      <h2>Base Design Requirements</h2>
+      <p>An FWA-approved base is split into four clearly separated sections, and defense ranges (other than the Town Hall and Clan Castle) can't overlap into another section:</p>
+      <div class="guide-subgrid">
+        <div class="guide-subcard">
+          <h4>Town Hall Section</h4>
+          <ul>
+            <li>Non-defensive buildings, air defenses, air sweepers</li>
+            <li>TH11 and below: TH in a corner with the Eagle underneath, on the edge</li>
+            <li>TH12+: TH and Eagle on opposite corners</li>
+            <li>TH14+: weaponized builder huts kept 6 tiles from the free zone, reachable from 3+ sides</li>
+          </ul>
+        </div>
+        <div class="guide-subcard">
+          <h4>Trap Section</h4>
+          <ul>
+            <li>All traps enclosed in walls</li>
+            <li>Walls can't surround the TH or Queen section</li>
+            <li>Air traps can't overlap the King section; ground traps can't overlap Queen/TH</li>
+            <li>No offensive imagery or text in wall layouts</li>
+          </ul>
+        </div>
+        <div class="guide-subcard">
+          <h4>Queen Section</h4>
+          <ul>
+            <li>All dual-targeting defenses and heroes (except Barbarian King)</li>
+            <li>Infernos set to single-target, with one fully exposed side alongside the Queen</li>
+            <li>Scattershots side-by-side on a map edge; Monolith on an edge, preferably a corner</li>
+            <li>No Teslas in front of the exposed side; max 3 wall-covered buildings; no gaps (except TH on TH12+)</li>
+          </ul>
+        </div>
+        <div class="guide-subcard">
+          <h4>King Section</h4>
+          <ul>
+            <li>Ground-only targeting defenses</li>
+            <li>X-Bows set to ground</li>
+            <li>Firespitters side-by-side on an edge, facing outward</li>
+          </ul>
+        </div>
+      </div>
+      <p style="margin-top:14px;">Approved sample base layouts exist for every Town Hall level from TH8 to TH17.</p>
+    </div>
+
+    <div class="guide-card" id="weight">
+      <h2>War Weight</h2>
+      <p>War weight is calculated from Gold and Elixir storage on Battle Day: multiply the total by 5x for TH9 and above, or 4x for TH8 (e.g. 14,000 gold × 5 = 70,000 weight). Lower Town Halls sum their storage amounts plus TH level instead.</p>
+      <p>Weight must be submitted at least once every 4 weeks via FWA Stats or a Simple Weight spreadsheet. A clan gets a 2-week Yellow Zone warning before hitting the Red Zone, where all wins are forfeited until weight is submitted. Minimum weight is 42,000 — bases below that are disqualified. TH7s aren't accepted (TH8 is the floor), and a sync allows at most 4 TH8s.</p>
+    </div>
+
+    <div class="guide-card" id="flagged">
+      <h2>Flagged &amp; Banned Players</h2>
+      <p>Player history is tracked at cc.fwafarm.com. Flagged players have a noted history of bad behavior but aren't banned — a clan can still accept them at its own risk. Banned or sync-stalking players are permanently barred from FWA, though a flagged player with 2+ months of clean behavior can appeal at band.us/@appealfwa.</p>
+      <p>Keeping a banned player in the clan costs the clan its Sync Band access for 6 hours; if it happens close to sync time, removal is immediate regardless of how long the player's been there.</p>
+      <div class="guide-warn">Watch out for Anti Farm Wars (AFW) and Farm Clan Hunters (FCH) groups — FWA's own guidance is that they lie and cheat to disrupt legitimate clans.</div>
+    </div>
+
+    <div class="guide-card" id="sanctions">
+      <h2>Sanctions &amp; Violations</h2>
       <ul>
-        <li>All players can complete attacks successfully</li>
-        <li>Maximum loot is gained</li>
-        <li>No time is wasted on failed attempts</li>
+        <li>A fully non-compliant war base (no section separation at all): 3 points</li>
+        <li>A single rule violation on an otherwise compliant base: 1 point</li>
+        <li>Including a TH7 (below the TH8 minimum): not allowed</li>
+        <li>Each TH8 beyond the 4-per-sync cap: 3 points</li>
+        <li>War weight under 42,000: 3 points</li>
       </ul>
-      <p>These bases are approved and must not be modified during war.</p>
+      <p>Clans can also request a War Weight Check, a War Starter if they can't get their own war going (capped at 4 requests per 12 syncs), or a Clan Check-Up — a base audit that's purely educational on a first visit, with no penalty attached.</p>
     </div>
 
-    <div class="guide-card">
-      <h2>What Rules Do Players Follow?</h2>
-      <ul>
-        <li>Attack only assigned targets</li>
-        <li>Use approved FWA base layouts</li>
-        <li>Complete both war attacks</li>
-        <li>No freestyle or trophy-focused attacks</li>
-        <li>Follow leadership instructions</li>
-      </ul>
-      <p>Full details are available on the <a href="/rules.html">Rules page</a>.</p>
+    <div class="guide-card" id="cwl">
+      <h2>CWL Participation</h2>
+      <p>FWA clans are allowed to play Clan War League, with conditions: no colluding or win-trading with other CWL clans, war logs stay public, no banned players in the roster, and leadership tells the FWA Leaders Chat the clan is participating. Bases must already be FWA-compliant before the next FWA war — CWL doesn't earn a grace period.</p>
+      <p>FWA does not get involved in CWL matches: it won't negotiate them, open conflict cases for them, or approve flags related to them.</p>
     </div>
 
-    <div class="guide-card">
-      <h2>Is FWA Safe?</h2>
-      <p>Yes. FWA has existed for many years and operates through structured, community-managed coordination. When rules are followed, players benefit from consistent loot and smooth progression.</p>
-    </div>
-
-    <div class="guide-card">
-      <h2>How FWA Evolution Helps</h2>
-      <ul>
-        <li>Clear clan placement based on Town Hall</li>
-        <li>Verified entry through a single Discord system</li>
-        <li>Approved FWA bases and guidance</li>
-        <li>Organized, stress-free war environment</li>
-      </ul>
-      <div class="guide-note">New members are verified before clan placement to maintain fairness and system integrity.</div>
+    <div class="guide-card" id="staff">
+      <h2>Staff &amp; Administration</h2>
+      <div class="guide-warn">FWA staff (ADMN and OFH) will never ask for leadership or a promotion in your clan. Legitimate staff always announce themselves in Band before joining a clan.</div>
+      <p>The FWA Leaders Band runs a dedicated Conflict Admin team, and members can become an OFH (Official FWA Helper) after 3 months in the Leaders Band. Abuse can be reported through the FWA Reports Band (max 2 reps per clan, no dual-repping).</p>
     </div>
 
     <div class="guide-card guide-cta">
