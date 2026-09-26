@@ -296,10 +296,6 @@
 
     <div class="stats-grid">
       <div class="info-card">
-        <h3>🏆 Family Points</h3>
-        <p id="family-points" class="skeleton skeleton-text">Loading...</p>
-      </div>
-      <div class="info-card">
         <h3>👥 Family Members</h3>
         <p id="family-members" class="skeleton skeleton-text">Loading...</p>
       </div>
@@ -500,9 +496,7 @@
 
       document.getElementById("family-members").textContent =
         `${family.members} / ${family.capacity} Members`;
-      document.getElementById("family-points").textContent =
-        `${family.familyPoints} Points`;
-      clearSkeleton("family-members", "family-points");
+      clearSkeleton("family-members");
 
       if (lastUpdatedText) {
         lastUpdatedText.textContent =
@@ -514,7 +508,7 @@
       console.error("StatHut: failed to load family data:", error);
 
       const unavailableIds = [
-        "family-points", "family-members",
+        "family-members",
         "shield-name", "shield-members", "shield-level", "shield-league",
         "bandit-name", "bandit-members", "bandit-level", "bandit-league",
         "warriors-name", "warriors-members", "warriors-level", "warriors-league"
