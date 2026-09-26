@@ -29,97 +29,18 @@
       padding: 28px;
       margin-top: 8px;
       box-shadow: var(--shadow);
+      text-align: center;
     }
 
-    .join-box label {
-      display: block;
-      font-weight: 700;
-      font-size: 13.5px;
-      letter-spacing: .02em;
-      text-transform: uppercase;
+    .join-box p {
       color: var(--text-dim);
-      margin-bottom: 10px;
-    }
-
-    .join-box select {
-      width: 100%;
-      padding: 12px 14px;
-      font-size: 16px;
-      font-family: inherit;
-      color: var(--text);
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      appearance: none;
-      cursor: pointer;
-    }
-
-    .join-box select:focus {
-      outline: none;
-      border-color: var(--accent-fwa);
-    }
-
-    .recommendation {
-      margin-top: 22px;
-      padding: 18px;
-      border-left: 3px solid var(--accent-fwa);
-      background: rgba(255, 156, 42, .08);
-      border-radius: 0 10px 10px 0;
-    }
-
-    .recommendation strong {
-      display: block;
-      margin-bottom: 10px;
-      font-size: 13.5px;
-      text-transform: uppercase;
-      letter-spacing: .02em;
-      color: var(--text-dim);
-    }
-
-    .recommendation.hidden {
-      display: none;
-    }
-
-    #clanList {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    #clanList li {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    #clanList li:last-child {
-      margin-bottom: 0;
-    }
-
-    #clanList img {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      margin-right: 12px;
-      object-fit: contain;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-    }
-
-    #clanList a {
-      font-weight: 700;
-      color: var(--text);
-      text-decoration: none;
-    }
-
-    #clanList a:hover {
-      color: var(--accent-fwa);
+      margin: 0 0 22px;
+      font-size: 14.5px;
     }
 
     .join-btn {
-      display: none;
-      margin-top: 22px;
-      padding: 13px 22px;
+      display: inline-block;
+      padding: 13px 26px;
       border-radius: 10px;
       font-weight: 800;
       font-size: 14.5px;
@@ -154,31 +75,13 @@
   <section class="sh2-hero">
     <span class="sh2-eyebrow">Clan Family</span>
     <h1>Join FWA</h1>
-    <p>Select your Town Hall level and we'll point you to the right FWA Evolution clan.</p>
+    <p>Ready to join FWA Evolution? Hop into our Discord to get started.</p>
   </section>
 
   <section class="sh2-section join-section">
     <div class="join-box">
-      <label for="thSelect">Your Town Hall Level</label>
-      <select id="thSelect">
-        <option value="">Select Town Hall</option>
-        <option value="10">TH10</option>
-        <option value="11">TH11</option>
-        <option value="12">TH12</option>
-        <option value="13">TH13</option>
-        <option value="14">TH14</option>
-        <option value="15">TH15</option>
-        <option value="16">TH16</option>
-        <option value="17">TH17</option>
-        <option value="18">TH18</option>
-      </select>
-
-      <div id="recommendation" class="recommendation hidden">
-        <strong>Recommended Clans</strong>
-        <ul id="clanList"></ul>
-      </div>
-
-      <a href="https://discord.gg/Svp5BxT" target="_blank" class="join-btn" id="joinBtn">Join via Discord →</a>
+      <p>Our team will help place you in the right clan once you're in.</p>
+      <a href="https://discord.gg/Svp5BxT" target="_blank" class="join-btn">Join via Discord →</a>
     </div>
   </section>
 
@@ -186,58 +89,6 @@
     <a href="https://stathut.in/">← Back to StatHut Home</a>
       <div class="sh2-visitor-stat" id="sh2VisitorStat"></div>
   </footer>
-
-  <script>
-    const thSelect = document.getElementById("thSelect");
-    const recommendation = document.getElementById("recommendation");
-    const clanList = document.getElementById("clanList");
-    const joinBtn = document.getElementById("joinBtn");
-
-    thSelect.addEventListener("change", () => {
-      const th = parseInt(thSelect.value, 10);
-      clanList.innerHTML = "";
-
-      if (!th) {
-        recommendation.classList.add("hidden");
-        joinBtn.style.display = "none";
-        return;
-      }
-
-      let clans = [];
-      if (th >= 10 && th <= 11) { clans = ["#THE SHIELD#"]; }
-      else if (th === 12) { clans = ["InvidiaBandit"]; }
-      else if (th >= 13 && th <= 18) { clans = ["Vi11ageWarriors"]; }
-      else { clans = ["#THE SHIELD#", "InvidiaBandit", "Vi11ageWarriors"]; }
-
-      const DISCORD_LINK = "https://discord.gg/Svp5BxT";
-      const clanLogos = {
-        "#THE SHIELD#": "/assets/badges/shield.png.png",
-        "InvidiaBandit": "/assets/badges/nvidiabandit.png.png",
-        "Vi11ageWarriors": "/assets/badges/villagewarriors.png.png"
-      };
-
-      clans.forEach(clan => {
-        const li = document.createElement("li");
-
-        const img = document.createElement("img");
-        img.src = clanLogos[clan];
-        img.alt = clan + " logo";
-        img.onerror = () => { console.error("Logo not found:", img.src); img.style.display = "none"; };
-
-        const a = document.createElement("a");
-        a.textContent = clan;
-        a.href = DISCORD_LINK;
-        a.target = "_blank";
-
-        li.appendChild(img);
-        li.appendChild(a);
-        clanList.appendChild(li);
-      });
-
-      recommendation.classList.remove("hidden");
-      joinBtn.style.display = "inline-block";
-    });
-  </script>
 
   <script src="/visitor-counter.js" defer></script>
 </body>
