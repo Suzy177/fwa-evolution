@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CWL Bonus Decider | FWA | StatHut</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/stathut-v2.css">
+  <link rel="icon" type="image/png" href="/assets/stathut-logo.png">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GJLXJW3G7H"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-GJLXJW3G7H');
+  </script>
+  <style>
+    .bracket-toggle {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .bracket-btn {
+      font-family: "Orbitron", sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .4px;
+      padding: 10px 20px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-dim);
+      cursor: pointer;
+    }
+    .bracket-btn.active {
+      color: #0a0e1a;
+      background: linear-gradient(135deg, var(--accent-fwa), var(--accent-fwa-2));
+      border-color: transparent;
+    }
+    .clan-summary {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+    .clan-summary img { width: 44px; height: 44px; }
+    .clan-summary .name { font-family: "Orbitron", sans-serif; font-size: 16px; color: var(--text); }
+    .clan-summary .meta { font-size: 12.5px; color: var(--text-dim); margin-top: 2px; }
+
+    .weight-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      margin-bottom: 24px;
+    }
+    .weight-panel h4 {
+      font-family: "Orbitron", sans-serif;
+      font-size: 14px;
+      margin: 0 0 4px;
+      color: var(--text);
+    }
+    .weight-panel .sub {
+      font-size: 12.5px;
+      color: var(--text-dim);
+      margin: 0 0 18px;
+    }
+    .weight-row {
+      display: grid;
+      grid-template-columns: 170px 1fr 54px;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .weight-row label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .weight-row input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent-fwa);
+    }
+    .weight-row .val {
+      font-family: "Orbitron", sans-serif;
+      font-size: 13px;
+      color: var(--accent-fwa);
+      text-align: right;
+    }
+    .weight-total {
+      font-size: 12.5px;
+      color: var(--text-dim);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+    }
+    .weight-total.off { color: #fb7185; }
+    .weight-total.ok { color: #34d399; }
+    .reset-btn {
+      font-size: 12px;
+      color: var(--text-dim);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 5px 12px;
+      cursor: pointer;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    table.bonus-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 760px;
+    }
+    table.bonus-table th, table.bonus-table td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    table.bonus-table th {
+      color: var(--text-dim);
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      font-weight: 700;
+    }
+    table.bonus-table td.num, table.bonus-table th.num { text-align: right; }
+    table.bonus-table tr:last-child td { border-bottom: none; }
+    table.bonus-table td.rank {
+      font-family: "Orbitron", sans-serif;
+      color: var(--accent-fwa);
+      font-weight: 700;
+    }
+    table.bonus-table tr.bonus-slot { background: rgba(255,156,42,.08); }
+    table.bonus-table td.score {
+      font-family: "Orbitron", sans-serif;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .bonus-cap-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+    .bonus-cap-row input {
+      width: 64px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 5px 8px;
+      font-size: 13px;
+    }
+    .state-msg {
+      color: var(--text-dim);
+      font-size: 13.5px;
+      padding: 30px 4px;
+    }
+    .disclaimer {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: 14px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body class="sh2">
+
+  <header class="sh2-topbar">
+    <a href="https://stathut.in/" class="sh2-logo"><img src="/assets/stathut-logo.png" alt="StatHut">StatHut</a>
+    <nav class="sh2-nav">
+      <a href="/" class="active">Home</a>
+      <a href="/family.html">Family</a>
+      <a href="/clans.html">Clans</a>
+      <a href="/rules.html">Rules</a>
+      <a href="/fwa-guide.html">Guide</a>
+      <a href="/join.html">Join</a>
+    </nav>
+  </header>
+
+  <section class="sh2-hero" style="padding-bottom:10px;">
+    <span class="sh2-eyebrow">FWA &middot; CWL</span>
+    <h1 style="font-size:38px;">CWL Bonus Decider</h1>
+    <p>Live CWL performance for the Serious and Casual brackets, ranked by an adjustable weighted score to help decide bonus/medal slots.</p>
+  </section>
+
+  <div class="sh2-section" style="padding-top:0;">
+
+    <div class="bracket-toggle">
+      <button class="bracket-btn active" data-bracket="serious">Serious CWL (TH18)</button>
+      <button class="bracket-btn" data-bracket="casual">Casual CWL (Mixed)</button>
+    </div>
+
+    <div id="clanSummary"></div>
+
+    <div class="weight-panel">
+      <h4>Scoring Weights</h4>
+      <p class="sub">Adjust how much each metric counts toward a member's bonus score. Weights are normalized automatically, so they don't need to add to exactly 100%.</p>
+
+      <div class="weight-row">
+        <label>Attack Stars</label>
+        <input type="range" min="0" max="100" value="40" data-metric="stars">
+        <div class="val" id="val-stars">40%</div>
+      </div>
+      <div class="weight-row">
+        <label>Destruction %</label>
+        <input type="range" min="0" max="100" value="20" data-metric="destruction">
+        <div class="val" id="val-destruction">20%</div>
+      </div>
+      <div class="weight-row">
+        <label>Stars Surrendered</label>
+        <input type="range" min="0" max="100" value="20" data-metric="conceded">
+        <div class="val" id="val-conceded">20%</div>
+      </div>
+      <div class="weight-row">
+        <label>Target Position</label>
+        <input type="range" min="0" max="100" value="10" data-metric="offset">
+        <div class="val" id="val-offset">10%</div>
+      </div>
+      <div class="weight-row">
+        <label>Attack Order</label>
+        <input type="range" min="0" max="100" value="10" data-metric="order">
+        <div class="val" id="val-order">10%</div>
+      </div>
+
+      <div class="weight-total">
+        <span id="totalLabel">Total: 100% — good to go</span>
+        <button class="reset-btn" id="resetWeights">Reset to defaults</button>
+      </div>
+
+      <p class="disclaimer">
+        "Stars Surrendered" and "Attack Order" count against a member (fewer stars given up, attacking earlier in your turn both score higher). The official Clash of Clans API doesn't expose per-attack timestamps, so <strong>Attack Order</strong> (a member's turn number in the war) is used as the closest available stand-in for time-of-battle.
+      </p>
+    </div>
+
+    <div class="bonus-cap-row">
+      Highlight top
+      <input type="number" id="bonusCap" value="5" min="1" max="50">
+      members as bonus slots
+    </div>
+
+    <div id="resultArea">
+      <div class="state-msg">Loading live CWL data…</div>
+    </div>
+
+  </div>
+
+  <footer class="sh2-footer">
+    <a href="/">← Back to FWA Home</a>
+      <div class="sh2-visitor-stat" id="sh2VisitorStat"></div>
+  </footer>
+
+  <script>
+    const API_BASE = "https://api.stathut.in/api";
+    let currentBracket = "serious";
+    let currentData = null;
+
+    const weightIds = ["stars", "destruction", "conceded", "offset", "order"];
+
+    function getWeights() {
+      const w = {};
+      weightIds.forEach(id => {
+        w[id] = Number(document.querySelector(`input[data-metric="${id}"]`).value);
+      });
+      return w;
+    }
+
+    function updateWeightLabels() {
+      const w = getWeights();
+      let total = 0;
+      weightIds.forEach(id => {
+        document.getElementById(`val-${id}`).textContent = w[id] + "%";
+        total += w[id];
+      });
+      const totalLabel = document.getElementById("totalLabel");
+      if (total === 0) {
+        totalLabel.textContent = "Total: 0% — raise at least one weight";
+        totalLabel.className = "off";
+      } else {
+        totalLabel.textContent = `Total: ${total}% (normalized automatically)`;
+        totalLabel.className = "ok";
+      }
+    }
+
+    weightIds.forEach(id => {
+      document.querySelector(`input[data-metric="${id}"]`).addEventListener("input", () => {
+        updateWeightLabels();
+        render();
+      });
+    });
+
+    document.getElementById("resetWeights").addEventListener("click", () => {
+      const defaults = { stars: 40, destruction: 20, conceded: 20, offset: 10, order: 10 };
+      weightIds.forEach(id => {
+        document.querySelector(`input[data-metric="${id}"]`).value = defaults[id];
+      });
+      updateWeightLabels();
+      render();
+    });
+
+    document.getElementById("bonusCap").addEventListener("input", render);
+
+    document.querySelectorAll(".bracket-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".bracket-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentBracket = btn.dataset.bracket;
+        loadData();
+      });
+    });
+
+    function normalize(values) {
+      // min-max normalize an array of numbers to 0..1. Flat arrays return 0.5 for everyone.
+      const min = Math.min(...values);
+      const max = Math.max(...values);
+      if (max === min) return values.map(() => 0.5);
+      return values.map(v => (v - min) / (max - min));
+    }
+
+    function computeScores(members, weights) {
+      const totalWeight = weightIds.reduce((s, id) => s + weights[id], 0) || 1;
+
+      const starsArr = members.map(m => m.totalStars || 0);
+      const destArr = members.map(m => m.avgDestruction || 0);
+      const concededArr = members.map(m => m.starsConceded || 0);
+      const offsetArr = members.map(m => m.avgTargetOffset || 0);
+      const orderArr = members.map(m => (m.avgAttackOrder === null || m.avgAttackOrder === undefined) ? 0 : m.avgAttackOrder);
+
+      const starsNorm = normalize(starsArr);
+      const destNorm = normalize(destArr);
+      const concededNorm = normalize(concededArr).map(v => 1 - v); // fewer stars conceded is better
+      const offsetNorm = normalize(offsetArr); // punching up (higher offset) is better
+      const orderNorm = normalize(orderArr).map(v => 1 - v); // attacking earlier in the turn is better
+
+      return members.map((m, i) => {
+        const score =
+          (starsNorm[i] * weights.stars +
+           destNorm[i] * weights.destruction +
+           concededNorm[i] * weights.conceded +
+           offsetNorm[i] * weights.offset +
+           orderNorm[i] * weights.order) / totalWeight * 100;
+        return { ...m, score };
+      }).sort((a, b) => b.score - a.score);
+    }
+
+    function render() {
+      const resultArea = document.getElementById("resultArea");
+      if (!currentData) return;
+
+      if (!currentData.inLeague) {
+        resultArea.innerHTML = `<div class="state-msg">This clan isn't currently in an active CWL. Check back once the season starts.</div>`;
+        return;
+      }
+
+      const weights = getWeights();
+      const totalWeight = weightIds.reduce((s, id) => s + weights[id], 0);
+      if (totalWeight === 0) {
+        resultArea.innerHTML = `<div class="state-msg">Raise at least one weight slider above to see rankings.</div>`;
+        return;
+      }
+
+      const ranked = computeScores(currentData.members, weights);
+      const bonusCap = Math.max(1, parseInt(document.getElementById("bonusCap").value, 10) || 5);
+
+      const rows = ranked.map((m, i) => `
+        <tr class="${i < bonusCap ? 'bonus-slot' : ''}">
+          <td class="rank">#${i + 1}</td>
+          <td>${m.name}</td>
+          <td class="num">TH${m.townhallLevel}</td>
+          <td class="num">${m.totalStars}</td>
+          <td class="num">${m.avgDestruction}%</td>
+          <td class="num">${m.starsConceded}</td>
+          <td class="num">${m.avgTargetOffset > 0 ? '+' : ''}${m.avgTargetOffset}</td>
+          <td class="num">${m.avgAttackOrder === null ? '—' : m.avgAttackOrder}</td>
+          <td class="num">${m.attacksUsed}/${m.roundsPlayed}</td>
+          <td class="num score">${m.score.toFixed(1)}</td>
+        </tr>
+      `).join("");
+
+      resultArea.innerHTML = `
+        <div class="table-wrap">
+          <table class="bonus-table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Member</th>
+                <th class="num">TH</th>
+                <th class="num">Stars</th>
+                <th class="num">Avg Dest.</th>
+                <th class="num">Conceded</th>
+                <th class="num">Target Offset</th>
+                <th class="num">Avg Order</th>
+                <th class="num">Attacks</th>
+                <th class="num">Score</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+        <p class="disclaimer">
+          Highlighted rows are the top ${bonusCap} by current weights. Round ${currentData.rounds.length} of ${currentData.roundsTotal} reported so far this season (${currentData.season}).
+        </p>
+      `;
+    }
+
+    async function loadData() {
+      const resultArea = document.getElementById("resultArea");
+      const clanSummary = document.getElementById("clanSummary");
+      resultArea.innerHTML = `<div class="state-msg">Loading live CWL data…</div>`;
+      clanSummary.innerHTML = "";
+
+      try {
+        const res = await fetch(`${API_BASE}/cwl/${currentBracket}`);
+        if (!res.ok) throw new Error("Request failed");
+        const data = await res.json();
+        currentData = data;
+
+        if (data.clan) {
+          clanSummary.innerHTML = `
+            <div class="clan-summary">
+              ${data.clan.badge ? `<img src="${data.clan.badge}" alt="">` : ""}
+              <div>
+                <div class="name">${data.clan.name || "Unknown Clan"}</div>
+                <div class="meta">${data.clan.tag || ""} &middot; Level ${data.clan.level || "?"} &middot; ${data.inLeague ? "In CWL" : "Not currently in CWL"}</div>
+              </div>
+            </div>
+          `;
+        }
+
+        render();
+      } catch (err) {
+        resultArea.innerHTML = `<div class="state-msg">Couldn't load live CWL data right now. Please try again shortly.</div>`;
+      }
+    }
+
+    updateWeightLabels();
+    loadData();
+  </script>
+
+  <script src="/visitor-counter.js" defer></script>
+</body>
+</html>

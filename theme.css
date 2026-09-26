@@ -1,0 +1,968 @@
+/* =========================
+   STATHUT GLOBAL THEME
+========================= */
+
+:root {
+    color-scheme: light;
+
+    --sh-page-bg-start: #dbeafe;
+    --sh-page-bg-end: #eef2ff;
+
+    --sh-surface: #ffffff;
+    --sh-surface-soft: #f8fbff;
+    --sh-surface-muted: #f1f5f9;
+
+    --sh-text-primary: #1f3c88;
+    --sh-text-normal: #111827;
+    --sh-text-secondary: #6b7280;
+
+    --sh-border: #e7ebf5;
+
+    --sh-nav-bg: rgba(255, 255, 255, 0.82);
+    --sh-nav-border: rgba(255, 255, 255, 0.70);
+
+    --sh-shadow-card:
+        0 10px 28px rgba(0, 0, 0, 0.08);
+
+    --sh-shadow-large:
+        0 20px 45px rgba(0, 0, 0, 0.10);
+}
+
+/* =========================
+   DARK THEME PALETTE
+========================= */
+
+html[data-theme="dark"] {
+    color-scheme: dark;
+
+    /* Matched 1:1 to stathut-v2.css's palette */
+    --sh-page-bg-start: #0a0e1a;
+    --sh-page-bg-end: #0f1524;
+
+    --sh-surface: #131a2b;
+    --sh-surface-soft: #161d30;
+    --sh-surface-muted: #1a2338;
+
+    --sh-text-primary: #60a5fa;
+    --sh-text-normal: #f1f5f9;
+    --sh-text-secondary: #94a3b8;
+
+    --sh-border: rgba(148, 163, 184, .14);
+
+    --sh-nav-bg: rgba(10, 14, 26, 0.75);
+    --sh-nav-border: rgba(148, 163, 184, 0.18);
+
+    --sh-shadow-card:
+        0 10px 28px rgba(0, 0, 0, 0.35);
+
+    --sh-shadow-large:
+        0 20px 50px rgba(0, 0, 0, 0.45);
+}
+
+/* =========================
+   SHARED THEME TOGGLE
+========================= */
+
+.stathut-theme-toggle {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--sh-border);
+    border-radius: 50%;
+
+    background: var(--sh-surface);
+    color: var(--sh-text-normal);
+
+    font-size: 20px;
+    cursor: pointer;
+
+    box-shadow: var(--sh-shadow-card);
+
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.stathut-theme-toggle:hover {
+    transform: translateY(-2px) rotate(8deg);
+}
+
+.stathut-theme-toggle:active {
+    transform: scale(0.94);
+}
+
+/* =========================================
+   PLAYER SEARCH PAGE - GLOBAL THEME WIRING
+========================================= */
+
+/* Page */
+html[data-theme="dark"] body {
+    background: linear-gradient(
+        135deg,
+        var(--sh-page-bg-start),
+        var(--sh-page-bg-end)
+    );
+    color: var(--sh-text-normal);
+}
+
+/* Main title */
+html[data-theme="dark"] body h1 {
+    color: var(--sh-text-primary);
+}
+
+/* Search input */
+html[data-theme="dark"] .search-box input {
+    background: var(--sh-surface);
+    color: var(--sh-text-normal);
+    box-shadow: var(--sh-shadow-card);
+}
+
+html[data-theme="dark"] .search-box input::placeholder {
+    color: var(--sh-text-secondary);
+}
+
+/* Main dashboard */
+html[data-theme="dark"] .player-card {
+    background: var(--sh-surface);
+    box-shadow: var(--sh-shadow-large);
+}
+
+/* Overview stats */
+html[data-theme="dark"] .top-stat,
+html[data-theme="dark"] .overview-card {
+    background: var(--sh-surface-soft);
+}
+
+html[data-theme="dark"] .top-stat h3,
+html[data-theme="dark"] .overview-card h4 {
+    color: var(--sh-text-primary);
+}
+
+html[data-theme="dark"] .top-stat small {
+    color: var(--sh-text-secondary);
+}
+
+html[data-theme="dark"] .overview-card p {
+    color: var(--sh-text-normal);
+}
+
+/* Section titles */
+html[data-theme="dark"] .heroes-section h2,
+html[data-theme="dark"] .section-title {
+    color: var(--sh-text-primary);
+}
+
+html[data-theme="dark"] .section-line {
+    background: var(--sh-border);
+}
+
+/* Heroes and Pets */
+html[data-theme="dark"] .hero-card {
+    background: var(--sh-surface);
+    box-shadow: var(--sh-shadow-card);
+}
+
+html[data-theme="dark"] .hero-card h3,
+html[data-theme="dark"] .hero-title h3 {
+    color: var(--sh-text-primary);
+}
+
+html[data-theme="dark"] .hero-card p,
+html[data-theme="dark"] .hero-level {
+    color: var(--sh-text-secondary);
+}
+
+html[data-theme="dark"] .equipment-pill {
+    background: var(--sh-surface-muted);
+    color: var(--sh-text-normal);
+}
+
+html[data-theme="dark"] .hero-bar {
+    background: var(--sh-border);
+}
+
+/* Military */
+html[data-theme="dark"] .military-tab {
+    background: var(--sh-surface-muted);
+    color: var(--sh-text-normal);
+}
+
+html[data-theme="dark"] .military-tab.active {
+    background: #60a5fa;
+    color: #ffffff;
+}
+
+html[data-theme="dark"] .military-card {
+    background: var(--sh-surface);
+    box-shadow: var(--sh-shadow-card);
+}
+
+html[data-theme="dark"] .military-card h4 {
+    color: var(--sh-text-primary);
+}
+
+html[data-theme="dark"] .military-card small {
+    color: var(--sh-text-secondary);
+}
+
+/* Spells */
+html[data-theme="dark"] .spell-card {
+    background: var(--sh-surface);
+    box-shadow: var(--sh-shadow-card);
+}
+
+html[data-theme="dark"] .spell-name {
+    color: var(--sh-text-primary);
+}
+
+html[data-theme="dark"] .spell-level {
+    color: var(--sh-text-secondary);
+}
+
+html[data-theme="dark"] .spell-progress {
+    background: var(--sh-border);
+}
+
+/* Player Stats */
+html[data-theme="dark"] .stat-card {
+    background: var(--sh-surface);
+    box-shadow: var(--sh-shadow-card);
+}
+
+html[data-theme="dark"] .stat-card h3 {
+    color: var(--sh-text-primary);
+}
+
+html[data-theme="dark"] .stat-card p {
+    color: var(--sh-text-secondary);
+}
+
+/* Builder Base */
+html[data-theme="dark"] .builder-stat-card,
+html[data-theme="dark"] .builder-hero-card {
+    background: var(--sh-surface);
+    box-shadow: var(--sh-shadow-card);
+}
+
+html[data-theme="dark"] .builder-stat-card h3,
+html[data-theme="dark"] .builder-hero-title h3 {
+    color: var(--sh-text-primary);
+}
+
+html[data-theme="dark"] .builder-stat-card p,
+html[data-theme="dark"] .builder-hero-level {
+    color: var(--sh-text-secondary);
+}
+
+/* War Profile */
+html[data-theme="dark"] .war-profile-card {
+    background: var(--sh-surface);
+    box-shadow: var(--sh-shadow-card);
+}
+
+html[data-theme="dark"] .war-profile-card h3 {
+    color: var(--sh-text-primary);
+}
+
+html[data-theme="dark"] .war-profile-card p {
+    color: var(--sh-text-secondary);
+}
+
+/* Dashboard navigation */
+html[data-theme="dark"] .dashboard-nav {
+    background: var(--sh-nav-bg);
+    border-color: var(--sh-nav-border);
+    box-shadow: var(--sh-shadow-card);
+}
+
+html[data-theme="dark"] .dashboard-nav-btn {
+    color: var(--sh-text-secondary);
+}
+
+html[data-theme="dark"] .dashboard-nav-btn:hover {
+    color: var(--sh-text-primary);
+    background: var(--sh-surface-muted);
+}
+
+html[data-theme="dark"] .dashboard-nav-btn.active {
+    color: #ffffff;
+    background: #60a5fa;
+}
+
+/* =========================================
+   FWA HOME PAGE
+========================================= */
+
+html[data-theme="dark"] body {
+    background: linear-gradient(
+        120deg,
+        #0a0e1a,
+        #0f1524,
+        #131a2b,
+        #0a0e1a
+    );
+}
+
+html[data-theme="dark"] .card {
+
+    background: linear-gradient(
+        145deg,
+        #131a2b,
+        #1a2338
+    );
+
+    box-shadow:
+        0 20px 45px rgba(0,0,0,.35),
+        inset 0 1px 0 rgba(255,255,255,.03);
+
+}
+
+html[data-theme="dark"] .stathut-title{
+    color:#60a5fa;
+}
+
+html[data-theme="dark"] .subtitle{
+    color:#94a3b8;
+}
+
+html[data-theme="dark"] .card p{
+    color:#f1f5f9;
+}
+
+html[data-theme="dark"] .card a{
+    color:#60a5fa;
+}
+
+html[data-theme="dark"] .fwa-nav a{
+
+    color:#94a3b8;
+
+}
+
+html[data-theme="dark"] .fwa-nav a:hover{
+
+    background:rgba(255,156,42,.18);
+
+    color:#ff9c2a;
+
+}
+
+html[data-theme="dark"] .fwa-nav a.active{
+
+    background:rgba(255,156,42,.25);
+
+    color:#ff9c2a;
+
+}
+
+/* =========================================
+   FWA CLANS PAGE
+========================================= */
+
+html[data-theme="dark"] .section-title{
+    color:#60a5fa;
+}
+
+html[data-theme="dark"] .section-desc{
+    color:#94a3b8;
+}
+
+html[data-theme="dark"] .clan-card{
+
+    background:#131a2b;
+
+    box-shadow:
+        0 12px 28px rgba(0,0,0,.35);
+
+}
+
+html[data-theme="dark"] .clan-card h3{
+    color:#60a5fa;
+}
+
+html[data-theme="dark"] .clan-card p{
+    color:#94a3b8;
+}
+
+html[data-theme="dark"] .th-btn{
+
+    background:#1a2338;
+
+    color:#94a3b8;
+
+}
+
+html[data-theme="dark"] .th-btn:hover{
+
+    background:#232e47;
+
+}
+
+html[data-theme="dark"] .th-btn.active{
+
+    background:rgba(255,156,42,.28);
+
+    color:#ff9c2a;
+
+}
+
+html[data-theme="dark"] .back-link{
+
+    color:#60a5fa;
+
+}
+
+html[data-theme="dark"] .discord-cta{
+
+    background:
+        linear-gradient(
+            135deg,
+            #3849c7,
+            #4958d8
+        );
+
+}
+
+/* =========================================
+   FWA RULES PAGE
+========================================= */
+
+html[data-theme="dark"] .header .logo{
+    color:#60a5fa;
+}
+
+html[data-theme="dark"] .header .logo span{
+    color:#94a3b8;
+}
+
+html[data-theme="dark"] .subtitle{
+    color:#94a3b8;
+}
+
+html[data-theme="dark"] .page-header h1{
+    color:#60a5fa;
+}
+
+html[data-theme="dark"] .page-header p{
+    color:#94a3b8;
+}
+
+html[data-theme="dark"] .nav a{
+    color:#94a3b8;
+}
+
+html[data-theme="dark"] .nav a:hover,
+html[data-theme="dark"] .nav a.active{
+
+    background:#1a2338;
+
+}
+
+html[data-theme="dark"] .section{
+
+    background:#131a2b;
+
+    box-shadow:
+        0 10px 28px rgba(0,0,0,.25);
+
+}
+
+html[data-theme="dark"] .section h2{
+    color:#60a5fa;
+}
+
+html[data-theme="dark"] .section li{
+    color:#f1f5f9;
+}
+
+html[data-theme="dark"] .footer{
+
+    color:#94a3b8;
+
+}
+
+html[data-theme="dark"] .card > p a{
+
+    color:#60a5fa;
+
+}
+
+/* =========================================
+   FWA BASE GUIDE PAGE
+========================================= */
+
+html[data-theme="dark"] body {
+    background: #0a0e1a;
+}
+
+html[data-theme="dark"] .card{
+    background:#131a2b;
+    box-shadow:0 20px 45px rgba(0,0,0,.35);
+}
+
+html[data-theme="dark"] h1{
+    color:#60a5fa;
+}
+
+html[data-theme="dark"] h2{
+    color:#60a5fa;
+}
+
+html[data-theme="dark"] p{
+    color:#94a3b8;
+}
+
+html[data-theme="dark"] .alert{
+
+    background:#4a2d12;
+    border-left-color:#fb923c;
+    color:#fde68a;
+
+}
+
+html[data-theme="dark"] .warning{
+
+    background:#4a1717;
+    border-left-color:#ef4444;
+    color:#fecaca;
+
+}
+
+html[data-theme="dark"] .th-box{
+
+    background:#1a2338;
+
+}
+
+html[data-theme="dark"] .th-box a{
+
+    color:#f1f5f9;
+
+}
+
+html[data-theme="dark"] .links li{
+
+    color:#94a3b8;
+
+}
+
+html[data-theme="dark"] .links a{
+
+    color:#60a5fa;
+
+}
+
+/* =========================================
+   FAMILY DASHBOARD
+========================================= */
+
+html[data-theme="dark"] .section-title{
+    color:#60a5fa;
+}
+
+html[data-theme="dark"] .section-desc{
+    color:#94a3b8;
+}
+
+html[data-theme="dark"] .clan-card{
+
+    background:#131a2b;
+
+    box-shadow:
+        0 12px 28px rgba(0,0,0,.35);
+
+}
+
+html[data-theme="dark"] .clan-card h3{
+    color:#60a5fa;
+}
+
+html[data-theme="dark"] .clan-card p{
+    color:#94a3b8;
+}
+
+html[data-theme="dark"] .badge.recruiting{
+
+    background:#1b4332;
+
+    color:#6ee7b7;
+
+}
+
+html[data-theme="dark"] .badge.almost-full{
+
+    background:#5b4300;
+
+    color:#fde68a;
+
+}
+
+html[data-theme="dark"] .badge.full{
+
+    background:#4c1d1d;
+
+    color:#fecaca;
+
+}
+
+html[data-theme="dark"] .badge.closed{
+
+    background:#4c1d1d;
+
+    color:#fecaca;
+
+}
+
+html[data-theme="dark"] .discord-cta{
+
+    background:
+        linear-gradient(
+            135deg,
+            #3849c7,
+            #4958d8
+        );
+
+}
+
+html[data-theme="dark"] .back-link{
+
+    color:#60a5fa;
+
+}
+
+/* =========================================
+   FWA GUIDE PAGE
+========================================= */
+
+html[data-theme="dark"] body {
+    background: #0a0e1a;
+    color: #f1f5f9;
+}
+
+html[data-theme="dark"] header {
+    background: #131a2b;
+    border-bottom-color: rgba(148,163,184,.14);
+}
+
+html[data-theme="dark"] .logo {
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .logo span {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] nav a {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] nav a.active {
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .page-header h1,
+html[data-theme="dark"] .section h2 {
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .page-header p,
+html[data-theme="dark"] .section p,
+html[data-theme="dark"] .section li {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .note {
+    background: #131a2b;
+    border-left-color: #60a5fa;
+    color: #f1f5f9;
+}
+
+html[data-theme="dark"] footer {
+    border-top-color: rgba(148,163,184,.14);
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] a {
+    color: #60a5fa;
+}
+
+/* =========================================
+   JOIN PAGE
+========================================= */
+
+html[data-theme="dark"] body{
+    background:#0a0e1a;
+    color:#f1f5f9;
+}
+
+html[data-theme="dark"] header{
+    background:#131a2b;
+    border-bottom-color:rgba(148,163,184,.14);
+}
+
+html[data-theme="dark"] .logo{
+    color:#60a5fa;
+}
+
+html[data-theme="dark"] .logo span{
+    color:#94a3b8;
+}
+
+html[data-theme="dark"] nav a{
+    color:#94a3b8;
+}
+
+html[data-theme="dark"] nav a.active{
+    color:#60a5fa;
+}
+
+html[data-theme="dark"] .page-header h2{
+    color:#60a5fa;
+}
+
+html[data-theme="dark"] .page-header p{
+    color:#94a3b8;
+}
+
+html[data-theme="dark"] label{
+    color:#f1f5f9;
+}
+
+html[data-theme="dark"] select{
+
+    background:#131a2b;
+    color:#f1f5f9;
+    border:1px solid rgba(148,163,184,.24);
+
+}
+
+html[data-theme="dark"] .recommendation{
+
+    background:#131a2b;
+    border-left-color:#60a5fa;
+    color:#f1f5f9;
+
+}
+
+html[data-theme="dark"] .recommendation li{
+
+    color:#f1f5f9;
+
+}
+
+html[data-theme="dark"] .btn{
+
+    border-color:#60a5fa;
+    color:#60a5fa;
+
+}
+
+html[data-theme="dark"] .btn:hover{
+
+    background:#60a5fa;
+    color:#ffffff;
+
+}
+
+html[data-theme="dark"] footer{
+
+    border-top-color:rgba(148,163,184,.14);
+    color:#94a3b8;
+
+}
+
+/* =========================================
+   WAR STATUS PAGE
+========================================= */
+
+html[data-theme="dark"] .section-title{
+    color:#60a5fa;
+}
+
+html[data-theme="dark"] .section-desc{
+    color:#94a3b8;
+}
+
+html[data-theme="dark"] .clan-card{
+
+    background:#131a2b;
+
+    box-shadow:
+        0 12px 28px rgba(0,0,0,.35);
+
+}
+
+html[data-theme="dark"] .clan-card h3{
+    color:#60a5fa;
+}
+
+html[data-theme="dark"] .clan-card p{
+    color:#94a3b8;
+}
+
+html[data-theme="dark"] .badge{
+
+    background:#1b4332;
+
+    color:#6ee7b7;
+
+}
+
+html[data-theme="dark"] .discord-cta{
+
+    background:
+        linear-gradient(
+            135deg,
+            #3849c7,
+            #4958d8
+        );
+
+}
+
+html[data-theme="dark"] .back-link{
+
+    color:#60a5fa;
+
+}
+
+/* =========================================
+   MAIN STATHUT HOME
+========================================= */
+
+html[data-theme="dark"] body{
+
+    background:linear-gradient(
+        120deg,
+        #0a0e1a,
+        #0f1524,
+        #131a2b,
+        #0a0e1a
+    );
+
+}
+
+html[data-theme="dark"] .card{
+
+    background:
+        linear-gradient(
+            145deg,
+            #131a2b,
+            #1a2338
+        );
+
+    box-shadow:
+        0 20px 45px rgba(0,0,0,.35),
+        inset 0 1px 0 rgba(255,255,255,.03);
+
+}
+
+html[data-theme="dark"] .stathut-title{
+
+    color:#60a5fa;
+
+}
+
+html[data-theme="dark"] .subtitle{
+
+    color:#94a3b8;
+
+}
+
+/* =========================================
+   CLAN DETAIL PAGES (the-shield / invidia-bandit / village-warriors)
+========================================= */
+
+html[data-theme="dark"] .tag-badge {
+    background: rgba(96, 165, 250, .16);
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] .hero-stats span {
+    background: var(--sh-surface-muted, #263449);
+    color: #60a5fa;
+    box-shadow: 0 8px 20px rgba(0,0,0,.25);
+}
+
+html[data-theme="dark"] .member-progress {
+    background: #1a2338;
+}
+
+html[data-theme="dark"] .hero-divider {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #263449,
+        transparent
+    );
+}
+
+html[data-theme="dark"] .clan-info h3 {
+    color: #60a5fa;
+}
+
+html[data-theme="dark"] #clan-description,
+html[data-theme="dark"] .clan-info p {
+    color: #94a3b8;
+}
+
+/* =========================================
+   TYPOGRAPHY — match the Orbitron display
+   font used on Home / FWA Hub / MWL / General
+   across every older FWA page's headings.
+   (Brand wordmarks like ".logo" are DIVs, not
+   heading tags, so they're untouched here —
+   consistent with how the hub/home pages treat
+   their own topbar logo.)
+========================================= */
+
+h1, h2, h3, h4 {
+    font-family: "Orbitron", "Segoe UI", system-ui, -apple-system, sans-serif;
+    letter-spacing: .3px;
+}
+
+/* =========================================
+   FAMILY DASHBOARD — skeleton loading,
+   progress bars, extra stats, refresh meta
+========================================= */
+
+html[data-theme="dark"] .skeleton {
+    background: #1a2338;
+}
+
+html[data-theme="dark"] .skeleton::after {
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+}
+
+html[data-theme="dark"] .member-progress {
+    background: #263449;
+}
+
+html[data-theme="dark"] .clan-extra-stats span {
+    background: rgba(96, 165, 250, .14);
+    color: #93c5fd;
+}
+
+html[data-theme="dark"] .dashboard-meta span {
+    color: #94a3b8;
+}
+
+html[data-theme="dark"] .refresh-btn {
+    background: #1a2338;
+    color: #93c5fd;
+}
+
+html[data-theme="dark"] .refresh-btn:hover {
+    background: #232e47;
+}
+
+/* War Status page's data-source disclosure note */
+html[data-theme="dark"] .api-note {
+    color: #64748b;
+}

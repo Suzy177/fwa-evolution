@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>StatHut | Join</title>
+  <link rel="stylesheet" href="theme.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #ffffff;
+      color: #222;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: #5a2ea6;
+    }
+
+    /* ---------- HEADER ---------- */
+    header {
+      padding: 20px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .nav-container {
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      color: #00bcd4;
+    }
+
+    .logo span {
+      color: #bbb;
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+
+    nav a {
+      margin-right: 15px;
+      font-weight: 500;
+    }
+
+    nav a.active {
+      text-decoration: underline;
+    }
+
+    /* ---------- PAGE ---------- */
+    .page-container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .page-header {
+      margin-bottom: 30px;
+    }
+
+    .page-header h2 {
+      font-size: 34px;
+      margin-bottom: 10px;
+    }
+
+    .page-header p {
+      color: #555;
+      max-width: 700px;
+    }
+
+    /* ---------- JOIN ---------- */
+    .join-box {
+      max-width: 400px;
+      margin-top: 30px;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    select {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+
+    .recommendation {
+      margin: 10px 0;
+      padding: 10px;
+      border-left: 3px solid #00bcd4;
+      background: #f7f7f7;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 16px;
+      border: 1px solid #00bcd4;
+      color: #00bcd4;
+      font-weight: 600;
+    }
+
+    .btn:hover {
+      background: #00bcd4;
+      color: #fff;
+    }
+
+    /* ---------- FOOTER ---------- */
+    footer {
+      margin-top: 60px;
+      padding: 20px;
+      border-top: 1px solid #ddd;
+      text-align: center;
+      color: #777;
+      font-size: 14px;
+    }
+  </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GJLXJW3G7H"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'G-GJLXJW3G7H');
+  </script>
+</head>
+
+<body>
+  <button
+      class="stathut-theme-toggle"
+      type="button"
+      data-stathut-theme-toggle
+      aria-label="Switch theme"
+      title="Switch theme"
+      style="
+          position:fixed;
+          top:22px;
+          right:22px;
+          z-index:9999;
+      "
+  >
+    <span data-stathut-theme-icon>🌙</span>
+</button>
+  
+<header>
+  <div class="nav-container">
+    <div class="logo">Stat<span>Hut</span></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about-fwa.html">About FWA</a>
+      <a href="fwa-guide.html">Learn FWA</a>
+      <a href="rules.html">Rules</a>
+      <a href="our-clans.html">Our Clans</a>
+      <a href="join.html" class="active">Join</a>
+    </nav>
+  </div>
+</header>
+
+<main class="page-container">
+
+  <section class="page-header">
+    <h2>Join Farm War Alliance</h2>
+    <p>
+      Select your Town Hall level and we’ll guide you to the right StatHut FWA clan.
+    </p>
+  </section>
+
+  <section class="join-box">
+    <label for="thSelect">Your Town Hall Level</label>
+
+    <select id="thSelect">
+      <option value="">Select Town Hall</option>
+      <option value="10">TH10</option>
+      <option value="11">TH11</option>
+      <option value="12">TH12</option>
+      <option value="13">TH13</option>
+      <option value="14">TH14</option>
+      <option value="15">TH15</option>
+      <option value="16">TH16</option>
+      <option value="17">TH17</option>
+      <option value="18">TH18</option>
+    </select>
+
+    <div id="recommendation" class="recommendation hidden">
+      <strong>Recommended clans:</strong>
+      <ul id="clanList"></ul>
+    </div>
+
+    <a
+      href="https://discord.gg/Svp5BxT"
+      target="_blank"
+      class="btn"
+      id="joinBtn"
+      style="display:none;"
+    >
+      Join via Discord
+    </a>
+  </section>
+
+</main>
+
+<footer>
+  © 2026 StatHut • Farm War Alliance Community
+</footer>
+  
+<script>
+  const thSelect = document.getElementById("thSelect");
+  const recommendation = document.getElementById("recommendation");
+  const clanList = document.getElementById("clanList");
+  const joinBtn = document.getElementById("joinBtn");
+
+  thSelect.addEventListener("change", () => {
+    const th = parseInt(thSelect.value, 10);
+    clanList.innerHTML = "";
+
+    if (!th) {
+      recommendation.classList.add("hidden");
+      joinBtn.style.display = "none";
+      return;
+    }
+
+    let clans = [];
+
+    if (th >= 10 && th <= 11) {
+      clans = ["#THE SHIELD#"];
+    } else if (th === 12) {
+      clans = ["InvidiaBandit"];
+    } else if (th >= 13 && th <= 18) {
+      clans = ["Vi11ageWarriors"];
+    } else {
+      clans = ["#THE SHIELD#", "InvidiaBandit", "Vi11ageWarriors"];
+    }
+
+    const DISCORD_LINK = "https://discord.gg/Svp5BxT";
+
+    const clanLogos = {
+      "#THE SHIELD#": "/fwa/assets/badges/shield.png.png",
+      "InvidiaBandit": "/fwa/assets/badges/nvidiabandit.png.png",
+      "Vi11ageWarriors": "/fwa/assets/badges/villagewarriors.png.png"
+    };
+
+    clans.forEach(clan => {
+      const li = document.createElement("li");
+      li.style.display = "flex";
+      li.style.alignItems = "center";
+      li.style.marginBottom = "8px";
+
+      const img = document.createElement("img");
+      img.src = clanLogos[clan];
+      img.alt = clan + " logo";
+      img.style.width = "28px";
+      img.style.height = "28px";
+      img.style.marginRight = "10px";
+
+      img.onerror = () => {
+        console.error("Logo not found:", img.src);
+        img.style.display = "none";
+      };
+
+      const a = document.createElement("a");
+      a.textContent = clan;
+      a.href = DISCORD_LINK;
+      a.target = "_blank";
+      a.style.fontWeight = "600";
+      a.style.color = "#5a2ea6";
+
+      li.appendChild(img);
+      li.appendChild(a);
+      clanList.appendChild(li);
+    });
+
+    recommendation.classList.remove("hidden");
+    joinBtn.style.display = "inline-block";
+  });
+</script>
+<script src="theme.js"></script>
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+

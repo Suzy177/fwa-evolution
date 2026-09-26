@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FWA Clans | StatHut</title>
+  <link rel="stylesheet" href="theme.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(
+        120deg,
+        #c7d2fe,
+        #bae6fd,
+        #e9d5ff,
+        #bfdbfe
+      );
+      background-size: 400% 400%;
+      animation: gradientShift 14s ease infinite;
+      color: #111827;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .card {
+      background: linear-gradient(145deg, #f8fbff, #ffffff);
+      border-radius: 22px;
+      padding: 42px 48px;
+      max-width: 900px;
+      width: 100%;
+      text-align: center;
+      box-shadow:
+        0 20px 40px rgba(0,0,0,0.08),
+        inset 0 1px 0 rgba(255,255,255,0.6);
+    }
+
+    .stathut-title {
+      font-size: 44px;
+      font-weight: 800;
+      color: #1f3c88;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: #6b7280;
+      margin-bottom: 28px;
+    }
+
+    /* FWA NAV */
+    .fwa-nav {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+    }
+
+    .fwa-nav a {
+      text-decoration: none;
+      font-weight: 600;
+      color: #374151;
+      padding: 8px 14px;
+      border-radius: 999px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .fwa-nav a:hover,
+    .fwa-nav a.active {
+      background: rgba(197, 106, 0, 0.18);
+      color: #c56a00;
+    }
+
+    /* CLANS SECTION */
+    .section-title {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .section-desc {
+      color: #6b7280;
+      margin-bottom: 28px;
+    }
+
+    .clans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 22px;
+      margin-top: 10px;
+    }
+
+    .clan-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 20px 18px;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.08);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      text-align: left;
+    }
+
+    .clan-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 34px rgba(0,0,0,0.14);
+    }
+
+    .clan-card h3 {
+      margin: 0 0 6px;
+      font-size: 18px;
+      color: #1f3c88;
+    }
+
+    .clan-card p {
+      margin: 0;
+      font-size: 14px;
+      color: #6b7280;
+    }
+    .clan-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .clan-avatar {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #c56a00, #e28b28);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .clan-info h3 {
+      margin: 0 0 4px;
+    }
+
+    .clan-info p {
+      margin: 0;
+    }
+
+    .clan-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 999px;
+      letter-spacing: 0.3px;
+    }
+
+    .badge.active {
+      background: rgba(16, 185, 129, 0.15);
+      color: #059669;
+    }
+
+    .badge.recruiting {
+      background: rgba(245, 158, 11, 0.18);
+      color: #b45309;
+    }
+
+    .badge.closed {
+      background: rgba(239, 68, 68, 0.18);
+      color: #b91c1c;
+    }
+    
+    .back-link {
+      display: inline-block;
+      margin-top: 36px;
+      text-decoration: none;
+      color: #1f3c88;
+      font-weight: 600;
+      opacity: 0.85;
+    }
+
+    .back-link:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+
+    .clan-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    .clan-avatar.shield {
+      background: linear-gradient(135deg, #c56a00, #e28b28);
+    }
+
+    .clan-avatar.bandit {
+      background: linear-gradient(135deg, #0ea5a5, #22d3ee);
+    }
+
+    .clan-avatar.warriors {
+      background: linear-gradient(135deg, #7c3aed, #a78bfa);
+    }
+
+    .clan-card {
+      height: 100%;
+    }
+
+    /* TH Filter */
+    .th-filter {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 10px 0 30px;
+    }
+
+    .th-btn {
+      border: none;
+      background: #f3f4f6;
+      color: #374151;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .th-btn:hover {
+      background: #e5e7eb;
+    }
+
+    .th-btn.active {
+      background: rgba(197, 106, 0, 0.18);
+      color: #c56a00;
+    }
+    .discord-cta {
+      margin: 48px auto 32px;
+      padding: 28px 24px;
+      max-width: 520px;
+      text-align: center;
+      background: linear-gradient(135deg, #5865f2, #7289da);
+      border-radius: 20px;
+      color: #ffffff;
+      box-shadow: 0 20px 40px rgba(88, 101, 242, 0.25);
+    }
+
+    .discord-cta h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .discord-cta p {
+      margin: 0 0 20px;
+      font-size: 14px;
+      line-height: 1.6;
+      opacity: 0.95;
+    }
+
+    .discord-btn {
+      display: inline-block;
+      padding: 12px 22px;
+      background: #ffffff;
+      color: #5865f2;
+      font-weight: 800;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .discord-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        padding: 32px 24px;
+      }
+    }
+  </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GJLXJW3G7H"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'G-GJLXJW3G7H');
+  </script>
+
+</head>
+
+<body>
+  <button
+      class="stathut-theme-toggle"
+      type="button"
+      data-stathut-theme-toggle
+      aria-label="Switch theme"
+      title="Switch theme"
+      style="
+          position: fixed;
+          top: 22px;
+          right: 22px;
+          z-index: 9999;
+      "
+  >
+    <span data-stathut-theme-icon>🌙</span>
+</button>
+  <div class="page">
+    <div class="card">
+
+      <h1 class="stathut-title">FWA</h1>
+      <p class="subtitle">Farm War Alliance – StatHut</p>
+
+      <nav class="fwa-nav">
+        <a href="/">Home</a>
+        <a href="/clans.html" class="active">Clans</a>
+        <a href="/rules.html">Rules</a>
+        <a href="/fwa-guide.html">Guide</a>
+        <a href="/join.html">Join</a>
+      </nav>
+
+      <h2 class="section-title">Our FWA Clans</h2>
+      <p class="section-desc">
+        Active Farm War Alliance clans under StatHut.
+      </p>
+
+      <!-- TH FILTER -->
+      <div class="th-filter" id="thFilterGroup">
+        <button class="th-btn active" data-th="all">All</button>
+        <button class="th-btn" data-th="12">TH12</button>
+        <button class="th-btn" data-th="13">TH13</button>
+        <button class="th-btn" data-th="14">TH14</button>
+        <button class="th-btn" data-th="15">TH15</button>
+        <button class="th-btn" data-th="16">TH16</button>
+        <button class="th-btn" data-th="17">TH17</button>
+        <button class="th-btn" data-th="18">TH18</button>
+      </div>
+
+      <div class="clans-grid" id="clansGrid">
+
+        <a href="/clans/the-shield.html" class="clan-link">
+          <div class="clan-card" data-min-th="13" data-max-th="18">
+            <div class="clan-header">
+              <div class="clan-avatar shield">TS</div>
+            <img
+                class="clan-badge"
+                id="shield-badge"
+            >
+              
+              <div class="clan-info">
+                <h3>The Shield</h3>
+                <p>TH13–TH18</p>
+              </div>
+            </div>
+            <span class="badge recruiting">Active • Recruiting</span>
+          </div>
+        </a>
+
+        <a href="/clans/invidia-bandit.html" class="clan-link">
+          <div class="clan-card" data-min-th="13" data-max-th="18">
+            <div class="clan-header">
+              <div class="clan-avatar bandit">IB</div>
+              <div class="clan-info">
+                <h3>InvidiaBandit</h3>
+                <p>TH13–TH18</p>
+              </div>
+            </div>
+            <span class="badge recruiting">Active • Recruiting</span>
+          </div>
+        </a>
+
+        <a href="/clans/village-warriors.html" class="clan-link">
+          <div class="clan-card" data-min-th="13" data-max-th="18">
+            <div class="clan-header">
+              <div class="clan-avatar warriors">VW</div>
+              <div class="clan-info">
+                <h3>VillageWarriors</h3>
+                <p>TH13–TH18</p>
+              </div>
+            </div>
+            <span class="badge recruiting">Active • Recruiting</span>
+          </div>
+        </a>
+
+      </div>
+
+      <p id="noClansMessage" style="display:none; color:#6b7280; margin-top:-10px;">
+        No FWA clans currently recruit that Town Hall level — try "All" or check back later.
+      </p>
+
+      <!-- DISCORD CTA -->
+      <div class="discord-cta">
+        <h3>Recruitment happens on Discord</h3>
+        <p>
+           All clans review players through the FWA Discord welcome chat.
+           Join the server and our team will guide you to the right clan.
+          </p>
+        <a
+          href="https://discord.gg/Svp5BxT"
+          target="_blank"
+          class="discord-btn"
+        >
+          Join FWA Discord
+        </a>
+      </div>
+
+      <a href="https://stathut.in/" class="back-link">← Back to StatHut Home</a>
+
+    </div>
+  </div>
+  <script>
+    (function () {
+      const buttons = document.querySelectorAll("#thFilterGroup .th-btn");
+      const cards = document.querySelectorAll("#clansGrid .clan-link");
+      const noClansMessage = document.getElementById("noClansMessage");
+
+      function applyFilter(thValue) {
+        let visibleCount = 0;
+
+        cards.forEach(link => {
+          const card = link.querySelector(".clan-card");
+          const min = parseInt(card.dataset.minTh, 10);
+          const max = parseInt(card.dataset.maxTh, 10);
+
+          const matches =
+            thValue === "all" ||
+            (parseInt(thValue, 10) >= min && parseInt(thValue, 10) <= max);
+
+          link.style.display = matches ? "" : "none";
+          if (matches) visibleCount++;
+        });
+
+        noClansMessage.style.display = visibleCount === 0 ? "block" : "none";
+      }
+
+      buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          buttons.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          applyFilter(btn.dataset.th);
+        });
+      });
+    })();
+  </script>
+  <script src="theme.js"></script>
+</body>
+</html>
+
+
+
+
+
+

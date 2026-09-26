@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FWA | StatHut</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/stathut-v2.css">
+  <link rel="icon" type="image/png" href="/assets/stathut-logo.png">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GJLXJW3G7H"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-GJLXJW3G7H');
+  </script>
+</head>
+<body class="sh2">
+
+  <header class="sh2-topbar">
+    <a href="https://stathut.in/" class="sh2-logo"><img src="/assets/stathut-logo.png" alt="StatHut">StatHut</a>
+    <nav class="sh2-nav">
+      <a href="/" class="active">Home</a>
+      <a href="/family.html">Family</a>
+      <a href="/clans.html">Clans</a>
+      <a href="/rules.html">Rules</a>
+      <a href="/fwa-guide.html">Guide</a>
+      <a href="/join.html">Join</a>
+    </nav>
+  </header>
+
+  <section class="sh2-hero">
+    <span class="sh2-eyebrow">Clan Family</span>
+    <h1>FWA</h1>
+    <p>Farm War Alliance — pre-arranged, no-drama wars focused on loot and account growth, not stars. Pick a section below.</p>
+  </section>
+
+  <div class="sh2-warbar">
+    <div class="sh2-warbar-inner">
+      <span class="sh2-warbar-pulse" id="warbarPulse"></span>
+      <div class="sh2-warbar-main">
+        <p class="sh2-warbar-eyebrow" id="warbarEyebrow">Live · Family Wars</p>
+        <p class="sh2-warbar-headline" id="warbarHeadline">Checking current war status…</p>
+      </div>
+      <div class="sh2-warbar-chips" id="warbarChips"></div>
+      <a href="/fwa-war-status.html" class="sh2-warbar-cta">View War Status →</a>
+    </div>
+  </div>
+
+  <div class="sh2-grid">
+
+    <a href="/family.html" class="sh2-card fwa">
+      <div class="badge">👪</div>
+      <h3>Family</h3>
+      <p>What FWA is, how it's organized, and what to expect as a member.</p>
+    </a>
+
+    <a href="/clans.html" class="sh2-card fwa">
+      <div class="badge">🏰</div>
+      <h3>Clans</h3>
+      <p>Browse every clan in the family and their Town Hall range.</p>
+    </a>
+
+    <a href="/rules.html" class="sh2-card fwa">
+      <div class="badge">📜</div>
+      <h3>Rules</h3>
+      <p>War participation, base layouts, loot etiquette and account standards.</p>
+    </a>
+
+    <a href="/fwa-guide.html" class="sh2-card fwa">
+      <div class="badge">📘</div>
+      <h3>Guide</h3>
+      <p>New to FWA wars? Start here for a full walkthrough.</p>
+    </a>
+
+    <a href="/join.html" class="sh2-card fwa">
+      <div class="badge">🚪</div>
+      <h3>Join</h3>
+      <p>How to apply and get matched with a clan in the family.</p>
+    </a>
+
+    <a href="/base-guide.html" class="sh2-card fwa">
+      <div class="badge">🧱</div>
+      <h3>Base Guide</h3>
+      <p>Approved FWA base layouts by Town Hall level.</p>
+    </a>
+
+    <a href="/fwa-war-status.html" class="sh2-card fwa">
+      <div class="badge">⚔️</div>
+      <h3>War Status</h3>
+      <p>Live status of ongoing FWA wars across the family.</p>
+    </a>
+
+    <a href="/cwl-bonus.html" class="sh2-card fwa">
+      <div class="badge">🏅</div>
+      <h3>CWL Bonus Decider</h3>
+      <p>Live Serious &amp; Casual CWL performance, ranked by adjustable weighted scoring.</p>
+    </a>
+
+  </div>
+
+  <footer class="sh2-footer">
+    <a href="https://stathut.in/">← Back to StatHut Home</a>
+      <div class="sh2-visitor-stat" id="sh2VisitorStat"></div>
+  </footer>
+
+  <script>
+    (function () {
+      const CLAN_SLUGS = ["the-shield", "invidia-bandit", "village-warriors"];
+
+      const pulseEl     = document.getElementById("warbarPulse");
+      const eyebrowEl   = document.getElementById("warbarEyebrow");
+      const headlineEl  = document.getElementById("warbarHeadline");
+      const chipsEl     = document.getElementById("warbarChips");
+
+      function setChips(battleDay, prepDay, notInWar) {
+        chipsEl.innerHTML = "";
+        const add = (text, cls) => {
+          const span = document.createElement("span");
+          span.className = "sh2-warbar-chip" + (cls ? ` ${cls}` : "");
+          span.textContent = text;
+          chipsEl.appendChild(span);
+        };
+        if (battleDay > 0) add(`🔵 ${battleDay} Battle Day`, "hot");
+        if (prepDay > 0)   add(`🟡 ${prepDay} Preparation`, "warn");
+        if (notInWar > 0)  add(`${notInWar} Not In War`);
+      }
+
+      async function loadWarbar() {
+        try {
+          const results = await Promise.allSettled(
+            CLAN_SLUGS.map(slug => {
+              const controller = new AbortController();
+              const timeout = setTimeout(() => controller.abort(), 8000);
+              return fetch(`https://api.stathut.in/api/clan/${slug}/currentwar`, { signal: controller.signal })
+                .then(r => {
+                  clearTimeout(timeout);
+                  if (!r.ok) throw new Error(`API ${r.status}`);
+                  return r.json();
+                });
+            })
+          );
+
+          let battleDay = 0, prepDay = 0, notInWar = 0, ok = 0;
+
+          results.forEach(settled => {
+            if (settled.status !== "fulfilled") return;
+            ok++;
+            const war = settled.value;
+            if (!war || war.state === "unavailable") return;
+            if (war.state === "inWar") battleDay++;
+            else if (war.state === "preparation") prepDay++;
+            else notInWar++;
+          });
+
+          if (ok === 0) {
+            eyebrowEl.textContent = "Family Wars";
+            headlineEl.innerHTML = "Live war data is unavailable right now.";
+            pulseEl.style.background = "#6b7280";
+            chipsEl.innerHTML = "";
+            return;
+          }
+
+          const activeWars = battleDay + prepDay;
+          headlineEl.innerHTML = activeWars > 0
+            ? `<strong>${activeWars}</strong> war${activeWars === 1 ? "" : "s"} live across the family right now.`
+            : `No clans are currently in war — check back during the next cycle.`;
+
+          setChips(battleDay, prepDay, notInWar);
+          pulseEl.style.background = activeWars > 0 ? "#34d399" : "#6b7280";
+        } catch (err) {
+          console.error("StatHut: warbar failed to load", err);
+          eyebrowEl.textContent = "Family Wars";
+          headlineEl.textContent = "Live war data is unavailable right now.";
+          pulseEl.style.background = "#6b7280";
+        }
+      }
+
+      loadWarbar();
+      setInterval(loadWarbar, 60000);
+    })();
+  </script>
+
+  <script src="/visitor-counter.js" defer></script>
+</body>
+</html>
