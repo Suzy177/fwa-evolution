@@ -54,145 +54,60 @@
       cursor: default;
     }
 
-    .fam-section-title {
-      font-family: "Orbitron", sans-serif;
-      font-size: 20px;
-      margin: 0 0 6px;
-      color: var(--text);
-    }
-
-    .fam-section-desc {
-      color: var(--text-dim);
-      font-size: 14px;
-      margin: 0 0 22px;
-    }
-
-    .stats-grid,
-    .clans-grid {
+    .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 18px;
-      margin-bottom: 44px;
+      margin-bottom: 36px;
     }
 
     .info-card {
       background: var(--surface);
       border: 1px solid var(--border);
+      border-top: 3px solid var(--accent-fwa);
       border-radius: var(--radius);
-      padding: 20px 22px;
+      padding: 22px;
+      text-align: center;
     }
 
     .info-card h3 {
-      margin: 0 0 6px;
-      font-size: 15px;
-      color: var(--text);
+      margin: 0 0 8px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--text-dim);
     }
 
     .info-card p {
       margin: 0;
-      font-size: 14px;
-      color: var(--text-dim);
-    }
-
-    .clan-link {
-      text-decoration: none;
-      color: inherit;
-      display: block;
-      height: 100%;
-    }
-
-    .clan-card {
-      height: 100%;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-top: 3px solid var(--accent-fwa);
-      border-radius: var(--radius);
-      padding: 20px;
-      transition: transform .22s ease, box-shadow .22s ease;
-    }
-
-    .clan-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow);
-    }
-
-    .clan-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 12px;
-    }
-
-    .clan-badge {
-      width: 52px;
-      height: 52px;
-      border-radius: 12px;
-      object-fit: contain;
-      background: var(--surface-2);
-      flex-shrink: 0;
-    }
-
-    .clan-info h3 {
-      margin: 0 0 4px;
-      font-size: 16px;
+      font-family: "Orbitron", sans-serif;
+      font-size: 22px;
+      font-weight: 800;
       color: var(--text);
     }
 
-    .clan-info p {
-      margin: 0 0 2px;
-      font-size: 12.5px;
-      color: var(--text-dim);
+    .view-clans-cta {
+      text-align: center;
+      margin-bottom: 36px;
     }
 
-    .member-progress {
-      width: 100%;
-      height: 7px;
-      background: var(--surface-2);
-      border-radius: 999px;
-      overflow: hidden;
-      margin: 12px 0 10px;
-    }
-
-    .member-fill {
-      width: 0%;
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent-fwa), var(--accent-fwa-2));
-      border-radius: 999px;
-      transition: width .8s ease;
-    }
-
-    .clan-extra-stats {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
-    }
-
-    .clan-extra-stats span {
-      font-size: 11.5px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: var(--surface-2);
-      color: var(--text-dim);
-      border: 1px solid var(--border);
-    }
-
-    .status-tag {
-      display: inline-flex;
-      align-items: center;
-      font-size: 11px;
+    .view-clans-btn {
+      display: inline-block;
+      padding: 13px 26px;
+      border-radius: 10px;
       font-weight: 800;
-      letter-spacing: .4px;
-      text-transform: uppercase;
-      padding: 5px 12px;
-      border-radius: 999px;
+      font-size: 14.5px;
+      text-decoration: none;
+      color: #0a0e1a;
+      background: linear-gradient(135deg, var(--accent-fwa), var(--accent-fwa-2));
+      box-shadow: 0 10px 24px rgba(255, 107, 0, .3);
+      transition: transform .18s ease, box-shadow .18s ease;
     }
 
-    .status-tag.recruiting  { color: #34d399; background: rgba(52,211,153,.14); }
-    .status-tag.almost-full { color: #fbbf24; background: rgba(251,191,36,.14); }
-    .status-tag.full        { color: var(--accent-mwl); background: rgba(255,39,64,.14); }
-    .status-tag.closed      { color: var(--text-dim); background: rgba(148,163,184,.14); }
+    .view-clans-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(255, 107, 0, .4);
+    }
 
     .discord-cta {
       margin: 8px auto 32px;
@@ -258,12 +173,8 @@
 
     .skeleton-text {
       display: inline-block;
-      height: 13px;
-      width: 80%;
-    }
-
-    .skeleton-badge {
-      border-radius: 12px;
+      height: 16px;
+      width: 60%;
     }
   </style>
 </head>
@@ -284,7 +195,7 @@
   <section class="sh2-hero">
     <span class="sh2-eyebrow">Clan Family</span>
     <h1>Family Dashboard</h1>
-    <p>United FWA Evolution clans — live recruitment, family progress, and community growth.</p>
+    <p>United FWA Evolution clans — live family-wide totals across all three clans.</p>
   </section>
 
   <section class="sh2-section">
@@ -300,73 +211,21 @@
         <p id="family-members" class="skeleton skeleton-text">Loading...</p>
       </div>
       <div class="info-card">
-        <h3>🏰 Recruiting</h3>
-        <p>TH13 - TH18</p>
+        <h3>🏰 Clans in Family</h3>
+        <p>3</p>
+      </div>
+      <div class="info-card">
+        <h3>⚔ Total Wars Won</h3>
+        <p id="family-warwins" class="skeleton skeleton-text">Loading...</p>
+      </div>
+      <div class="info-card">
+        <h3>📈 Recruiting</h3>
+        <p style="font-size:18px;">TH13 – TH18</p>
       </div>
     </div>
 
-    <div class="clans-grid">
-
-      <a href="/clans/the-shield.html" class="clan-link">
-        <div class="clan-card">
-          <div class="clan-header">
-            <img id="shield-badge" class="clan-badge skeleton skeleton-badge" alt="#THE SHIELD# Badge">
-            <div class="clan-info">
-              <h3 id="shield-name" class="skeleton skeleton-text">Loading...</h3>
-              <p id="shield-members" class="skeleton skeleton-text">Loading...</p>
-              <p id="shield-level" class="skeleton skeleton-text">Loading...</p>
-              <p id="shield-league" class="skeleton skeleton-text">Loading...</p>
-            </div>
-          </div>
-          <div class="member-progress"><div id="shield-fill" class="member-fill"></div></div>
-          <div class="clan-extra-stats">
-            <span id="shield-warwins">⚔ — Wars Won</span>
-            <span id="shield-type">— Type</span>
-          </div>
-          <span id="shield-status" class="status-tag recruiting">Loading...</span>
-        </div>
-      </a>
-
-      <a href="/clans/invidia-bandit.html" class="clan-link">
-        <div class="clan-card">
-          <div class="clan-header">
-            <img id="bandit-badge" class="clan-badge skeleton skeleton-badge" alt="InvidiaBandit Badge">
-            <div class="clan-info">
-              <h3 id="bandit-name" class="skeleton skeleton-text">Loading...</h3>
-              <p id="bandit-members" class="skeleton skeleton-text">Loading...</p>
-              <p id="bandit-level" class="skeleton skeleton-text">Loading...</p>
-              <p id="bandit-league" class="skeleton skeleton-text">Loading...</p>
-            </div>
-          </div>
-          <div class="member-progress"><div id="bandit-fill" class="member-fill"></div></div>
-          <div class="clan-extra-stats">
-            <span id="bandit-warwins">⚔ — Wars Won</span>
-            <span id="bandit-type">— Type</span>
-          </div>
-          <span id="bandit-status" class="status-tag recruiting">Loading...</span>
-        </div>
-      </a>
-
-      <a href="/clans/village-warriors.html" class="clan-link">
-        <div class="clan-card">
-          <div class="clan-header">
-            <img id="warriors-badge" class="clan-badge skeleton skeleton-badge" alt="Vi11ageWarriors Badge">
-            <div class="clan-info">
-              <h3 id="warriors-name" class="skeleton skeleton-text">Loading...</h3>
-              <p id="warriors-members" class="skeleton skeleton-text">Loading...</p>
-              <p id="warriors-level" class="skeleton skeleton-text">Loading...</p>
-              <p id="warriors-league" class="skeleton skeleton-text">Loading...</p>
-            </div>
-          </div>
-          <div class="member-progress"><div id="warriors-fill" class="member-fill"></div></div>
-          <div class="clan-extra-stats">
-            <span id="warriors-warwins">⚔ — Wars Won</span>
-            <span id="warriors-type">— Type</span>
-          </div>
-          <span id="warriors-status" class="status-tag recruiting">Loading...</span>
-        </div>
-      </a>
-
+    <div class="view-clans-cta">
+      <a href="/clans.html" class="view-clans-btn">See Live Clan Stats →</a>
     </div>
 
     <div class="discord-cta">
@@ -385,33 +244,14 @@
   <script>
 
   const CLAN_SLUGS = ["the-shield", "invidia-bandit", "village-warriors"];
-  const CLAN_PREFIXES = ["shield", "bandit", "warriors"];
   // Note: the family API's own "endpoint" field is wrong for VillageWarriors
   // (it 404s) — these slugs are the ones the clan detail pages already use
   // successfully, so we hardcode them rather than trusting that field.
 
-  function updateStatus(id, status) {
-    const badge = document.getElementById(id);
-    if (!badge) return;
-
-    badge.textContent = status;
-    badge.classList.remove("recruiting", "almost-full", "full", "closed");
-
-    if (status === "Recruiting") {
-      badge.classList.add("recruiting");
-    } else if (status === "Almost Full") {
-      badge.classList.add("almost-full");
-    } else if (status === "Unavailable") {
-      badge.classList.add("closed");
-    } else {
-      badge.classList.add("full");
-    }
-  }
-
   function clearSkeleton(...ids) {
     ids.forEach(id => {
       const el = document.getElementById(id);
-      if (el) el.classList.remove("skeleton", "skeleton-text", "skeleton-badge");
+      if (el) el.classList.remove("skeleton", "skeleton-text");
     });
   }
 
@@ -438,9 +278,9 @@
 
       const family = await response.json();
 
-      // Fetch each clan's own detail endpoint in parallel for the extra
-      // stats (war wins, open/invite-only). allSettled so one clan's
-      // failure doesn't take down the whole dashboard.
+      // Fetch each clan's own detail endpoint in parallel just to sum up
+      // total war wins across the family. allSettled so one clan's failure
+      // doesn't take down the whole dashboard.
       const clanDetails = await Promise.allSettled(
         CLAN_SLUGS.map(slug =>
           fetch(`https://api.stathut.in/api/clan/${slug}`)
@@ -448,55 +288,21 @@
         )
       );
 
-      family.clans.forEach((clan, i) => {
-        const p = CLAN_PREFIXES[i];
-        if (!p) return;
-
-        document.getElementById(`${p}-name`).textContent = clan.name;
-        document.getElementById(`${p}-members`).textContent =
-          `👥 ${clan.members} / 50 Members`;
-        document.getElementById(`${p}-level`).textContent =
-          `⭐ Level ${clan.level}`;
-        document.getElementById(`${p}-league`).textContent =
-          `🏆 ${clan.league}`;
-        document.getElementById(`${p}-badge`).src = clan.badge;
-
-        const fill = document.getElementById(`${p}-fill`);
-        if (fill) {
-          const pct = Math.max(0, Math.min(100, (clan.members / 50) * 100));
-          fill.style.width = `${pct}%`;
+      let totalWarWins = 0;
+      let anyWarWins = false;
+      clanDetails.forEach(settled => {
+        const detail = settled.status === "fulfilled" ? settled.value : null;
+        if (detail && typeof detail.warWins === "number") {
+          totalWarWins += detail.warWins;
+          anyWarWins = true;
         }
-
-        const settled = clanDetails[i];
-        const detail = settled && settled.status === "fulfilled" ? settled.value : null;
-
-        const warWinsEl = document.getElementById(`${p}-warwins`);
-        const typeEl = document.getElementById(`${p}-type`);
-
-        if (detail) {
-          if (warWinsEl) {
-            warWinsEl.textContent =
-              typeof detail.warWins === "number"
-                ? `⚔ ${detail.warWins} Wars Won`
-                : "⚔ Wars Won: —";
-          }
-          if (typeEl) {
-            typeEl.textContent =
-              detail.type === "inviteOnly" ? "🔒 Invite Only" : "🔓 Open";
-          }
-        } else {
-          if (warWinsEl) warWinsEl.textContent = "⚔ Wars Won unavailable";
-          if (typeEl) typeEl.textContent = "";
-        }
-
-        updateStatus(`${p}-status`, clan.status);
-
-        clearSkeleton(`${p}-name`, `${p}-members`, `${p}-level`, `${p}-league`, `${p}-badge`);
       });
 
       document.getElementById("family-members").textContent =
-        `${family.members} / ${family.capacity} Members`;
-      clearSkeleton("family-members");
+        `${family.members} / ${family.capacity}`;
+      document.getElementById("family-warwins").textContent =
+        anyWarWins ? totalWarWins : "—";
+      clearSkeleton("family-members", "family-warwins");
 
       if (lastUpdatedText) {
         lastUpdatedText.textContent =
@@ -507,22 +313,11 @@
 
       console.error("StatHut: failed to load family data:", error);
 
-      const unavailableIds = [
-        "family-members",
-        "shield-name", "shield-members", "shield-level", "shield-league",
-        "bandit-name", "bandit-members", "bandit-level", "bandit-league",
-        "warriors-name", "warriors-members", "warriors-level", "warriors-league"
-      ];
-
-      unavailableIds.forEach(id => {
+      ["family-members", "family-warwins"].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.textContent = "Unavailable";
       });
-      clearSkeleton(...unavailableIds, "shield-badge", "bandit-badge", "warriors-badge");
-
-      ["shield-status", "bandit-status", "warriors-status"].forEach(id => {
-        updateStatus(id, "Unavailable");
-      });
+      clearSkeleton("family-members", "family-warwins");
 
       if (lastUpdatedText) {
         lastUpdatedText.textContent = "Live data unavailable right now — showing fallback state";
