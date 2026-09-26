@@ -1,180 +1,519 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>FWA Base Guide | StatHut</title>
-  <link rel="stylesheet" href="theme.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Base Guide | FWA Evolution</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <style>
-    body {
-      margin: 0;
-      background: #f4f7fb;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      color: #111827;
-    }
-
-    .page {
-      padding: 24px;
-    }
-
-    .card {
-      max-width: 900px;
-      margin: auto;
-      background: #ffffff;
-      border-radius: 24px;
-      padding: 32px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-    }
-
-    h1 {
-      margin-top: 0;
-      font-size: 32px;
-      text-align: center;
-    }
-
-    h2 {
-      margin-top: 36px;
-      font-size: 22px;
-    }
-
-    p {
-      line-height: 1.6;
-      color: #374151;
-    }
-
-    .alert {
-      background: #fff7ed;
-      border-left: 6px solid #f97316;
-      padding: 16px;
-      border-radius: 12px;
-      margin: 24px 0;
-      font-weight: 600;
-    }
-
-    .th-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    .th-box {
-      background: #f3f4f6;
-      border-radius: 14px;
-      padding: 12px;
-      text-align: center;
-      font-weight: 700;
-    }
-
-    .th-box a {
-      text-decoration: none;
-      color: #1f2937;
-    }
-
-    .links ul {
-      padding-left: 18px;
-    }
-
-    .links li {
-      margin-bottom: 8px;
-    }
-
-    .warning {
-      margin-top: 32px;
-      background: #fee2e2;
-      border-left: 6px solid #dc2626;
-      padding: 16px;
-      border-radius: 12px;
-      font-weight: 700;
-    }
-  </style>
-
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,900;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/stathut-v2.css">
+  <link rel="icon" type="image/png" href="/assets/fwa-evolution-logo.png">
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-GJLXJW3G7H"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-  
     gtag('config', 'G-GJLXJW3G7H');
   </script>
-  
+
+  <style>
+    .book-wrap {
+      max-width: 1040px;
+      margin: 0 auto 46px;
+    }
+
+    /* ---- the "open book" hero card ---- */
+    .book-card {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+      background: #efe7d8;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 30px 70px rgba(0,0,0,.45);
+      min-height: 440px;
+    }
+
+    .book-left {
+      padding: 52px 48px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      font-family: "Playfair Display", Georgia, serif;
+      color: #2a2318;
+    }
+
+    .book-eyebrow {
+      font-family: "Orbitron", sans-serif;
+      font-size: 11.5px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: #8a6d3b;
+      margin-bottom: 18px;
+    }
+
+    .book-left h1 {
+      margin: 0 0 22px;
+      font-size: 46px;
+      line-height: 1.08;
+      font-weight: 900;
+      color: #221c12;
+    }
+
+    .book-byline {
+      font-size: 14px;
+      font-style: italic;
+      color: #7a6a4d;
+      margin-bottom: 26px;
+    }
+
+    .book-left p.desc {
+      font-family: Georgia, "Playfair Display", serif;
+      font-size: 15.5px;
+      line-height: 1.75;
+      color: #4a4030;
+      margin: 0;
+      max-width: 380px;
+    }
+
+    /* ---- right graphic panel, standing in for the "photo" ---- */
+    .book-right {
+      position: relative;
+      background:
+        radial-gradient(circle at 50% 38%, rgba(255,107,0,.28), transparent 62%),
+        linear-gradient(160deg, #0d1424, #05070d 78%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .book-right::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+      background-size: 34px 34px;
+      opacity: .5;
+    }
+
+    .book-emblem {
+      position: relative;
+      width: 190px;
+      height: 190px;
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 0 60px rgba(255,107,0,.25);
+    }
+
+    .book-emblem img {
+      width: 118px;
+      height: 118px;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 18px rgba(0,0,0,.5));
+    }
+
+    .book-tag {
+      position: absolute;
+      bottom: 26px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: "Orbitron", sans-serif;
+      font-size: 12px;
+      letter-spacing: .08em;
+      color: var(--text-dim);
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      padding: 6px 16px;
+      border-radius: 999px;
+    }
+
+    @media (max-width: 760px) {
+      .book-card { grid-template-columns: 1fr; }
+      .book-right { min-height: 260px; }
+      .book-left { padding: 40px 30px; }
+      .book-left h1 { font-size: 34px; }
+    }
+
+    /* ---- editorial index cards (TH collections) ---- */
+    .book-section-label {
+      font-family: "Playfair Display", Georgia, serif;
+      font-style: italic;
+      font-size: 22px;
+      color: var(--text);
+      margin: 0 0 6px;
+      text-align: center;
+    }
+
+    .book-section-sub {
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 14px;
+      margin: 0 0 26px;
+    }
+
+    /* ---- coverflow carousel ---- */
+    .th-carousel-wrap {
+      position: relative;
+      margin: 0 0 44px;
+    }
+
+    .th-carousel {
+      position: relative;
+      height: 430px;
+      overflow: hidden;
+    }
+
+    .th-box {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 230px;
+      background: #efe7d8;
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: transform .45s cubic-bezier(.22,.9,.32,1), opacity .45s ease, box-shadow .3s ease;
+      box-shadow: 0 20px 40px rgba(0,0,0,.35);
+    }
+
+    .th-box.is-active {
+      cursor: default;
+      box-shadow: 0 26px 55px rgba(0,0,0,.55);
+    }
+
+    .th-carousel-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      border: none;
+      cursor: pointer;
+      font-family: "Orbitron", sans-serif;
+      font-weight: 700;
+      transition: transform .15s ease, background .15s ease;
+    }
+
+    .th-carousel-arrow.next {
+      right: 6%;
+      background: #ffffff;
+      color: #221c12;
+      font-size: 13px;
+      letter-spacing: .04em;
+      padding: 14px 26px;
+      border-radius: 999px;
+      box-shadow: 0 10px 26px rgba(0,0,0,.4);
+    }
+
+    .th-carousel-arrow.next:hover {
+      transform: translateY(-50%) scale(1.05);
+    }
+
+    .th-carousel-arrow.prev {
+      left: 6%;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.12);
+      color: #efe7d8;
+      font-size: 18px;
+      border: 1px solid rgba(255,255,255,.25);
+      backdrop-filter: blur(4px);
+    }
+
+    .th-carousel-arrow.prev:hover {
+      background: rgba(255,255,255,.22);
+      transform: translateY(-50%) scale(1.08);
+    }
+
+    .th-carousel-label {
+      text-align: center;
+      margin-top: 18px;
+      font-family: "Orbitron", sans-serif;
+      font-size: 12px;
+      letter-spacing: .1em;
+      color: var(--text-dim);
+    }
+
+    @media (max-width: 640px) {
+      .th-carousel { height: 380px; }
+      .th-box { width: 190px; }
+      .th-carousel-arrow.next { padding: 11px 18px; font-size: 11px; right: 3%; }
+      .th-carousel-arrow.prev { left: 3%; width: 38px; height: 38px; }
+    }
+
+    .th-box .th-thumb {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+      display: block;
+      background: #05070d;
+    }
+
+    .th-box .th-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+      transition: transform .3s ease;
+    }
+
+    .th-box.is-active .th-thumb img {
+      transform: scale(1.04);
+    }
+
+    .th-box .th-thumb-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-family: "Playfair Display", Georgia, serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: #efe7d8;
+      background: rgba(10,14,26,.72);
+      padding: 4px 12px;
+      border-radius: 999px;
+      backdrop-filter: blur(4px);
+    }
+
+    .th-box .th-body {
+      padding: 16px 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .th-box .th-sub {
+      font-family: "Orbitron", sans-serif;
+      font-size: 9.5px;
+      letter-spacing: .1em;
+      color: #8a6d3b;
+    }
+
+    .th-box .th-links {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      margin-top: auto;
+    }
+
+    .th-box a {
+      flex: 1;
+      text-align: center;
+      text-decoration: none;
+      font-family: "Orbitron", sans-serif;
+      font-size: 10px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: #8a6d3b;
+      border: 1px solid rgba(138,109,59,.4);
+      padding: 7px 8px;
+      border-radius: 999px;
+      transition: background .18s ease, color .18s ease;
+    }
+
+    .th-box a.primary {
+      background: #221c12;
+      color: #efe7d8;
+      border-color: #221c12;
+    }
+
+    .th-box a:hover {
+      background: #221c12;
+      color: #efe7d8;
+      border-color: #221c12;
+    }
+
+    .th-box a.primary:hover {
+      background: #4a3a1f;
+      border-color: #4a3a1f;
+    }
+
+    .book-callout {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      background: rgba(251,191,36,.08);
+      border-left: 3px solid #fbbf24;
+      border-radius: 0 12px 12px 0;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      color: var(--text-dim);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .book-callout.danger {
+      background: rgba(255,39,64,.08);
+      border-left-color: var(--accent-mwl);
+    }
+
+    .book-callout strong { color: var(--text); }
+  </style>
 </head>
+<body class="sh2">
 
-<body>
-  <button
-      class="stathut-theme-toggle"
-      type="button"
-      data-stathut-theme-toggle
-      aria-label="Switch theme"
-      title="Switch theme"
-      style="
-          position: fixed;
-          top: 22px;
-          right: 22px;
-          z-index: 9999;
-      "
-  >
-    <span data-stathut-theme-icon>🌙</span>
-</button>
-  <div class="page">
-    <div class="card">
+  <header class="sh2-topbar">
+    <a href="/" class="sh2-logo"><img src="/assets/fwa-evolution-logo.png" alt="FWA Evolution">FWA Evolution</a>
+    <nav class="sh2-nav">
+      <a href="/">Home</a>
+      <a href="/family.html">Family</a>
+      <a href="/clans.html">Clans</a>
+      <a href="/rules.html">Rules</a>
+      <a href="/fwa-guide.html">Guide</a>
+      <a href="/base-guide.html" class="active">Bases</a>
+      <a href="/join.html">Join</a>
+    </nav>
+  </header>
 
-      <h1>⚔🏠 FWA Base Guide 🏠⚔</h1>
+  <section class="sh2-section">
+    <div class="book-wrap">
 
-      <div class="alert">
-        🔆 Please make sure you always adjust your base when you upgrade your Town Hall.  
-        Using an incorrect base may result in penalties.
-      </div>
-
-      <h2>General FWA Base Rules</h2>
-      <p>
-        All players are responsible for keeping their bases updated according to
-        their current Town Hall level. Bases must follow official FWA layouts.
-      </p>
-
-      <h2>Town Hall Base Collections</h2>
-      <div class="th-grid">
-        <div class="th-box"><a href="http://tiny.cc/fwabases18" target="_blank">TH18</a></div>
-        <div class="th-box"><a href="http://tiny.cc/fwabases17" target="_blank">TH17</a></div>
-        <div class="th-box"><a href="http://tiny.cc/fwabases16" target="_blank">TH16</a></div>
-        <div class="th-box"><a href="http://tiny.cc/fwabases15" target="_blank">TH15</a></div>
-        <div class="th-box"><a href="http://tiny.cc/fwabases14" target="_blank">TH14</a></div>
-        <div class="th-box"><a href="http://tiny.cc/fwabases13" target="_blank">TH13</a></div>
-        <div class="th-box"><a href="http://tiny.cc/fwabase12" target="_blank">TH12</a></div>
-        <div class="th-box"><a href="http://tiny.cc/fwabase11" target="_blank">TH11</a></div>
-        <div class="th-box"><a href="http://tiny.cc/fwabase10" target="_blank">TH10</a></div>
-        <div class="th-box"><a href="http://tiny.cc/fwabase9" target="_blank">TH9</a></div>
-        <div class="th-box"><a href="http://tiny.cc/fwabase8" target="_blank">TH8</a></div>
-      </div>
-
-      <h2>Direct In-Game Base Links</h2>
-      <div class="links">
-        <ul>
-          <li><strong>TH18:</strong> <a href="https://link.clashofclans.com/en?action=OpenLayout&id=TH18%3AWB%3AAAAAAgAAAAMIFXlpMp2DcHS1uqUMNgA4" target="_blank">Open Layout</a></li>
-          <li><strong>TH17:</strong> <a href="https://link.clashofclans.com/en?action=OpenLayout&id=TH17%3AWB%3AAAAAMwAAAAJvKqSJR0K6j5vKXNzKC0Eo" target="_blank">Open Layout</a></li>
-          <li><strong>TH16:</strong> <a href="https://link.clashofclans.com/en?action=OpenLayout&id=TH16%3AWB%3AAAAAWQAAAAHYhYD8UAx4YzwvwSR5_kYp" target="_blank">Open Layout</a></li>
-          <li><strong>TH15:</strong> <a href="https://link.clashofclans.com/en?action=OpenLayout&id=TH15%3AWB%3AAAAAVAAAAAHixZ2x1n8Q5kcjKac5Ta3R" target="_blank">Open Layout</a></li>
-          <li><strong>TH14:</strong> <a href="https://link.clashofclans.com/en?action=OpenLayout&id=TH14%3AWB%3AAAAAPQAAAAJQFTvvhxVFhpHEctRKa2RJ" target="_blank">Open Layout</a></li>
-          <li><strong>TH13:</strong> <a href="https://link.clashofclans.com/en?action=OpenLayout&id=TH13%3AWB%3AAAAANQAAAAJg3K_0TUhkZz6SfZeONbRt" target="_blank">Open Layout</a></li>
-          <li><strong>TH12:</strong> <a href="https://link.clashofclans.com/en?action=OpenLayout&id=TH12%3AWB%3AAAAAAAAAAAMJ-9kz6ATWMmoYhsM5X4Zo" target="_blank">Open Layout</a></li>
-          <li><strong>TH11:</strong> <a href="https://link.clashofclans.com/en?action=OpenLayout&id=TH11%3AWB%3AAAAAJQAAAAKdWWT-kVMWijtjXI3Ieeeu" target="_blank">Open Layout</a></li>
-          <li><strong>TH10:</strong> <a href="https://link.clashofclans.com/en?action=OpenLayout&id=TH10%3AWB%3AAAAASwAAAAHxz3UQ1NJeeTS0DGN61GmR" target="_blank">Open Layout</a></li>
-          <li><strong>TH9:</strong> <a href="https://link.clashofclans.com/en?action=OpenLayout&id=TH9%3AWB%3AAAAANQAAAAJg3suFcORqtzL2m38RiJuD" target="_blank">Open Layout</a></li>
-          <li><strong>TH8:</strong> <a href="https://link.clashofclans.com/en?action=OpenLayout&id=TH8%3AWB%3AAAAAKgAAAAKANkTLQf__hePWp7JBwmVc" target="_blank">Open Layout</a></li>
-        </ul>
-      </div>
-
-      <div class="warning">
-        ⚠️ You are still responsible for ensuring your base follows current FWA rules.  
-        Always double-check after Town Hall upgrades.
+      <div class="book-card">
+        <div class="book-left">
+          <span class="book-eyebrow">FWA Evolution · Reference</span>
+          <h1>Base<br>Designs</h1>
+          <p class="book-byline">by FWA Evolution</p>
+          <p class="desc">
+            One approved layout per Town Hall — no edits, no exceptions.
+            Pick your Town Hall below for the collection link, or jump
+            straight to an in-game layout you can import in one tap.
+          </p>
+        </div>
+        <div class="book-right">
+          <div class="book-emblem">
+            <img src="/assets/fwa-evolution-logo.png" alt="FWA Evolution">
+          </div>
+          <span class="book-tag">TH8 – TH18 COVERED</span>
+        </div>
       </div>
 
     </div>
-  </div>
-  <script src="theme.js"></script>
+
+    <div class="book-wrap">
+      <div class="book-callout">
+        Always re-check your base right after a Town Hall upgrade — an
+        outdated layout is treated as an unapproved base, not a grace period.
+      </div>
+    </div>
+
+    <div class="book-wrap">
+      <p class="book-section-label">Town Hall Layouts</p>
+      <p class="book-section-sub">Swipe through — the curated collection, plus a one-tap in-game import</p>
+
+      <div class="th-carousel-wrap">
+        <div class="th-carousel" id="thCarousel"></div>
+        <button class="th-carousel-arrow prev" id="thPrev" aria-label="Previous">‹</button>
+        <button class="th-carousel-arrow next" id="thNext" aria-label="Next">Next</button>
+      </div>
+      <p class="th-carousel-label" id="thCarouselLabel"></p>
+
+      <div class="book-callout danger">
+        <strong>Your base is still your responsibility.</strong>&nbsp;These links are a starting point — confirm your layout matches current FWA rules after every Town Hall upgrade. See the <a href="/fwa-guide.html" style="color:var(--accent-mwl);font-weight:700;">Guide</a> for full base requirements.
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="sh2-footer">
+    <a href="https://stathut.in/">← Back to StatHut Home</a>
+      <div class="sh2-visitor-stat" id="sh2VisitorStat"></div>
+  </footer>
+
+  <script>
+  const TH_LAYOUTS = [
+    { label: "TH18", img: "/assets/bases/th18.jpg", collection: "http://tiny.cc/fwabases18", layout: "https://link.clashofclans.com/en?action=OpenLayout&id=TH18%3AWB%3AAAAAAgAAAAMIFXlpMp2DcHS1uqUMNgA4" },
+    { label: "TH17", img: "/assets/bases/th17.jpg", collection: "http://tiny.cc/fwabases17", layout: "https://link.clashofclans.com/en?action=OpenLayout&id=TH17%3AWB%3AAAAAMwAAAAJvKqSJR0K6j5vKXNzKC0Eo" },
+    { label: "TH16", img: "/assets/bases/th16.jpg", collection: "http://tiny.cc/fwabases16", layout: "https://link.clashofclans.com/en?action=OpenLayout&id=TH16%3AWB%3AAAAAWQAAAAHYhYD8UAx4YzwvwSR5_kYp" },
+    { label: "TH15", img: "/assets/bases/th15.jpg", collection: "http://tiny.cc/fwabases15", layout: "https://link.clashofclans.com/en?action=OpenLayout&id=TH15%3AWB%3AAAAAVAAAAAHixZ2x1n8Q5kcjKac5Ta3R" },
+    { label: "TH14", img: "/assets/bases/th14.jpg", collection: "http://tiny.cc/fwabases14", layout: "https://link.clashofclans.com/en?action=OpenLayout&id=TH14%3AWB%3AAAAAPQAAAAJQFTvvhxVFhpHEctRKa2RJ" },
+    { label: "TH13", img: "/assets/bases/th13.jpg", collection: "http://tiny.cc/fwabases13", layout: "https://link.clashofclans.com/en?action=OpenLayout&id=TH13%3AWB%3AAAAANQAAAAJg3K_0TUhkZz6SfZeONbRt" },
+    { label: "TH12", img: "/assets/bases/th12.jpg", collection: "http://tiny.cc/fwabase12", layout: "https://link.clashofclans.com/en?action=OpenLayout&id=TH12%3AWB%3AAAAAAAAAAAMJ-9kz6ATWMmoYhsM5X4Zo" },
+    { label: "TH11", img: "/assets/bases/th11.jpg", collection: "http://tiny.cc/fwabase11", layout: "https://link.clashofclans.com/en?action=OpenLayout&id=TH11%3AWB%3AAAAAJQAAAAKdWWT-kVMWijtjXI3Ieeeu" },
+    { label: "TH10", img: "/assets/bases/th10.jpg", collection: "http://tiny.cc/fwabase10", layout: "https://link.clashofclans.com/en?action=OpenLayout&id=TH10%3AWB%3AAAAASwAAAAHxz3UQ1NJeeTS0DGN61GmR" },
+    { label: "TH9",  img: "/assets/bases/th9.jpg",  collection: "http://tiny.cc/fwabase9",  layout: "https://link.clashofclans.com/en?action=OpenLayout&id=TH9%3AWB%3AAAAANQAAAAJg3suFcORqtzL2m38RiJuD" },
+    { label: "TH8",  img: "/assets/bases/th8.jpg",  collection: "http://tiny.cc/fwabase8",  layout: "https://link.clashofclans.com/en?action=OpenLayout&id=TH8%3AWB%3AAAAAKgAAAAKANkTLQf__hePWp7JBwmVc" }
+  ];
+
+  let thActive = 0;
+  const thTrack = document.getElementById("thCarousel");
+  const thLabel = document.getElementById("thCarouselLabel");
+
+  function renderCarousel() {
+    thTrack.innerHTML = "";
+    const n = TH_LAYOUTS.length;
+
+    TH_LAYOUTS.forEach((item, i) => {
+      let offset = i - thActive;
+      // wrap the offset so it takes the shortest path around the loop
+      if (offset > n / 2) offset -= n;
+      if (offset < -n / 2) offset += n;
+
+      // only render nearby cards for performance/clarity
+      if (Math.abs(offset) > 3) return;
+
+      const dist = Math.abs(offset);
+      const scale = dist === 0 ? 1 : dist === 1 ? 0.82 : dist === 2 ? 0.66 : 0.52;
+      const opacity = dist === 0 ? 1 : dist === 1 ? 0.75 : dist === 2 ? 0.4 : 0;
+      const spacing = 168;
+      const x = offset * spacing;
+      const z = 100 - dist;
+
+      const card = document.createElement("div");
+      card.className = "th-box" + (dist === 0 ? " is-active" : "");
+      card.style.transform = `translate(calc(-50% + ${x}px), 0) scale(${scale})`;
+      card.style.opacity = opacity;
+      card.style.zIndex = z;
+      card.style.pointerEvents = dist > 3 ? "none" : "auto";
+
+      card.innerHTML = `
+        <div class="th-thumb"><span class="th-thumb-badge">${item.label}</span><img src="${item.img}" alt="FWA ${item.label} base layout" loading="lazy"></div>
+        <div class="th-body">
+          <span class="th-sub">TOWN HALL ${item.label.replace("TH", "")}</span>
+          <div class="th-links">
+            <a href="${item.collection}" target="_blank" onclick="event.stopPropagation()">Collection</a>
+            <a class="primary" href="${item.layout}" target="_blank" onclick="event.stopPropagation()">Open Layout</a>
+          </div>
+        </div>
+      `;
+
+      if (dist !== 0) {
+        card.addEventListener("click", () => {
+          thActive = i;
+          renderCarousel();
+        });
+      }
+
+      thTrack.appendChild(card);
+    });
+
+    thLabel.textContent = `${TH_LAYOUTS[thActive].label} — ${thActive + 1} of ${n}`;
+  }
+
+  document.getElementById("thNext").addEventListener("click", () => {
+    thActive = (thActive + 1) % TH_LAYOUTS.length;
+    renderCarousel();
+  });
+
+  document.getElementById("thPrev").addEventListener("click", () => {
+    thActive = (thActive - 1 + TH_LAYOUTS.length) % TH_LAYOUTS.length;
+    renderCarousel();
+  });
+
+  renderCarousel();
+  </script>
+
+  <script src="/visitor-counter.js" defer></script>
 </body>
 </html>
