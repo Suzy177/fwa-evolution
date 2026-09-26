@@ -2,264 +2,251 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>FWA War Status | StatHut</title>
-  <link rel="stylesheet" href="theme.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>War Status | FWA Evolution</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/stathut-v2.css">
+  <link rel="icon" type="image/png" href="/assets/fwa-evolution-logo.png">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GJLXJW3G7H"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-GJLXJW3G7H');
+  </script>
 
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: linear-gradient(
-        120deg,
-        #c7d2fe,
-        #bae6fd,
-        #e9d5ff,
-        #bfdbfe
-      );
-      background-size: 400% 400%;
-      animation: gradientShift 14s ease infinite;
-      color: #111827;
-    }
-
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    .page {
-      min-height: 100vh;
+    .dashboard-meta {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 40px 20px;
-    }
-
-    .card {
-      background: linear-gradient(145deg, #f8fbff, #ffffff);
-      border-radius: 22px;
-      padding: 42px 48px;
-      max-width: 900px;
-      width: 100%;
-      text-align: center;
-      box-shadow:
-        0 20px 40px rgba(0,0,0,0.08),
-        inset 0 1px 0 rgba(255,255,255,0.6);
-    }
-
-    .stathut-title {
-      font-size: 44px;
-      font-weight: 800;
-      color: #1f3c88;
-      margin-bottom: 8px;
-    }
-
-    .subtitle {
-      font-size: 16px;
-      color: #6b7280;
-      margin-bottom: 28px;
-    }
-
-    /* FWA NAV */
-    .fwa-nav {
-      display: flex;
-      justify-content: center;
-      gap: 18px;
-      margin-bottom: 36px;
+      gap: 12px;
+      margin: 0 0 30px;
       flex-wrap: wrap;
     }
 
-    .fwa-nav a {
-      text-decoration: none;
-      font-weight: 600;
-      color: #374151;
-      padding: 8px 14px;
-      border-radius: 999px;
-      transition: background 0.2s ease, color 0.2s ease;
+    .dashboard-meta span {
+      font-size: 13px;
+      color: var(--text-dim);
     }
 
-    .fwa-nav a:hover,
-    .fwa-nav a.active {
-      background: rgba(197, 106, 0, 0.18);
-      color: #c56a00;
-    }
-
-    /* CLANS SECTION */
-    .section-title {
-      font-size: 26px;
+    .refresh-btn {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
       font-weight: 700;
-      margin-bottom: 6px;
+      font-size: 12.5px;
+      padding: 7px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: border-color .18s ease, color .18s ease;
     }
 
-    .section-desc {
-      color: #6b7280;
-      margin-bottom: 28px;
+    .refresh-btn:hover {
+      border-color: var(--accent-fwa);
+      color: var(--accent-fwa);
     }
 
-    .clans-grid {
+    .refresh-btn:disabled {
+      opacity: .5;
+      cursor: default;
+    }
+
+    .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 22px;
-      margin-top: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 18px;
+      margin-bottom: 36px;
     }
 
-    .clan-card {
-      background: #ffffff;
-      border-radius: 18px;
-      padding: 20px 18px;
-      box-shadow: 0 10px 22px rgba(0,0,0,0.08);
-      transition: transform 0.25s ease, box-shadow 0.25s ease;
-      text-align: left;
+    .info-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--accent-fwa);
+      border-radius: var(--radius);
+      padding: 22px;
+      text-align: center;
     }
 
-    .clan-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 16px 34px rgba(0,0,0,0.14);
+    .info-card h3 {
+      margin: 0 0 8px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--text-dim);
     }
 
-    .clan-card h3 {
-      margin: 0 0 6px;
-      font-size: 18px;
-      color: #1f3c88;
-    }
-
-    .clan-card p {
+    .info-card p {
       margin: 0;
-      font-size: 14px;
-      color: #6b7280;
-    }
-    .clan-card {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .clan-avatar {
-      width: 54px;
-      height: 54px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #c56a00, #e28b28);
-      color: #ffffff;
+      font-family: "Orbitron", sans-serif;
+      font-size: 22px;
       font-weight: 800;
-      font-size: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
+      color: var(--text);
     }
 
-    .clan-info h3 {
-      margin: 0 0 4px;
+    .war-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 22px;
     }
 
-    .clan-info p {
-      margin: 0;
-    }
-
-    .clan-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 12px;
-    }
-
-    .badge {
-      display: inline-block;
-      margin-top: 12px;
-      padding: 6px 12px;
-      font-size: 12px;
-      font-weight: 700;
-      border-radius: 999px;
-      letter-spacing: 0.3px;
-    }
-
-    .badge.active {
-      background: rgba(16, 185, 129, 0.15);
-      color: #059669;
-    }
-
-    .badge.recruiting {
-      background: rgba(245, 158, 11, 0.18);
-      color: #b45309;
-    }
-
-    .badge.closed {
-      background: rgba(239, 68, 68, 0.18);
-      color: #b91c1c;
-    }
-
-    .badge.neutral {
-      background: rgba(107, 114, 128, 0.15);
-      color: #4b5563;
-    }
-
-    .back-link {
-      display: inline-block;
-      margin-top: 36px;
-      text-decoration: none;
-      color: #1f3c88;
-      font-weight: 600;
-      opacity: 0.85;
-    }
-
-    .back-link:hover {
-      opacity: 1;
-      text-decoration: underline;
-    }
-
-    .clan-link {
+    .war-link {
       text-decoration: none;
       color: inherit;
       display: block;
     }
 
-    .clan-avatar.shield {
-      background: linear-gradient(135deg, #c56a00, #e28b28);
-    }
-
-    .clan-avatar.bandit {
-      background: linear-gradient(135deg, #0ea5a5, #22d3ee);
-    }
-
-    .clan-avatar.warriors {
-      background: linear-gradient(135deg, #7c3aed, #a78bfa);
-    }
-
-    .clan-card {
+    .war-card {
+      position: relative;
       height: 100%;
-      flex-direction: column;
-      align-items: flex-start;
+      text-align: center;
+      background:
+        linear-gradient(160deg, rgba(19,26,43,.82), rgba(10,14,26,.88)) padding-box,
+        linear-gradient(135deg, var(--accent-fwa), #60a5fa 45%, #c084fc 75%, var(--accent-fwa-2)) border-box;
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+      backdrop-filter: blur(18px) saturate(160%);
+      border: 1.5px solid transparent;
+      border-radius: 22px;
+      padding: 30px 22px 26px;
+      overflow: hidden;
+      box-shadow:
+        0 8px 32px rgba(0,0,0,.4),
+        inset 0 1px 0 rgba(255,255,255,.15);
+      transition: transform .22s ease, box-shadow .22s ease;
+    }
+
+    .war-link:hover .war-card {
+      transform: translateY(-6px);
+      box-shadow:
+        0 20px 44px rgba(0,0,0,.5),
+        inset 0 1px 0 rgba(255,255,255,.18);
+    }
+
+    .war-art {
+      position: relative;
+      width: 44%;
+      margin: 0 auto 14px;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .war-art::before {
+      content: "";
+      position: absolute;
+      width: 84%;
+      height: 84%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,156,42,.4), rgba(96,165,250,.15) 55%, transparent 72%);
+      filter: blur(4px);
+      animation: warPulseGlow 3.6s ease-in-out infinite;
+      z-index: 0;
+    }
+
+    @keyframes warPulseGlow {
+      0%, 100% { opacity: .55; transform: scale(1); }
+      50% { opacity: .9; transform: scale(1.08); }
+    }
+
+    .war-art img {
+      width: 88%;
+      height: 88%;
+      object-fit: contain;
+      display: block;
+      position: relative;
+      z-index: 1;
+      border-radius: 12px;
+      filter: drop-shadow(0 14px 22px rgba(0,0,0,.55));
+      animation: warFloaty 3.6s ease-in-out infinite;
+    }
+
+    @keyframes warFloaty {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .war-info h3 {
+      margin: 0 0 6px;
+      font-size: 19px;
+      font-family: "Orbitron", sans-serif;
+      color: var(--text);
+    }
+
+    .war-info p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--text-dim);
+    }
+
+    .war-score {
+      font-size: 13.5px;
+      color: var(--text-dim);
+      margin: 6px 0 16px;
+    }
+
+    .status-tag {
+      display: inline-block;
+      padding: 5px 12px;
+      font-size: 11.5px;
+      font-weight: 700;
+      border-radius: 999px;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+    }
+
+    .status-tag.active {
+      background: rgba(59,130,246,.16);
+      color: #60a5fa;
+    }
+
+    .status-tag.recruiting {
+      background: rgba(251,191,36,.16);
+      color: #fbbf24;
+    }
+
+    .status-tag.neutral {
+      background: rgba(148,163,184,.16);
+      color: var(--text-dim);
+    }
+
+    .status-tag.closed {
+      background: rgba(255,39,64,.16);
+      color: var(--accent-mwl);
+    }
+
+    .api-note {
+      font-size: 12.5px;
+      color: var(--text-dim);
+      text-align: center;
+      margin: 4px 0 40px;
     }
 
     .discord-cta {
-      margin: 48px auto 32px;
-      padding: 28px 24px;
+      margin: 8px auto 20px;
       max-width: 520px;
+      padding: 28px 24px;
       text-align: center;
       background: linear-gradient(135deg, #5865f2, #7289da);
-      border-radius: 20px;
+      border-radius: var(--radius);
       color: #ffffff;
-      box-shadow: 0 20px 40px rgba(88, 101, 242, 0.25);
+      box-shadow: 0 20px 40px rgba(88, 101, 242, .25);
     }
 
     .discord-cta h3 {
       margin: 0 0 10px;
-      font-size: 20px;
-      font-weight: 800;
+      font-size: 19px;
+      font-family: "Orbitron", sans-serif;
     }
 
     .discord-cta p {
       margin: 0 0 20px;
       font-size: 14px;
       line-height: 1.6;
-      opacity: 0.95;
+      opacity: .95;
     }
 
     .discord-btn {
@@ -270,26 +257,20 @@
       font-weight: 800;
       border-radius: 999px;
       text-decoration: none;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      transition: transform .15s ease, box-shadow .15s ease;
     }
 
     .discord-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .25);
     }
 
-    @media (max-width: 768px) {
-      .card {
-        padding: 32px 24px;
-      }
-    }
-
-    /* ---- Skeleton loading state ---- */
+    /* ---- Skeleton loading state (dark) ---- */
     .skeleton {
       position: relative;
       overflow: hidden;
-      background: #e5e7eb;
-      border-radius: 8px;
+      background: var(--surface-2);
+      border-radius: 6px;
       color: transparent !important;
     }
 
@@ -297,7 +278,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
       animation: skeletonShimmer 1.4s infinite;
     }
 
@@ -309,197 +290,113 @@
     .skeleton-text {
       display: inline-block;
       height: 14px;
-      width: 80%;
-    }
-
-    /* ---- Dashboard meta row (last updated + refresh) ---- */
-    .dashboard-meta {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      margin: -12px 0 24px;
-      flex-wrap: wrap;
-    }
-
-    .dashboard-meta span {
-      font-size: 13px;
-      color: #6b7280;
-    }
-
-    .refresh-btn {
-      border: none;
-      background: #eef2ff;
-      color: #4338ca;
-      font-weight: 700;
-      font-size: 13px;
-      padding: 6px 14px;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: background .2s ease;
-    }
-
-    .refresh-btn:hover {
-      background: #e0e7ff;
-    }
-
-    .refresh-btn:disabled {
-      opacity: .6;
-      cursor: default;
-    }
-
-    .api-note {
-      font-size: 12.5px;
-      color: #9ca3af;
-      margin: 8px 0 0;
+      width: 70%;
     }
   </style>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GJLXJW3G7H"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-GJLXJW3G7H');
-  </script>
 </head>
+<body class="sh2">
 
-<body>
-  <button
-      class="stathut-theme-toggle"
-      type="button"
-      data-stathut-theme-toggle
-      aria-label="Switch theme"
-      title="Switch theme"
-      style="
-          position:fixed;
-          top:22px;
-          right:22px;
-          z-index:9999;
-      "
-  >
-    <span data-stathut-theme-icon>🌙</span>
-</button>
-  <div class="page">
-    <div class="card">
+  <header class="sh2-topbar">
+    <a href="/" class="sh2-logo"><img src="/assets/fwa-evolution-logo.png" alt="FWA Evolution">FWA Evolution</a>
+    <nav class="sh2-nav">
+      <a href="/">Home</a>
+      <a href="/family.html">Family</a>
+      <a href="/clans.html">Clans</a>
+      <a href="/fwa-war-status.html" class="active">War Status</a>
+      <a href="/rules.html">Rules</a>
+      <a href="/fwa-guide.html">Guide</a>
+      <a href="/base-guide.html">Bases</a>
+      <a href="/join.html">Join</a>
+    </nav>
+  </header>
 
-      <h1 class="stathut-title">FWA War Status</h1>
-      <p class="subtitle">Live war tracking for the FWA Evolution family</p>
+  <section class="sh2-hero">
+    <span class="sh2-eyebrow">Live Tracking</span>
+    <h1>War Status</h1>
+    <p>Current matchups across every FWA Evolution clan, pulled straight from the Clash of Clans API.</p>
+  </section>
 
-      <nav class="fwa-nav">
-        <a href="/">Home</a>
-        <a href="/fwa-war-status.html" class="active">War Status</a>
-        <a href="/rules.html">Rules</a>
-        <a href="/fwa-guide.html">Guide</a>
-        <a href="/join.html">Join</a>
-      </nav>
+  <section class="sh2-section">
 
-      <h2 class="section-title">Current Family Wars</h2>
-      <p class="section-desc">
-        Current war status across the StatHut FWA family.
-      </p>
+    <div class="dashboard-meta">
+      <span id="lastUpdatedText">Loading live data…</span>
+      <button class="refresh-btn" id="refreshBtn" onclick="loadWarStatus()">↻ Refresh</button>
+    </div>
 
-      <div class="dashboard-meta">
-        <span id="lastUpdatedText">Loading live data…</span>
-        <button class="refresh-btn" id="refreshBtn" onclick="loadWarStatus()">↻ Refresh</button>
+    <div class="stats-grid">
+      <div class="info-card">
+        <h3>⚔ Active Wars</h3>
+        <p id="active-wars" class="skeleton skeleton-text">Loading...</p>
       </div>
+      <div class="info-card">
+        <h3>🔵 Battle Day</h3>
+        <p id="battle-day-count" class="skeleton skeleton-text">Loading...</p>
+      </div>
+      <div class="info-card">
+        <h3>🟡 Preparation Day</h3>
+        <p id="prep-day-count" class="skeleton skeleton-text">Loading...</p>
+      </div>
+    </div>
 
-      <div class="clans-grid">
+    <div class="war-grid">
 
-        <div class="clan-card">
-          <div class="clan-info">
-            <h3>⚔️ Active Wars</h3>
-            <p id="active-wars" class="skeleton skeleton-text">Loading...</p>
+      <a href="/clans/the-shield.html" class="war-link">
+        <div class="war-card">
+          <div class="war-art"><img src="/assets/badges/shield-card.png" alt="The Shield"></div>
+          <div class="war-info">
+            <h3 id="shield-name">The Shield</h3>
+            <p id="shield-opponent" class="skeleton skeleton-text">Loading...</p>
           </div>
+          <p id="shield-score" class="war-score skeleton skeleton-text">Loading...</p>
+          <span id="shield-status" class="status-tag neutral">Loading...</span>
         </div>
+      </a>
 
-        <div class="clan-card">
-          <div class="clan-info">
-            <h3>🔥 Battle Day</h3>
-            <p id="battle-day-count" class="skeleton skeleton-text">Loading...</p>
+      <a href="/clans/invidia-bandit.html" class="war-link">
+        <div class="war-card">
+          <div class="war-art"><img src="/assets/badges/nvidiabandit.png.png" alt="InvidiaBandit"></div>
+          <div class="war-info">
+            <h3 id="bandit-name">InvidiaBandit</h3>
+            <p id="bandit-opponent" class="skeleton skeleton-text">Loading...</p>
           </div>
+          <p id="bandit-score" class="war-score skeleton skeleton-text">Loading...</p>
+          <span id="bandit-status" class="status-tag neutral">Loading...</span>
         </div>
+      </a>
 
-        <div class="clan-card">
-          <div class="clan-info">
-            <h3>📅 Preparation Day</h3>
-            <p id="prep-day-count" class="skeleton skeleton-text">Loading...</p>
+      <a href="/clans/village-warriors.html" class="war-link">
+        <div class="war-card">
+          <div class="war-art"><img src="/assets/badges/villagewarriors.png.png" alt="VillageWarriors"></div>
+          <div class="war-info">
+            <h3 id="warriors-name">VillageWarriors</h3>
+            <p id="warriors-opponent" class="skeleton skeleton-text">Loading...</p>
           </div>
+          <p id="warriors-score" class="war-score skeleton skeleton-text">Loading...</p>
+          <span id="warriors-status" class="status-tag neutral">Loading...</span>
         </div>
-      </div>
-
-      <div class="clans-grid">
-
-        <a href="/clans/the-shield.html" class="clan-link">
-          <div class="clan-card">
-            <div class="clan-header">
-              <div class="clan-avatar shield">TS</div>
-              <div class="clan-info">
-                <h3 id="shield-name">The Shield</h3>
-                <p id="shield-opponent" class="skeleton skeleton-text">Loading...</p>
-                <p id="shield-score" class="skeleton skeleton-text">Loading...</p>
-              </div>
-            </div>
-            <span id="shield-status" class="badge neutral">Loading...</span>
-          </div>
-        </a>
-
-        <a href="/clans/invidia-bandit.html" class="clan-link">
-          <div class="clan-card">
-            <div class="clan-header">
-              <div class="clan-avatar bandit">IB</div>
-              <div class="clan-info">
-                <h3 id="bandit-name">InvidiaBandit</h3>
-                <p id="bandit-opponent" class="skeleton skeleton-text">Loading...</p>
-                <p id="bandit-score" class="skeleton skeleton-text">Loading...</p>
-              </div>
-            </div>
-            <span id="bandit-status" class="badge neutral">Loading...</span>
-          </div>
-        </a>
-
-        <a href="/clans/village-warriors.html" class="clan-link">
-          <div class="clan-card">
-            <div class="clan-header">
-              <div class="clan-avatar warriors">VW</div>
-              <div class="clan-info">
-                <h3 id="warriors-name">VillageWarriors</h3>
-                <p id="warriors-opponent" class="skeleton skeleton-text">Loading...</p>
-                <p id="warriors-score" class="skeleton skeleton-text">Loading...</p>
-              </div>
-            </div>
-            <span id="warriors-status" class="badge neutral">Loading...</span>
-          </div>
-        </a>
-      </div>
-
-      <p class="api-note">
-        Live matchups pulled straight from the Clash of Clans API. If a clan's war log
-        is set to private, or it isn't currently in a war, that card shows the actual
-        state instead of a matchup.
-      </p>
-
-      <!-- DISCORD CTA -->
-      <div class="discord-cta">
-        <h3>Recruitment happens on Discord</h3>
-        <p>
-           All clans review players through the FWA Discord welcome chat.
-           Join the server and our team will guide you to the right clan.
-          </p>
-        <a
-          href="https://discord.gg/Svp5BxT"
-          target="_blank"
-          class="discord-btn"
-        >
-          Join FWA Discord
-        </a>
-      </div>
-
-      <a href="https://stathut.in/" class="back-link">← Back to StatHut Home</a>
+      </a>
 
     </div>
-  </div>
+
+    <p class="api-note">
+      Live matchups pulled straight from the Clash of Clans API. If a clan's war log
+      is set to private, or it isn't currently in a war, that card shows the actual
+      state instead of a matchup.
+    </p>
+
+    <div class="discord-cta">
+      <h3>Recruitment Happens on Discord</h3>
+      <p>All clans review players through the FWA Evolution Discord welcome chat. Join the server and our team will guide you to the right clan.</p>
+      <a href="https://discord.gg/Svp5BxT" target="_blank" class="discord-btn">Join FWA Discord</a>
+    </div>
+
+  </section>
+
+  <footer class="sh2-footer">
+    <a href="https://stathut.in/">← Back to StatHut Home</a>
+      <div class="sh2-visitor-stat" id="sh2VisitorStat"></div>
+  </footer>
+
   <script>
 
   const CLAN_SLUGS = ["the-shield", "invidia-bandit", "village-warriors"];
@@ -516,7 +413,7 @@
     const badge = document.getElementById(id);
     if (!badge) return;
     badge.textContent = text;
-    badge.className = `badge ${kind}`;
+    badge.className = `status-tag ${kind}`;
   }
 
   function renderWarCard(prefix, war) {
@@ -642,6 +539,7 @@
   setInterval(loadWarStatus, 60000);
 
   </script>
-  <script src="theme.js"></script>
+
+  <script src="/visitor-counter.js" defer></script>
 </body>
 </html>
