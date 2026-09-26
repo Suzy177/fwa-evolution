@@ -2,262 +2,244 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>FWA</title>
-  <link rel="stylesheet" href="theme.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rules | FWA Evolution</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <style>
-    /* ---------- RESET ---------- */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(135deg, #ede9ff, #f5f3ff);
-      color: #1f2937;
-      line-height: 1.6;
-    }
-
-    a {
-      text-decoration: none;
-      color: #6d28d9;
-      font-weight: 500;
-    }
-
-    /* ---------- APP WRAPPER ---------- */
-    .app {
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      padding: 40px 20px;
-    }
-
-    /* ---------- MAIN CARD ---------- */
-    .card {
-      width: 100%;
-      max-width: 1100px;
-      background: #ffffff;
-      border-radius: 22px;
-      padding: 40px;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
-    }
-
-    /* ---------- HEADER ---------- */
-    .header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .logo {
-      font-size: 36px;
-      font-weight: 800;
-      color: #06b6d4;
-    }
-
-    .logo span {
-      color: #c7c7c7;
-    }
-
-    .subtitle {
-      color: #6b7280;
-      margin-top: 5px;
-      font-size: 14px;
-    }
-
-    /* ---------- NAV ---------- */
-    .nav {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin: 25px 0 40px;
-      flex-wrap: wrap;
-    }
-
-    .nav a {
-      padding: 8px 16px;
-      border-radius: 999px;
-      transition: background 0.2s;
-    }
-
-    .nav a.active,
-    .nav a:hover {
-      background: #ede9fe;
-    }
-
-    /* ---------- PAGE HEADER ---------- */
-    .page-header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .page-header h1 {
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
-
-    .page-header p {
-      color: #6b7280;
-      max-width: 700px;
-      margin: auto;
-    }
-
-    /* ---------- CONTENT SECTIONS ---------- */
-    .section {
-      background: #fafafa;
-      border-radius: 16px;
-      padding: 25px;
-      margin-bottom: 25px;
-    }
-
-    .section h2 {
-      font-size: 20px;
-      margin-bottom: 12px;
-    }
-
-    .section ul {
-      padding-left: 20px;
-    }
-
-    .section li {
-      margin-bottom: 8px;
-    }
-
-    /* ---------- CTA ---------- */
-    .cta {
-      background: linear-gradient(135deg, #6366f1, #7c3aed);
-      color: #ffffff;
-      border-radius: 18px;
-      padding: 30px;
-      text-align: center;
-      margin-top: 40px;
-    }
-
-    .cta p {
-      margin-bottom: 15px;
-    }
-
-    .cta a {
-      background: #ffffff;
-      color: #4f46e5;
-      padding: 10px 22px;
-      border-radius: 999px;
-      font-weight: 600;
-      display: inline-block;
-    }
-
-    /* ---------- FOOTER ---------- */
-    .footer {
-      text-align: center;
-      margin-top: 40px;
-      color: #6b7280;
-      font-size: 14px;
-    }
-  </style>
+  <link rel="stylesheet" href="/stathut-v2.css">
+  <link rel="icon" type="image/png" href="/assets/fwa-evolution-logo.png">
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-GJLXJW3G7H"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-  
     gtag('config', 'G-GJLXJW3G7H');
   </script>
+
+  <style>
+    .rules-section {
+      max-width: 860px;
+    }
+
+    .rules-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 26px 28px;
+      margin-bottom: 20px;
+    }
+
+    .rules-card h2 {
+      font-family: "Orbitron", sans-serif;
+      font-size: 19px;
+      margin: 0 0 14px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .rules-card h2 .num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent-fwa), var(--accent-fwa-2));
+      color: #0a0e1a;
+      font-size: 13px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .rules-card ul {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--text-dim);
+      font-size: 15px;
+    }
+
+    .rules-card li {
+      margin-bottom: 8px;
+    }
+
+    .rules-card li:last-child {
+      margin-bottom: 0;
+    }
+
+    .rules-card li strong {
+      color: var(--text);
+    }
+
+    .rules-warn {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-left: 3px solid #fbbf24;
+      background: rgba(251, 191, 36, .08);
+      border-radius: 0 10px 10px 0;
+      color: var(--text-dim);
+      font-size: 14px;
+    }
+
+    .consequences {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .consequence {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+    }
+
+    .consequence .tier {
+      font-family: "Orbitron", sans-serif;
+      font-size: 12.5px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      margin-bottom: 8px;
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    .consequence.t1 .tier { color: #34d399; background: rgba(52,211,153,.14); }
+    .consequence.t2 .tier { color: #fbbf24; background: rgba(251,191,36,.14); }
+    .consequence.t3 .tier { color: var(--accent-mwl); background: rgba(255,39,64,.14); }
+
+    .consequence p {
+      color: var(--text-dim);
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .rules-cta {
+      text-align: center;
+    }
+
+    .rules-cta p {
+      color: var(--text-dim);
+      margin-bottom: 18px;
+      font-size: 15px;
+    }
+
+    .rules-btn {
+      display: inline-block;
+      padding: 13px 26px;
+      border-radius: 10px;
+      font-weight: 800 !important;
+      font-size: 14.5px;
+      text-align: center;
+      text-decoration: none !important;
+      color: #0a0e1a !important;
+      background: linear-gradient(135deg, var(--accent-fwa), var(--accent-fwa-2));
+      box-shadow: 0 10px 24px rgba(255, 107, 0, .3);
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+
+    .rules-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(255, 107, 0, .4);
+      text-decoration: none !important;
+    }
+  </style>
 </head>
+<body class="sh2">
 
-<body>
-  <button
-      class="stathut-theme-toggle"
-      type="button"
-      data-stathut-theme-toggle
-      aria-label="Switch theme"
-      title="Switch theme"
-      style="
-          position: fixed;
-          top: 22px;
-          right: 22px;
-          z-index: 9999;
-      "
-  >
-    <span data-stathut-theme-icon>🌙</span>
-</button>
+  <header class="sh2-topbar">
+    <a href="/" class="sh2-logo"><img src="/assets/fwa-evolution-logo.png" alt="FWA Evolution">FWA Evolution</a>
+    <nav class="sh2-nav">
+      <a href="/">Home</a>
+      <a href="/family.html">Family</a>
+      <a href="/clans.html">Clans</a>
+      <a href="/rules.html" class="active">Rules</a>
+      <a href="/fwa-guide.html">Guide</a>
+      <a href="/join.html">Join</a>
+    </nav>
+  </header>
 
-<div class="app">
-  <div class="card">
+  <section class="sh2-hero">
+    <span class="sh2-eyebrow">Code of Conduct</span>
+    <h1>Member Rules</h1>
+    <p>Short version: attack properly, keep an approved base, don't leak sync times, and don't donate to the war CC. Here's the full list of what's expected from every member.</p>
+  </section>
 
-    <!-- HEADER -->
-    <div class="header">
-      <div class="logo">Stat<span>Hut</span></div>
-      <div class="subtitle">Farm War Alliance</div>
-    </div>
+  <section class="sh2-section rules-section">
 
-    <!-- NAVIGATION -->
-    <div class="nav">
-      <a href="index.html">Home</a>
-      <a href="rules.html" class="active">Rules</a>
-      <a href="clans.html">Clans</a>
-      <a href="join.html">Join</a>
-    </div>
-
-    <!-- PAGE HEADER -->
-    <div class="page-header">
-      <h1>FWA Clan Rules</h1>
-      <p>
-        To keep Farm War Alliance wars fair, organized, and stress-free,
-        all members are expected to follow these rules.
-      </p>
-    </div>
-
-    <!-- CONTENT -->
-    <div class="section">
-      <h2>War Participation</h2>
+    <div class="rules-card">
+      <h2><span class="num">1</span>War Participation</h2>
       <ul>
-        <li>Use both war attacks every war</li>
-        <li>Attack only assigned targets</li>
-        <li>Follow timing instructions from leadership</li>
-        <li>Inform leaders if unavailable</li>
+        <li>Use <strong>both</strong> war attacks, every war</li>
+        <li>Attack only your assigned target — no freestyle or trophy-hunting hits</li>
+        <li>Follow the timing called by leadership or reps</li>
+        <li>Tell leadership in advance if you'll be unavailable for a war</li>
       </ul>
     </div>
 
-    <div class="section">
-      <h2>Base Layouts</h2>
+    <div class="rules-card">
+      <h2><span class="num">2</span>Base &amp; Loot Conduct</h2>
       <ul>
-        <li>Use approved FWA base layouts only</li>
-        <li>Do not modify bases during war</li>
-        <li>Keep defensive traps as instructed</li>
+        <li>Keep an FWA-approved base up at all times — no edits during an active war</li>
+        <li>Clear random Clan Castle troops before Battle Day starts</li>
+        <li><strong>Never</strong> donate troops, spells, or siege machines to the war Clan Castle</li>
+        <li>Play for loot and account growth, not stars — that's the whole point of FWA</li>
       </ul>
     </div>
 
-    <div class="section">
-      <h2>Loot & Farming Etiquette</h2>
+    <div class="rules-card">
+      <h2><span class="num">3</span>Sync &amp; Communication</h2>
       <ul>
-        <li>Focus on loot, not stars</li>
-        <li>No freestyle attacks</li>
-        <li>Respect farming agreements</li>
+        <li>Sync times are confidential — never share them outside official channels, on any platform</li>
+        <li>Respond to reps and leadership promptly during sync and match confirmation</li>
+        <li>Report base violations or match disputes through leadership, not directly to opponents</li>
+      </ul>
+      <div class="rules-warn">Leaking a sync time is treated as a serious violation, not a minor one — see Consequences below.</div>
+    </div>
+
+    <div class="rules-card">
+      <h2><span class="num">4</span>Account Standards</h2>
+      <ul>
+        <li>Avoid extreme rushing — keep Town Hall, walls, and heroes reasonably in line with each other</li>
+        <li>Maintain hero levels appropriate for your Town Hall</li>
+        <li>Follow both clan leadership and wider FWA guidance (see the <a href="/fwa-guide.html" style="color:var(--accent-fwa);font-weight:700;">Guide</a> for how the system works)</li>
       </ul>
     </div>
 
-    <div class="section">
-      <h2>Account Standards</h2>
-      <ul>
-        <li>Avoid extreme rushing</li>
-        <li>Maintain reasonable hero levels</li>
-        <li>Follow clan and FWA instructions</li>
-      </ul>
+    <div class="rules-card">
+      <h2><span class="num">5</span>Consequences</h2>
+      <div class="consequences">
+        <div class="consequence t1">
+          <span class="tier">First Offense</span>
+          <p>Warning from leadership — missed attack, minor base slip, etc.</p>
+        </div>
+        <div class="consequence t2">
+          <span class="tier">Repeated</span>
+          <p>Repeated missed attacks, unapproved base edits, or ignoring rep instructions can lead to a demotion or removal.</p>
+        </div>
+        <div class="consequence t3">
+          <span class="tier">Serious</span>
+          <p>CC donations during war, leaking sync times, or getting the clan flagged/banned result in immediate removal.</p>
+        </div>
+      </div>
     </div>
 
-    <!-- FOOTER -->
-    <div class="footer">
+    <div class="rules-card rules-cta">
+      <h2 style="justify-content:center;">Ready to Join?</h2>
+      <p>Read the rules, know what's expected — now let's get you placed in a clan.</p>
+      <a href="/join.html" class="rules-btn">Proceed to Join →</a>
     </div>
-    <p>
-        <a href="https://stathut.in/">← Back to StatHut Home</a>
-    </p>
-  </div>
-</div>
-  <script src="theme.js"></script>
+
+  </section>
+
+  <footer class="sh2-footer">
+    <a href="https://stathut.in/">← Back to StatHut Home</a>
+      <div class="sh2-visitor-stat" id="sh2VisitorStat"></div>
+  </footer>
+
+  <script src="/visitor-counter.js" defer></script>
 </body>
 </html>
