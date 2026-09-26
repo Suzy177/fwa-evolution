@@ -175,19 +175,36 @@
       top: 0;
       left: 50%;
       width: 230px;
+      cursor: pointer;
+      transition: transform .45s cubic-bezier(.22,.9,.32,1), opacity .45s ease;
+    }
+
+    .th-box .th-float {
       background: #efe7d8;
       border-radius: 16px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      cursor: pointer;
-      transition: transform .45s cubic-bezier(.22,.9,.32,1), opacity .45s ease, box-shadow .3s ease;
       box-shadow: 0 20px 40px rgba(0,0,0,.35);
+      animation: thFloaty 3.6s ease-in-out infinite;
+      transition: box-shadow .3s ease;
+    }
+
+    .th-box.is-active .th-float {
+      box-shadow: 0 26px 55px rgba(0,0,0,.55);
     }
 
     .th-box.is-active {
       cursor: default;
-      box-shadow: 0 26px 55px rgba(0,0,0,.55);
+    }
+
+    @keyframes thFloaty {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-9px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .th-box .th-float { animation: none; }
     }
 
     .th-carousel-arrow {
@@ -449,35 +466,16 @@
   let thActive = 0;
   const thTrack = document.getElementById("thCarousel");
   const thLabel = document.getElementById("thCarouselLabel");
+  const thN = TH_LAYOUTS.length;
 
-  function renderCarousel() {
-    thTrack.innerHTML = "";
-    const n = TH_LAYOUTS.length;
-
-    TH_LAYOUTS.forEach((item, i) => {
-      let offset = i - thActive;
-      // wrap the offset so it takes the shortest path around the loop
-      if (offset > n / 2) offset -= n;
-      if (offset < -n / 2) offset += n;
-
-      // only render nearby cards for performance/clarity
-      if (Math.abs(offset) > 3) return;
-
-      const dist = Math.abs(offset);
-      const scale = dist === 0 ? 1 : dist === 1 ? 0.82 : dist === 2 ? 0.66 : 0.52;
-      const opacity = dist === 0 ? 1 : dist === 1 ? 0.75 : dist === 2 ? 0.4 : 0;
-      const spacing = 168;
-      const x = offset * spacing;
-      const z = 100 - dist;
-
-      const card = document.createElement("div");
-      card.className = "th-box" + (dist === 0 ? " is-active" : "");
-      card.style.transform = `translate(calc(-50% + ${x}px), 0) scale(${scale})`;
-      card.style.opacity = opacity;
-      card.style.zIndex = z;
-      card.style.pointerEvents = dist > 3 ? "none" : "auto";
-
-      card.innerHTML = `
+  // Build every card ONCE and keep the same DOM node forever — moving a
+  // card is just updating its transform, which is what lets the CSS
+  // transition actually animate a slide instead of snapping instantly.
+  const thCardEls = TH_LAYOUTS.map((item, i) => {
+    const card = document.createElement("div");
+    card.className = "th-box";
+    card.innerHTML = `
+      <div class="th-float" style="animation-delay:${(i % 5) * -0.7}s">
         <div class="th-thumb"><span class="th-thumb-badge">${item.label}</span><img src="${item.img}" alt="FWA ${item.label} base layout" loading="lazy"></div>
         <div class="th-body">
           <span class="th-sub">TOWN HALL ${item.label.replace("TH", "")}</span>
@@ -486,28 +484,50 @@
             <a class="primary" href="${item.layout}" target="_blank" onclick="event.stopPropagation()">Open Layout</a>
           </div>
         </div>
-      `;
+      </div>
+    `;
+    card.addEventListener("click", () => {
+      if (i === thActive) return;
+      thActive = i;
+      renderCarousel();
+    });
+    thTrack.appendChild(card);
+    return card;
+  });
 
-      if (dist !== 0) {
-        card.addEventListener("click", () => {
-          thActive = i;
-          renderCarousel();
-        });
-      }
+  function renderCarousel() {
+    TH_LAYOUTS.forEach((item, i) => {
+      let offset = i - thActive;
+      // wrap the offset so it takes the shortest path around the loop
+      if (offset > thN / 2) offset -= thN;
+      if (offset < -thN / 2) offset += thN;
 
-      thTrack.appendChild(card);
+      const dist = Math.abs(offset);
+      const scale = dist === 0 ? 1 : dist === 1 ? 0.82 : dist === 2 ? 0.66 : 0.52;
+      const opacity = dist === 0 ? 1 : dist === 1 ? 0.75 : dist === 2 ? 0.4 : 0;
+      const spacing = 168;
+      const x = offset * spacing;
+      const z = 100 - dist;
+
+      const card = thCardEls[i];
+      card.classList.toggle("is-active", dist === 0);
+      card.style.transform = `translate(calc(-50% + ${x}px), 0) scale(${scale})`;
+      card.style.opacity = opacity;
+      card.style.zIndex = z;
+      card.style.pointerEvents = dist > 3 ? "none" : "auto";
+      card.style.cursor = dist === 0 ? "default" : "pointer";
     });
 
-    thLabel.textContent = `${TH_LAYOUTS[thActive].label} — ${thActive + 1} of ${n}`;
+    thLabel.textContent = `${TH_LAYOUTS[thActive].label} — ${thActive + 1} of ${thN}`;
   }
 
   document.getElementById("thNext").addEventListener("click", () => {
-    thActive = (thActive + 1) % TH_LAYOUTS.length;
+    thActive = (thActive + 1) % thN;
     renderCarousel();
   });
 
   document.getElementById("thPrev").addEventListener("click", () => {
-    thActive = (thActive - 1 + TH_LAYOUTS.length) % TH_LAYOUTS.length;
+    thActive = (thActive - 1 + thN) % thN;
     renderCarousel();
   });
 
