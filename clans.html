@@ -23,7 +23,7 @@
       justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 34px;
+      margin-bottom: 20px;
     }
 
     .th-btn {
@@ -51,74 +51,72 @@
       border-color: transparent;
     }
 
-    /* ---------- carousel ---------- */
-    .carousel {
+    .dashboard-meta {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 18px;
-      max-width: 440px;
-      margin: 0 auto;
+      gap: 12px;
+      margin: 0 0 30px;
+      flex-wrap: wrap;
     }
 
-    .carousel-arrow {
-      flex-shrink: 0;
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
+    .dashboard-meta span {
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    .refresh-btn {
       border: 1px solid var(--border);
       background: var(--surface);
       color: var(--text);
-      font-size: 18px;
-      font-weight: 900;
+      font-weight: 700;
+      font-size: 12.5px;
+      padding: 7px 16px;
+      border-radius: 999px;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: border-color .18s ease, color .18s ease, transform .15s ease;
+      transition: border-color .18s ease, color .18s ease;
     }
 
-    .carousel-arrow:hover {
+    .refresh-btn:hover {
       border-color: var(--accent-fwa);
       color: var(--accent-fwa);
-      transform: translateY(-2px);
     }
 
-    .carousel-arrow:disabled {
-      opacity: .3;
+    .refresh-btn:disabled {
+      opacity: .5;
       cursor: default;
-      transform: none;
     }
 
-    .carousel-stage {
-      flex: 1;
-      min-width: 0;
+    .clans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
     }
 
     .clan-link {
       text-decoration: none;
       color: inherit;
       display: block;
+      height: 100%;
+      position: relative;
     }
 
-    .carousel-stage { position: relative; }
-
-    .carousel-stage::before {
+    .clan-link::before {
       content: "";
       position: absolute;
-      inset: -30px;
+      inset: -20px;
       background:
-        radial-gradient(circle at 30% 20%, rgba(255,156,42,.35), transparent 55%),
-        radial-gradient(circle at 75% 80%, rgba(96,165,250,.25), transparent 55%);
+        radial-gradient(circle at 30% 20%, rgba(255,156,42,.3), transparent 55%),
+        radial-gradient(circle at 75% 80%, rgba(96,165,250,.2), transparent 55%);
       filter: blur(10px);
       z-index: 0;
       border-radius: 40px;
     }
 
-    .clan-link { position: relative; z-index: 1; }
-
     .clan-card {
       position: relative;
+      z-index: 1;
+      height: 100%;
       background:
         linear-gradient(160deg, rgba(19,26,43,.82), rgba(10,14,26,.88)) padding-box,
         linear-gradient(135deg, var(--accent-fwa), #60a5fa 45%, #c084fc 75%, var(--accent-fwa-2)) border-box;
@@ -126,7 +124,7 @@
       backdrop-filter: blur(18px) saturate(160%);
       border: 1.5px solid transparent;
       border-radius: 22px;
-      padding: 20px 16px 16px;
+      padding: 20px 18px 18px;
       overflow: hidden;
       box-shadow:
         0 8px 32px rgba(0,0,0,.4),
@@ -168,8 +166,9 @@
 
     .clan-art {
       position: relative;
+      width: 58%;
+      margin: 0 auto 10px;
       aspect-ratio: 1 / 1;
-      margin-bottom: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -178,8 +177,8 @@
     .clan-art::before {
       content: "";
       position: absolute;
-      width: 72%;
-      height: 72%;
+      width: 82%;
+      height: 82%;
       border-radius: 50%;
       background: radial-gradient(circle, rgba(255,156,42,.4), rgba(96,165,250,.15) 55%, transparent 72%);
       filter: blur(4px);
@@ -193,14 +192,15 @@
     }
 
     .clan-art img {
-      width: 78%;
-      height: 78%;
+      width: 90%;
+      height: 90%;
       object-fit: contain;
       display: block;
       filter: drop-shadow(0 14px 22px rgba(0,0,0,.55));
       animation: floaty 3.6s ease-in-out infinite;
       position: relative;
       z-index: 1;
+      border-radius: 12px;
     }
 
     @keyframes floaty {
@@ -208,20 +208,15 @@
       50% { transform: translateY(-8px); }
     }
 
-    .clan-art .corner {
-      display: none;
-    }
-
     .clan-info {
       position: relative;
       z-index: 1;
-      padding: 2px 4px 0;
       text-align: center;
     }
 
     .clan-info h3 {
-      margin: 0 0 4px;
-      font-size: 19px;
+      margin: 0 0 6px;
+      font-size: 18px;
       font-family: "Orbitron", sans-serif;
       font-weight: 800;
       letter-spacing: .02em;
@@ -232,36 +227,67 @@
     }
 
     .clan-info p {
-      margin: 0 0 10px;
-      font-size: 13px;
+      margin: 0 0 3px;
+      font-size: 12.5px;
       color: var(--text-dim);
     }
 
-    .carousel-dots {
+    .member-progress {
+      width: 100%;
+      height: 7px;
+      background: var(--surface-2);
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 10px 0 10px;
+    }
+
+    .member-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-fwa), var(--accent-fwa-2));
+      border-radius: 999px;
+      transition: width .8s ease;
+    }
+
+    .clan-extra-stats {
       display: flex;
       justify-content: center;
       gap: 8px;
-      margin: 18px 0 6px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
     }
 
-    .carousel-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--border);
-      transition: background .18s ease, transform .18s ease;
+    .clan-extra-stats span {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--surface-2);
+      color: var(--text-dim);
+      border: 1px solid var(--border);
     }
 
-    .carousel-dot.active {
-      background: var(--accent-fwa);
-      transform: scale(1.3);
+    .status-tag {
+      display: inline-flex;
+      align-items: center;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .4px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 999px;
     }
+
+    .status-tag.recruiting  { color: #34d399; background: rgba(52,211,153,.14); }
+    .status-tag.almost-full { color: #fbbf24; background: rgba(251,191,36,.14); }
+    .status-tag.full        { color: var(--accent-mwl); background: rgba(255,39,64,.14); }
+    .status-tag.closed      { color: var(--text-dim); background: rgba(148,163,184,.14); }
 
     #noClansMessage {
       display: none;
       text-align: center;
       color: var(--text-dim);
-      margin-top: 10px;
+      margin: 20px 0;
     }
 
     .discord-cta {
@@ -302,6 +328,38 @@
       transform: translateY(-2px);
       box-shadow: 0 8px 20px rgba(0, 0, 0, .25);
     }
+
+    /* ---- Skeleton loading state (dark) ---- */
+    .skeleton {
+      position: relative;
+      overflow: hidden;
+      background: var(--surface-2);
+      border-radius: 6px;
+      color: transparent !important;
+    }
+
+    .skeleton::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+      animation: skeletonShimmer 1.4s infinite;
+    }
+
+    @keyframes skeletonShimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .skeleton-text {
+      display: inline-block;
+      height: 12px;
+      width: 70%;
+    }
+
+    .skeleton-badge {
+      border-radius: 12px;
+    }
   </style>
 </head>
 <body class="sh2">
@@ -321,10 +379,15 @@
   <section class="sh2-hero">
     <span class="sh2-eyebrow">Clan Family</span>
     <h1>Our Clans</h1>
-    <p>Three active FWA Evolution clans across TH13–TH18. Use the arrows to browse, or filter by Town Hall to find where you fit.</p>
+    <p>Three active FWA Evolution clans across TH13–TH18, with live member counts, levels, and war stats.</p>
   </section>
 
   <section class="sh2-section">
+
+    <div class="dashboard-meta">
+      <span id="lastUpdatedText">Loading live data…</span>
+      <button class="refresh-btn" id="refreshBtn" onclick="loadClans()">↻ Refresh</button>
+    </div>
 
     <div class="th-filter" id="thFilterGroup">
       <button class="th-btn active" data-th="all">All</button>
@@ -336,30 +399,78 @@
       <button class="th-btn" data-th="18">TH18</button>
     </div>
 
-    <div class="carousel">
-      <button class="carousel-arrow" id="prevBtn" aria-label="Previous clan">‹</button>
+    <div class="clans-grid" id="clansGrid">
 
-      <div class="carousel-stage">
-        <a href="#" class="clan-link" id="clanLink">
+      <div class="clan-item" data-min-th="13" data-max-th="18">
+        <a href="/clans/the-shield.html" class="clan-link">
           <div class="clan-card">
             <span class="clan-tier">FWA</span>
-            <div class="clan-art" id="clanArt">
-              <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
-              <img id="clanImg" src="" alt="">
+            <div class="clan-art">
+              <img id="shield-badge" class="skeleton skeleton-badge" src="/assets/badges/shield-card.png" alt="The Shield">
             </div>
             <div class="clan-info">
-              <h3 id="clanName"></h3>
-              <p id="clanRange"></p>
-              <span class="sh2-tag maint" id="clanStatus">Active · Recruiting</span>
+              <h3 id="shield-name" class="skeleton skeleton-text">Loading...</h3>
+              <p id="shield-members" class="skeleton skeleton-text">Loading...</p>
+              <p id="shield-level" class="skeleton skeleton-text">Loading...</p>
+              <p id="shield-league" class="skeleton skeleton-text">Loading...</p>
+              <div class="member-progress"><div id="shield-fill" class="member-fill"></div></div>
+              <div class="clan-extra-stats">
+                <span id="shield-warwins">⚔ — Wars Won</span>
+                <span id="shield-type">— Type</span>
+              </div>
+              <span id="shield-status" class="status-tag recruiting">Loading...</span>
             </div>
           </div>
         </a>
       </div>
 
-      <button class="carousel-arrow" id="nextBtn" aria-label="Next clan">›</button>
-    </div>
+      <div class="clan-item" data-min-th="13" data-max-th="18">
+        <a href="/clans/invidia-bandit.html" class="clan-link">
+          <div class="clan-card">
+            <span class="clan-tier">FWA</span>
+            <div class="clan-art">
+              <img id="bandit-badge" class="skeleton skeleton-badge" src="/assets/badges/nvidiabandit.png.png" alt="InvidiaBandit">
+            </div>
+            <div class="clan-info">
+              <h3 id="bandit-name" class="skeleton skeleton-text">Loading...</h3>
+              <p id="bandit-members" class="skeleton skeleton-text">Loading...</p>
+              <p id="bandit-level" class="skeleton skeleton-text">Loading...</p>
+              <p id="bandit-league" class="skeleton skeleton-text">Loading...</p>
+              <div class="member-progress"><div id="bandit-fill" class="member-fill"></div></div>
+              <div class="clan-extra-stats">
+                <span id="bandit-warwins">⚔ — Wars Won</span>
+                <span id="bandit-type">— Type</span>
+              </div>
+              <span id="bandit-status" class="status-tag recruiting">Loading...</span>
+            </div>
+          </div>
+        </a>
+      </div>
 
-    <div class="carousel-dots" id="carouselDots"></div>
+      <div class="clan-item" data-min-th="13" data-max-th="18">
+        <a href="/clans/village-warriors.html" class="clan-link">
+          <div class="clan-card">
+            <span class="clan-tier">FWA</span>
+            <div class="clan-art">
+              <img id="warriors-badge" class="skeleton skeleton-badge" src="/assets/badges/villagewarriors.png.png" alt="Vi11ageWarriors">
+            </div>
+            <div class="clan-info">
+              <h3 id="warriors-name" class="skeleton skeleton-text">Loading...</h3>
+              <p id="warriors-members" class="skeleton skeleton-text">Loading...</p>
+              <p id="warriors-level" class="skeleton skeleton-text">Loading...</p>
+              <p id="warriors-league" class="skeleton skeleton-text">Loading...</p>
+              <div class="member-progress"><div id="warriors-fill" class="member-fill"></div></div>
+              <div class="clan-extra-stats">
+                <span id="warriors-warwins">⚔ — Wars Won</span>
+                <span id="warriors-type">— Type</span>
+              </div>
+              <span id="warriors-status" class="status-tag recruiting">Loading...</span>
+            </div>
+          </div>
+        </a>
+      </div>
+
+    </div>
 
     <p id="noClansMessage">No FWA clans currently recruit that Town Hall level — try "All" or check back later.</p>
 
@@ -377,122 +488,181 @@
   </footer>
 
   <script>
-    (function () {
-      const CLANS = [
-        {
-          name: "The Shield",
-          href: "/clans/the-shield.html",
-          img: "/assets/badges/shield-card.png",
-          min: 13, max: 18
-        },
-        {
-          name: "InvidiaBandit",
-          href: "/clans/invidia-bandit.html",
-          img: "/assets/badges/nvidiabandit.png.png",
-          min: 13, max: 18
-        },
-        {
-          name: "Vi11ageWarriors",
-          href: "/clans/village-warriors.html",
-          img: "/assets/badges/villagewarriors.png.png",
-          min: 13, max: 18
-        }
-      ];
+    const CLAN_SLUGS = ["the-shield", "invidia-bandit", "village-warriors"];
+    const CLAN_PREFIXES = ["shield", "bandit", "warriors"];
+    // Note: the family API's own "endpoint" field is wrong for VillageWarriors
+    // (it 404s) — these slugs are the ones the clan detail pages already use
+    // successfully, so we hardcode them rather than trusting that field.
 
-      const buttons = document.querySelectorAll("#thFilterGroup .th-btn");
-      const prevBtn = document.getElementById("prevBtn");
-      const nextBtn = document.getElementById("nextBtn");
-      const dotsWrap = document.getElementById("carouselDots");
-      const noClansMessage = document.getElementById("noClansMessage");
-      const carousel = document.querySelector(".carousel");
+    function updateStatus(id, status) {
+      const badge = document.getElementById(id);
+      if (!badge) return;
 
-      const clanLink = document.getElementById("clanLink");
-      const clanArt = document.getElementById("clanArt");
-      const clanImg = document.getElementById("clanImg");
-      const clanName = document.getElementById("clanName");
-      const clanRange = document.getElementById("clanRange");
+      badge.textContent = status;
+      badge.classList.remove("recruiting", "almost-full", "full", "closed");
 
-      let thFilter = "all";
-      let currentIndex = 0;
-
-      function getFiltered() {
-        if (thFilter === "all") return CLANS.map((c, i) => i);
-        const th = parseInt(thFilter, 10);
-        return CLANS.reduce((acc, c, i) => {
-          if (th >= c.min && th <= c.max) acc.push(i);
-          return acc;
-        }, []);
+      if (status === "Recruiting") {
+        badge.classList.add("recruiting");
+      } else if (status === "Almost Full") {
+        badge.classList.add("almost-full");
+      } else if (status === "Unavailable") {
+        badge.classList.add("closed");
+      } else {
+        badge.classList.add("full");
       }
+    }
 
-      function renderDots(filtered) {
-        dotsWrap.innerHTML = "";
-        filtered.forEach(i => {
-          const dot = document.createElement("span");
-          dot.className = "carousel-dot" + (i === currentIndex ? " active" : "");
-          dot.addEventListener("click", () => {
-            currentIndex = i;
-            render();
-          });
-          dotsWrap.appendChild(dot);
+    function clearSkeleton(...ids) {
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove("skeleton", "skeleton-text", "skeleton-badge");
+      });
+    }
+
+    async function loadClans(){
+      const refreshBtn = document.getElementById("refreshBtn");
+      const lastUpdatedText = document.getElementById("lastUpdatedText");
+      if (refreshBtn) refreshBtn.disabled = true;
+
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 8000);
+
+        const response =
+            await fetch("https://api.stathut.in/api/family", {
+              signal: controller.signal
+            });
+
+        clearTimeout(timeout);
+
+        if (!response.ok) {
+          throw new Error(`API returned ${response.status}`);
+        }
+
+        const family = await response.json();
+
+        const clanDetails = await Promise.allSettled(
+          CLAN_SLUGS.map(slug =>
+            fetch(`https://api.stathut.in/api/clan/${slug}`)
+              .then(r => (r.ok ? r.json() : null))
+          )
+        );
+
+        family.clans.forEach((clan, i) => {
+          const p = CLAN_PREFIXES[i];
+          if (!p) return;
+
+          document.getElementById(`${p}-name`).textContent = clan.name;
+          document.getElementById(`${p}-members`).textContent =
+            `👥 ${clan.members} / 50 Members`;
+          document.getElementById(`${p}-level`).textContent =
+            `⭐ Level ${clan.level}`;
+          document.getElementById(`${p}-league`).textContent =
+            `🏆 ${clan.league}`;
+          if (clan.badge) document.getElementById(`${p}-badge`).src = clan.badge;
+
+          const fill = document.getElementById(`${p}-fill`);
+          if (fill) {
+            const pct = Math.max(0, Math.min(100, (clan.members / 50) * 100));
+            fill.style.width = `${pct}%`;
+          }
+
+          const settled = clanDetails[i];
+          const detail = settled && settled.status === "fulfilled" ? settled.value : null;
+
+          const warWinsEl = document.getElementById(`${p}-warwins`);
+          const typeEl = document.getElementById(`${p}-type`);
+
+          if (detail) {
+            if (warWinsEl) {
+              warWinsEl.textContent =
+                typeof detail.warWins === "number"
+                  ? `⚔ ${detail.warWins} Wars Won`
+                  : "⚔ Wars Won: —";
+            }
+            if (typeEl) {
+              typeEl.textContent =
+                detail.type === "inviteOnly" ? "🔒 Invite Only" : "🔓 Open";
+            }
+          } else {
+            if (warWinsEl) warWinsEl.textContent = "⚔ Wars Won unavailable";
+            if (typeEl) typeEl.textContent = "";
+          }
+
+          updateStatus(`${p}-status`, clan.status);
+
+          clearSkeleton(`${p}-name`, `${p}-members`, `${p}-level`, `${p}-league`, `${p}-badge`);
         });
+
+        if (lastUpdatedText) {
+          lastUpdatedText.textContent =
+            `Last updated ${new Date().toLocaleTimeString()} · auto-refreshing every 60s`;
+        }
+
+      } catch (error) {
+
+        console.error("StatHut: failed to load clan data:", error);
+
+        const unavailableIds = [
+          "shield-name", "shield-members", "shield-level", "shield-league",
+          "bandit-name", "bandit-members", "bandit-level", "bandit-league",
+          "warriors-name", "warriors-members", "warriors-level", "warriors-league"
+        ];
+
+        unavailableIds.forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.textContent = "Unavailable";
+        });
+        clearSkeleton(...unavailableIds, "shield-badge", "bandit-badge", "warriors-badge");
+
+        ["shield-status", "bandit-status", "warriors-status"].forEach(id => {
+          updateStatus(id, "Unavailable");
+        });
+
+        if (lastUpdatedText) {
+          lastUpdatedText.textContent = "Live data unavailable right now — showing fallback state";
+        }
+
+      } finally {
+        if (refreshBtn) refreshBtn.disabled = false;
       }
+    }
 
-      function render() {
-        const filtered = getFiltered();
+    loadClans();
+    setInterval(loadClans, 60000);
 
-        if (filtered.length === 0) {
-          carousel.style.display = "none";
-          dotsWrap.style.display = "none";
-          noClansMessage.style.display = "block";
-          return;
-        }
+    (function () {
+      const buttons = document.querySelectorAll("#thFilterGroup .th-btn");
+      const items = document.querySelectorAll("#clansGrid .clan-item");
+      const noClansMessage = document.getElementById("noClansMessage");
+      const clansGrid = document.getElementById("clansGrid");
 
-        if (!filtered.includes(currentIndex)) {
-          currentIndex = filtered[0];
-        }
+      function applyFilter(thValue) {
+        let visibleCount = 0;
 
-        carousel.style.display = "flex";
-        dotsWrap.style.display = "flex";
-        noClansMessage.style.display = "none";
+        items.forEach(item => {
+          const min = parseInt(item.dataset.minTh, 10);
+          const max = parseInt(item.dataset.maxTh, 10);
 
-        const clan = CLANS[currentIndex];
-        clanLink.href = clan.href;
-        clanImg.src = clan.img;
-        clanImg.alt = clan.name;
-        clanName.textContent = clan.name;
-        clanRange.textContent = "TH" + clan.min + "–TH" + clan.max;
+          const matches =
+            thValue === "all" ||
+            (parseInt(thValue, 10) >= min && parseInt(thValue, 10) <= max);
 
-        const posInFiltered = filtered.indexOf(currentIndex);
-        prevBtn.disabled = filtered.length <= 1;
-        nextBtn.disabled = filtered.length <= 1;
+          item.style.display = matches ? "" : "none";
+          if (matches) visibleCount++;
+        });
 
-        renderDots(filtered);
-
-        prevBtn.onclick = () => {
-          const idx = filtered.indexOf(currentIndex);
-          const prevIdx = (idx - 1 + filtered.length) % filtered.length;
-          currentIndex = filtered[prevIdx];
-          render();
-        };
-
-        nextBtn.onclick = () => {
-          const idx = filtered.indexOf(currentIndex);
-          const nextIdx = (idx + 1) % filtered.length;
-          currentIndex = filtered[nextIdx];
-          render();
-        };
+        clansGrid.style.display = visibleCount === 0 ? "none" : "grid";
+        noClansMessage.style.display = visibleCount === 0 ? "block" : "none";
       }
 
       buttons.forEach(btn => {
         btn.addEventListener("click", () => {
           buttons.forEach(b => b.classList.remove("active"));
           btn.classList.add("active");
-          thFilter = btn.dataset.th;
-          render();
+          applyFilter(btn.dataset.th);
         });
       });
-
-      render();
     })();
   </script>
 
