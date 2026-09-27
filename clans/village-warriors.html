@@ -201,6 +201,74 @@
     .back-link:hover {
       color: var(--text);
     }
+
+    /* ---- clan roster ---- */
+    .roster-section {
+      margin-bottom: 40px;
+    }
+
+    .roster-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .roster-header h2 {
+      font-family: "Orbitron", sans-serif;
+      font-size: 19px;
+      color: var(--text);
+      margin: 0;
+    }
+
+    .roster-note {
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .roster-note strong {
+      color: #a78bfa;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    table.roster-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 640px;
+    }
+
+    table.roster-table th, table.roster-table td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    table.roster-table th {
+      color: var(--text-dim);
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      font-weight: 700;
+    }
+
+    table.roster-table td.num, table.roster-table th.num { text-align: right; }
+    table.roster-table tr:last-child td { border-bottom: none; }
+
+    table.roster-table td.role.leader,
+    table.roster-table td.role.coLeader {
+      color: #a78bfa;
+      font-weight: 700;
+    }
   </style>
 </head>
 <body class="sh2">
@@ -265,6 +333,30 @@
       </div>
 
 
+
+      <div class="roster-section">
+        <div class="roster-header">
+          <h2>👥 Clan Roster</h2>
+          <span class="roster-note" id="rosterNote">Showing <strong>sample</strong> data — live roster coming soon</span>
+        </div>
+        <div class="table-wrap">
+          <table class="roster-table">
+            <thead>
+              <tr>
+                <th>Role</th>
+                <th>Name</th>
+                <th class="num">TH</th>
+                <th class="num">Trophies</th>
+                <th class="num">Donated</th>
+                <th class="num">Received</th>
+                <th class="num">War Stars</th>
+              </tr>
+            </thead>
+            <tbody id="rosterBody"></tbody>
+          </table>
+        </div>
+      </div>
+
       <a href="/clans.html" class="back-link">← Back to Clans</a>
 
     </div>
@@ -321,6 +413,153 @@
       document.getElementById("alliance-name").textContent = "Unavailable";
     }
   }
+
+
+  const ROLE_ICON = { leader: "👑", coLeader: "🔰", admin: "⭐", member: "🔹" };
+  const ROLE_LABEL = { leader: "Leader", coLeader: "Co-Leader", admin: "Elder", member: "Member" };
+
+  const SAMPLE_MEMBERS = [
+  {
+    "name": "WarlordVi11age",
+    "role": "leader",
+    "townHallLevel": 14,
+    "trophies": 3105,
+    "donations": 2650,
+    "donationsReceived": 1340,
+    "warStars": 140
+  },
+  {
+    "name": "AmethystKnight",
+    "role": "coLeader",
+    "townHallLevel": 14,
+    "trophies": 2980,
+    "donations": 1960,
+    "donationsReceived": 1210,
+    "warStars": 126
+  },
+  {
+    "name": "ViolentBloom",
+    "role": "coLeader",
+    "townHallLevel": 13,
+    "trophies": 2840,
+    "donations": 1540,
+    "donationsReceived": 1090,
+    "warStars": 112
+  },
+  {
+    "name": "LilacSentry",
+    "role": "admin",
+    "townHallLevel": 13,
+    "trophies": 2705,
+    "donations": 1310,
+    "donationsReceived": 940,
+    "warStars": 101
+  },
+  {
+    "name": "OrchidTumult",
+    "role": "admin",
+    "townHallLevel": 12,
+    "trophies": 2580,
+    "donations": 1080,
+    "donationsReceived": 1220,
+    "warStars": 92
+  },
+  {
+    "name": "PlumRaven",
+    "role": "member",
+    "townHallLevel": 12,
+    "trophies": 2455,
+    "donations": 760,
+    "donationsReceived": 680,
+    "warStars": 83
+  },
+  {
+    "name": "MauveSprint",
+    "role": "member",
+    "townHallLevel": 11,
+    "trophies": 2330,
+    "donations": 590,
+    "donationsReceived": 960,
+    "warStars": 72
+  },
+  {
+    "name": "IndigoFletch",
+    "role": "member",
+    "townHallLevel": 11,
+    "trophies": 2205,
+    "donations": 980,
+    "donationsReceived": 510,
+    "warStars": 65
+  },
+  {
+    "name": "ThistleWard",
+    "role": "member",
+    "townHallLevel": 10,
+    "trophies": 2090,
+    "donations": 420,
+    "donationsReceived": 730,
+    "warStars": 55
+  },
+  {
+    "name": "HeatherVex",
+    "role": "member",
+    "townHallLevel": 10,
+    "trophies": 1975,
+    "donations": 610,
+    "donationsReceived": 560,
+    "warStars": 49
+  },
+  {
+    "name": "LavenderKit",
+    "role": "member",
+    "townHallLevel": 9,
+    "trophies": 1840,
+    "donations": 280,
+    "donationsReceived": 470,
+    "warStars": 38
+  },
+  {
+    "name": "WisteriaFang",
+    "role": "member",
+    "townHallLevel": 9,
+    "trophies": 1702,
+    "donations": 190,
+    "donationsReceived": 350,
+    "warStars": 29
+  }
+];
+
+  function renderRoster(members) {
+    const tbody = document.getElementById("rosterBody");
+    tbody.innerHTML = members.map(m => `
+      <tr>
+        <td class="role ${m.role}">${ROLE_ICON[m.role] || "🔹"} ${ROLE_LABEL[m.role] || "Member"}</td>
+        <td>${m.name}</td>
+        <td class="num">TH${m.townHallLevel}</td>
+        <td class="num">${m.trophies.toLocaleString()}</td>
+        <td class="num">${m.donations.toLocaleString()}</td>
+        <td class="num">${m.donationsReceived.toLocaleString()}</td>
+        <td class="num">${m.warStars}</td>
+      </tr>
+    `).join("");
+  }
+
+  async function loadRoster() {
+    const note = document.getElementById("rosterNote");
+    try {
+      const res = await fetch("https://api.stathut.in/api/clan/village-warriors/members");
+      if (!res.ok) throw new Error("members endpoint not live yet");
+      const data = await res.json();
+      const members = Array.isArray(data) ? data : data.members;
+      if (!Array.isArray(members) || members.length === 0) throw new Error("empty roster");
+      renderRoster(members);
+      note.innerHTML = "<strong>Live</strong> roster";
+    } catch (err) {
+      renderRoster(SAMPLE_MEMBERS);
+    }
+  }
+
+  loadRoster();
 
   loadClanData();
   </script>
