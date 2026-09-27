@@ -349,7 +349,6 @@
                 <th class="num">Trophies</th>
                 <th class="num">Donated</th>
                 <th class="num">Received</th>
-                <th class="num">War Stars</th>
               </tr>
             </thead>
             <tbody id="rosterBody"></tbody>
@@ -426,7 +425,6 @@
     "trophies": 3280,
     "donations": 3010,
     "donationsReceived": 1180,
-    "warStars": 147
   },
   {
     "name": "SilentViper",
@@ -435,7 +433,6 @@
     "trophies": 3105,
     "donations": 2140,
     "donationsReceived": 1290,
-    "warStars": 133
   },
   {
     "name": "TealRaider",
@@ -444,7 +441,6 @@
     "trophies": 2960,
     "donations": 1780,
     "donationsReceived": 1050,
-    "warStars": 118
   },
   {
     "name": "MirageFang",
@@ -453,7 +449,6 @@
     "trophies": 2845,
     "donations": 1420,
     "donationsReceived": 990,
-    "warStars": 106
   },
   {
     "name": "CipherWolf",
@@ -462,7 +457,6 @@
     "trophies": 2710,
     "donations": 1290,
     "donationsReceived": 1400,
-    "warStars": 99
   },
   {
     "name": "GlintHawk",
@@ -471,7 +465,6 @@
     "trophies": 2590,
     "donations": 870,
     "donationsReceived": 760,
-    "warStars": 90
   },
   {
     "name": "DuskRacer",
@@ -480,7 +473,6 @@
     "trophies": 2455,
     "donations": 640,
     "donationsReceived": 1080,
-    "warStars": 78
   },
   {
     "name": "OpalSlyth",
@@ -489,7 +481,6 @@
     "trophies": 2320,
     "donations": 1120,
     "donationsReceived": 580,
-    "warStars": 71
   },
   {
     "name": "RustJackal",
@@ -498,7 +489,6 @@
     "trophies": 2210,
     "donations": 490,
     "donationsReceived": 850,
-    "warStars": 60
   },
   {
     "name": "VelvetCrow",
@@ -507,7 +497,6 @@
     "trophies": 2088,
     "donations": 720,
     "donationsReceived": 640,
-    "warStars": 54
   },
   {
     "name": "QuartzFerret",
@@ -516,7 +505,6 @@
     "trophies": 1960,
     "donations": 330,
     "donationsReceived": 560,
-    "warStars": 41
   },
   {
     "name": "PallidLynx",
@@ -525,21 +513,26 @@
     "trophies": 1815,
     "donations": 260,
     "donationsReceived": 410,
-    "warStars": 33
   }
 ];
 
+  const ROLE_RANK = { leader: 0, coLeader: 1, admin: 2, member: 3 };
+
   function renderRoster(members) {
+    const sorted = [...members].sort((a, b) => {
+      const rankDiff = (ROLE_RANK[a.role] ?? 4) - (ROLE_RANK[b.role] ?? 4);
+      if (rankDiff !== 0) return rankDiff;
+      return (b.donations || 0) - (a.donations || 0);
+    });
     const tbody = document.getElementById("rosterBody");
-    tbody.innerHTML = members.map(m => `
+    tbody.innerHTML = sorted.map(m => `
       <tr>
         <td class="role ${m.role}">${ROLE_ICON[m.role] || "🔹"} ${ROLE_LABEL[m.role] || "Member"}</td>
         <td>${m.name}</td>
-        <td class="num">TH${m.townHallLevel}</td>
-        <td class="num">${m.trophies.toLocaleString()}</td>
-        <td class="num">${m.donations.toLocaleString()}</td>
-        <td class="num">${m.donationsReceived.toLocaleString()}</td>
-        <td class="num">${m.warStars}</td>
+        <td class="num">TH${m.townHallLevel ?? "—"}</td>
+        <td class="num">${(m.trophies ?? 0).toLocaleString()}</td>
+        <td class="num">${(m.donations ?? 0).toLocaleString()}</td>
+        <td class="num">${(m.donationsReceived ?? 0).toLocaleString()}</td>
       </tr>
     `).join("");
   }
