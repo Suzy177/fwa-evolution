@@ -23,124 +23,6 @@
       margin: 0 auto 46px;
     }
 
-    /* ---- the "open book" hero card ---- */
-    .book-card {
-      display: grid;
-      grid-template-columns: 1.1fr 1fr;
-      background: #efe7d8;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 30px 70px rgba(0,0,0,.45);
-      min-height: 440px;
-    }
-
-    .book-left {
-      padding: 52px 48px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      font-family: "Playfair Display", Georgia, serif;
-      color: #2a2318;
-    }
-
-    .book-eyebrow {
-      font-family: "Orbitron", sans-serif;
-      font-size: 11.5px;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      color: #8a6d3b;
-      margin-bottom: 18px;
-    }
-
-    .book-left h1 {
-      margin: 0 0 22px;
-      font-size: 46px;
-      line-height: 1.08;
-      font-weight: 900;
-      color: #221c12;
-    }
-
-    .book-byline {
-      font-size: 14px;
-      font-style: italic;
-      color: #7a6a4d;
-      margin-bottom: 26px;
-    }
-
-    .book-left p.desc {
-      font-family: Georgia, "Playfair Display", serif;
-      font-size: 15.5px;
-      line-height: 1.75;
-      color: #4a4030;
-      margin: 0;
-      max-width: 380px;
-    }
-
-    /* ---- right graphic panel, standing in for the "photo" ---- */
-    .book-right {
-      position: relative;
-      background:
-        radial-gradient(circle at 50% 38%, rgba(255,107,0,.28), transparent 62%),
-        linear-gradient(160deg, #0d1424, #05070d 78%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .book-right::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
-      background-size: 34px 34px;
-      opacity: .5;
-    }
-
-    .book-emblem {
-      position: relative;
-      width: 190px;
-      height: 190px;
-      border-radius: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(160deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
-      border: 1px solid rgba(255,255,255,.14);
-      box-shadow: 0 0 60px rgba(255,107,0,.25);
-    }
-
-    .book-emblem img {
-      width: 118px;
-      height: 118px;
-      object-fit: contain;
-      filter: drop-shadow(0 8px 18px rgba(0,0,0,.5));
-    }
-
-    .book-tag {
-      position: absolute;
-      bottom: 26px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: "Orbitron", sans-serif;
-      font-size: 12px;
-      letter-spacing: .08em;
-      color: var(--text-dim);
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.12);
-      padding: 6px 16px;
-      border-radius: 999px;
-    }
-
-    @media (max-width: 760px) {
-      .book-card { grid-template-columns: 1fr; }
-      .book-right { min-height: 260px; }
-      .book-left { padding: 40px 30px; }
-      .book-left h1 { font-size: 34px; }
-    }
-
     /* ---- live war status callout, styled like a book-callout ---- */
     .book-callout {
       display: flex;
@@ -435,29 +317,13 @@
     </nav>
   </header>
 
+  <section class="sh2-hero">
+    <span class="sh2-eyebrow">Clan Family</span>
+    <h1>FWA</h1>
+    <p>Farm War Alliance — pre-arranged, no-drama wars focused on loot and account growth, not stars. Pick a section below.</p>
+  </section>
+
   <section class="sh2-section">
-    <div class="book-wrap">
-
-      <div class="book-card">
-        <div class="book-left">
-          <span class="book-eyebrow">FWA Evolution · Clan Family</span>
-          <h1>FWA</h1>
-          <p class="book-byline">Farm War Alliance</p>
-          <p class="desc">
-            Pre-arranged, no-drama wars focused on loot and account growth,
-            not stars. Browse the family, meet the clans, and find out
-            exactly how everything runs below.
-          </p>
-        </div>
-        <div class="book-right">
-          <div class="book-emblem">
-            <img src="/assets/fwa-evolution-logo.png" alt="FWA Evolution">
-          </div>
-          <span class="book-tag">7 SECTIONS TO EXPLORE</span>
-        </div>
-      </div>
-
-    </div>
 
     <div class="book-wrap">
       <div class="book-callout live">
