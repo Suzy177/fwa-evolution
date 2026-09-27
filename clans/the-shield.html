@@ -269,6 +269,44 @@
       color: var(--accent-fwa);
       font-weight: 700;
     }
+
+    .roster-controls {
+      margin-bottom: 12px;
+    }
+
+    .roster-search {
+      width: 100%;
+      max-width: 280px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+
+    .roster-search:focus {
+      outline: none;
+      border-color: var(--accent-fwa);
+    }
+
+    table.roster-table th.sortable {
+      cursor: pointer;
+      user-select: none;
+      transition: color .15s ease;
+    }
+
+    table.roster-table th.sortable:hover {
+      color: var(--text);
+    }
+
+    .sort-arrow {
+      display: inline-block;
+      margin-left: 4px;
+      font-size: 9px;
+      opacity: .8;
+    }
+
   </style>
 </head>
 <body class="sh2">
@@ -339,16 +377,19 @@
           <h2>👥 Clan Roster</h2>
           <span class="roster-note" id="rosterNote">Showing <strong>sample</strong> data — live roster coming soon</span>
         </div>
+        <div class="roster-controls">
+          <input type="text" id="rosterSearch" class="roster-search" placeholder="Search member by name…">
+        </div>
         <div class="table-wrap">
           <table class="roster-table">
             <thead>
               <tr>
-                <th>Role</th>
-                <th>Name</th>
-                <th class="num">TH</th>
-                <th class="num">Trophies</th>
-                <th class="num">Donated</th>
-                <th class="num">Received</th>
+                <th class="sortable" data-key="role">Role<span class="sort-arrow"></span></th>
+                <th class="sortable" data-key="name">Name<span class="sort-arrow"></span></th>
+                <th class="num sortable" data-key="townHallLevel">TH<span class="sort-arrow"></span></th>
+                <th class="num sortable" data-key="trophies">Trophies<span class="sort-arrow"></span></th>
+                <th class="num sortable" data-key="donations">Donated<span class="sort-arrow"></span></th>
+                <th class="num sortable" data-key="donationsReceived">Received<span class="sort-arrow"></span></th>
               </tr>
             </thead>
             <tbody id="rosterBody"></tbody>
@@ -518,24 +559,84 @@
 
   const ROLE_RANK = { leader: 0, coLeader: 1, admin: 2, member: 3 };
 
-  function renderRoster(members) {
-    const sorted = [...members].sort((a, b) => {
-      const rankDiff = (ROLE_RANK[a.role] ?? 4) - (ROLE_RANK[b.role] ?? 4);
-      if (rankDiff !== 0) return rankDiff;
-      return (b.donations || 0) - (a.donations || 0);
+  let allMembers = [];
+  let sortKey = "role";
+  let sortDir = "asc";
+  let searchTerm = "";
+
+  function getSortedFiltered() {
+    let list = allMembers.filter(m => (m.name || "").toLowerCase().includes(searchTerm));
+
+    list = [...list].sort((a, b) => {
+      if (sortKey === "role") {
+        const rankDiff = (ROLE_RANK[a.role] ?? 4) - (ROLE_RANK[b.role] ?? 4);
+        const diff = sortDir === "asc" ? rankDiff : -rankDiff;
+        if (diff !== 0) return diff;
+        return (b.donations || 0) - (a.donations || 0);
+      }
+      if (sortKey === "name") {
+        const cmp = (a.name || "").localeCompare(b.name || "");
+        return sortDir === "asc" ? cmp : -cmp;
+      }
+      const av = a[sortKey] ?? 0;
+      const bv = b[sortKey] ?? 0;
+      return sortDir === "asc" ? av - bv : bv - av;
     });
-    const tbody = document.getElementById("rosterBody");
-    tbody.innerHTML = sorted.map(m => `
-      <tr>
-        <td class="role ${m.role}">${ROLE_ICON[m.role] || "🔹"} ${ROLE_LABEL[m.role] || "Member"}</td>
-        <td>${m.name}</td>
-        <td class="num">TH${m.townHallLevel ?? "—"}</td>
-        <td class="num">${(m.trophies ?? 0).toLocaleString()}</td>
-        <td class="num">${(m.donations ?? 0).toLocaleString()}</td>
-        <td class="num">${(m.donationsReceived ?? 0).toLocaleString()}</td>
-      </tr>
-    `).join("");
+
+    return list;
   }
+
+  function updateSortIndicators() {
+    document.querySelectorAll("th.sortable").forEach(th => {
+      const arrow = th.querySelector(".sort-arrow");
+      arrow.textContent = th.dataset.key === sortKey ? (sortDir === "asc" ? "▲" : "▼") : "";
+    });
+  }
+
+  function renderTable() {
+    const sorted = getSortedFiltered();
+    const tbody = document.getElementById("rosterBody");
+
+    if (sorted.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--text-dim);padding:20px;">No members match your search</td></tr>`;
+    } else {
+      tbody.innerHTML = sorted.map(m => `
+        <tr>
+          <td class="role ${m.role}">${ROLE_ICON[m.role] || "🔹"} ${ROLE_LABEL[m.role] || "Member"}</td>
+          <td>${m.name}</td>
+          <td class="num">TH${m.townHallLevel ?? "—"}</td>
+          <td class="num">${(m.trophies ?? 0).toLocaleString()}</td>
+          <td class="num">${(m.donations ?? 0).toLocaleString()}</td>
+          <td class="num">${(m.donationsReceived ?? 0).toLocaleString()}</td>
+        </tr>
+      `).join("");
+    }
+
+    updateSortIndicators();
+  }
+
+  function renderRoster(members) {
+    allMembers = members;
+    renderTable();
+  }
+
+  document.querySelectorAll("th.sortable").forEach(th => {
+    th.addEventListener("click", () => {
+      const key = th.dataset.key;
+      if (sortKey === key) {
+        sortDir = sortDir === "asc" ? "desc" : "asc";
+      } else {
+        sortKey = key;
+        sortDir = (key === "role" || key === "name") ? "asc" : "desc";
+      }
+      renderTable();
+    });
+  });
+
+  document.getElementById("rosterSearch").addEventListener("input", (e) => {
+    searchTerm = e.target.value.trim().toLowerCase();
+    renderTable();
+  });
 
   async function loadRoster() {
     const note = document.getElementById("rosterNote");
