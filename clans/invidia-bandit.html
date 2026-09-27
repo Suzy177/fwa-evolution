@@ -26,7 +26,6 @@
     /* ---- hero badge art (glass, glowing, floating) ---- */
     .detail-hero-card {
       position: relative;
-      text-align: center;
       background:
         linear-gradient(160deg, rgba(19,26,43,.82), rgba(10,14,26,.88)) padding-box,
         linear-gradient(135deg, #22d3ee, #0ea5a5 60%, #22d3ee) border-box;
@@ -34,7 +33,7 @@
       backdrop-filter: blur(18px) saturate(160%);
       border: 1.5px solid transparent;
       border-radius: 24px;
-      padding: 46px 30px 38px;
+      padding: 34px 32px;
       margin-bottom: 34px;
       overflow: hidden;
       box-shadow:
@@ -42,14 +41,42 @@
         inset 0 1px 0 rgba(255,255,255,.15);
     }
 
+    .detail-hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(160deg, rgba(10,14,26,.94), rgba(10,14,26,.97)),
+        url('/assets/bases/th15.jpg');
+      background-size: cover;
+      background-position: center 25%;
+      opacity: .35;
+      z-index: 0;
+    }
+
+    .detail-hero-body {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+
+    .detail-hero-text {
+      flex: 1;
+      min-width: 240px;
+      order: 1;
+    }
+
     .detail-art {
       position: relative;
-      width: 150px;
-      margin: 0 auto 18px;
+      width: 130px;
+      flex: 0 0 auto;
       aspect-ratio: 1 / 1;
       display: flex;
       align-items: center;
       justify-content: center;
+      order: 2;
     }
 
     .detail-art::before {
@@ -84,40 +111,119 @@
       50% { transform: translateY(-8px); }
     }
 
-    .detail-hero-card h1 {
-      margin: 0 0 8px;
-      font-size: 34px;
-      color: var(--text);
-    }
-
-    .detail-tag {
-      display: inline-block;
-      margin-bottom: 18px;
-      padding: 6px 16px;
-      border-radius: 999px;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      color: var(--text-dim);
-      font-family: "Orbitron", sans-serif;
-      font-size: 12px;
-      letter-spacing: .04em;
-    }
-
-    .hero-stats {
+    .level-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #22d3ee, #0ea5a5);
+      border: 2px solid #0d1220;
       display: flex;
+      align-items: center;
       justify-content: center;
-      gap: 14px;
-      flex-wrap: wrap;
+      font-family: "Orbitron", sans-serif;
+      font-weight: 900;
+      font-size: 12px;
+      color: #fff;
+      z-index: 2;
+      box-shadow: 0 4px 10px rgba(0,0,0,.45);
     }
 
-    .hero-stats span {
+    .detail-hero-card h1 {
+      margin: 0 0 10px;
+      font-size: 32px;
+      color: var(--text);
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .stat-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 14px;
+      border-radius: 999px;
       background: var(--surface-2);
       border: 1px solid var(--border);
       color: var(--text);
-      padding: 9px 18px;
-      border-radius: 999px;
+      font-size: 12.5px;
       font-weight: 700;
-      font-size: 13.5px;
+      white-space: nowrap;
+    }
+
+    .stat-chip.chip-tag {
+      font-family: "Orbitron", sans-serif;
+      letter-spacing: .03em;
+      color: var(--text-dim);
+    }
+
+    .stat-chip.chip-league {
+      background: rgba(255,39,64,.15);
+      color: #ff6b7a;
+      border-color: rgba(255,39,64,.35);
+    }
+
+    .stat-chip.chip-league.ranked {
+      background: rgba(45,212,191,.15);
+      color: var(--accent-gen);
+      border-color: rgba(45,212,191,.35);
+    }
+
+    .stat-chip.chip-points {
+      background: rgba(255,196,0,.14);
+      color: #ffd54a;
+      border-color: rgba(255,196,0,.32);
+    }
+
+    .stat-chip.chip-capital,
+    .stat-chip.chip-ties {
+      background: rgba(96,165,250,.14);
+      color: var(--accent-brand);
+      border-color: rgba(96,165,250,.32);
+    }
+
+    .stat-chip.chip-wins {
+      background: rgba(45,212,191,.15);
+      color: var(--accent-gen);
+      border-color: rgba(45,212,191,.35);
+    }
+
+    .stat-chip.chip-losses {
+      background: rgba(255,39,64,.15);
+      color: #ff6b7a;
+      border-color: rgba(255,39,64,.35);
+    }
+
+    .stat-chip.chip-streak {
+      background: rgba(255,156,42,.15);
+      color: var(--accent-fwa);
+      border-color: rgba(255,156,42,.35);
+    }
+
+    .label-pill {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: var(--surface);
+      border: 1px dashed var(--border);
+      color: var(--text-dim);
+      font-size: 11px;
+    }
+
+    @media (max-width: 640px) {
+      .detail-hero-body {
+        flex-direction: column;
+        text-align: center;
+      }
+      .detail-hero-text { text-align: center; }
+      .chip-row { justify-content: center; }
     }
 
     /* ---- overview info cards ---- */
@@ -329,14 +435,37 @@
     <div class="detail-wrap">
 
       <div class="detail-hero-card">
-        <div class="detail-art">
-          <img id="clan-badge" src="/assets/badges/nvidiabandit.png.png" alt="InvidiaBandit badge">
-        </div>
-        <h1 id="clan-name">Loading...</h1>
-        <div class="detail-tag" id="clan-tag">Loading...</div>
-        <div class="hero-stats">
-          <span id="clan-level">⭐ Level --</span>
-          <span id="war-league">🏆 Loading...</span>
+        <div class="detail-hero-bg"></div>
+        <div class="detail-hero-body">
+          <div class="detail-art">
+            <img id="clan-badge" src="/assets/badges/nvidiabandit.png.png" alt="InvidiaBandit badge">
+            <span class="level-badge" id="clan-level-badge">--</span>
+          </div>
+          <div class="detail-hero-text">
+            <h1 id="clan-name">Loading...</h1>
+            <div class="chip-row">
+              <span class="stat-chip" id="chip-members">👥 --</span>
+              <span class="stat-chip" id="chip-type">Loading...</span>
+              <span class="stat-chip" id="chip-location">📍 --</span>
+            </div>
+            <div class="chip-row">
+              <span class="stat-chip chip-league" id="chip-league">🎖 --</span>
+              <span class="stat-chip chip-points" id="chip-points">🏆 --</span>
+              <span class="stat-chip chip-capital" id="chip-capital">💎 --</span>
+              <span class="stat-chip chip-capital" id="chip-hall">🏛 --</span>
+            </div>
+            <div class="chip-row" id="warRecordRow">
+              <span class="stat-chip" id="chip-freq">⏰ --</span>
+              <span class="stat-chip chip-wins" id="chip-wins">🛡 --</span>
+              <span class="stat-chip chip-ties" id="chip-ties">🛡 --</span>
+              <span class="stat-chip chip-losses" id="chip-losses">🛡 --</span>
+              <span class="stat-chip chip-streak" id="chip-streak">🔥 --</span>
+            </div>
+            <div class="chip-row">
+              <span class="stat-chip chip-tag" id="clan-tag">Loading...</span>
+              <span id="labelRow"></span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -419,12 +548,18 @@
 
       document.getElementById("clan-name").textContent = clan.name;
       document.getElementById("clan-badge").src = clan.badgeUrls ? clan.badgeUrls.large : clan.badge;
-      document.getElementById("clan-level").textContent = `⭐ Level ${clan.clanLevel}`;
-      document.getElementById("war-league").textContent = `🏆 ${clan.warLeague ? clan.warLeague.name : 'Unranked'}`;
+      document.getElementById("clan-level-badge").textContent = clan.clanLevel ?? "--";
       document.getElementById("clan-tag").textContent = clan.tag;
       document.getElementById("alliance-name").textContent = clan.alliance;
       document.getElementById("clan-description").textContent = clan.description;
       document.getElementById("clan-location").textContent = clan.location || "Unknown";
+
+      function flagEmoji(code) {
+        if (!code || code.length !== 2) return "🏳";
+        return code.toUpperCase().replace(/./g, c => String.fromCodePoint(127397 + c.charCodeAt(0)));
+      }
+
+      const TYPE_LABELS = { open: "Open", inviteOnly: "Invite Only", closed: "Closed" };
 
       const warFrequencyLabels = {
         always: "Always",
@@ -435,18 +570,76 @@
         unknown: "Unknown"
       };
 
+      document.getElementById("chip-members").textContent = `👥 ${clan.members ?? "--"}/50`;
+      document.getElementById("chip-type").textContent = TYPE_LABELS[clan.type] || "Unknown Type";
+      document.getElementById("chip-location").textContent =
+        `${flagEmoji(clan.locationCountryCode)} ${clan.location || "Unknown"}`;
+
+      const leagueEl = document.getElementById("chip-league");
+      const leagueName = clan.warLeague || "Unranked";
+      leagueEl.textContent = `🎖 ${leagueName}`;
+      leagueEl.classList.toggle("ranked", leagueName !== "Unranked");
+
+      document.getElementById("chip-points").textContent =
+        `🏆 ${(clan.clanPoints ?? 0).toLocaleString()}`;
+      document.getElementById("chip-capital").textContent =
+        `💎 ${(clan.clanCapitalPoints ?? 0).toLocaleString()}`;
+      document.getElementById("chip-hall").textContent =
+        `🏛 CH${clan.clanCapitalHallLevel ?? "--"} · ${clan.capitalLeague || "Unranked"}`;
+
+      document.getElementById("chip-freq").textContent =
+        `⏰ ${warFrequencyLabels[clan.warFrequency] || "Unknown"}`;
       document.getElementById("war-frequency").textContent =
         `Frequency: ${warFrequencyLabels[clan.warFrequency] || "Unknown"}`;
       document.getElementById("war-log").textContent =
         clan.isWarLogPublic ? "War Log: Public" : "War Log: Private";
+
+      const winsEl = document.getElementById("chip-wins");
+      const tiesEl = document.getElementById("chip-ties");
+      const lossesEl = document.getElementById("chip-losses");
+      const streakEl = document.getElementById("chip-streak");
+
+      if (clan.isWarLogPublic && clan.warWins != null) {
+        winsEl.textContent = `🛡 ${clan.warWins}W`;
+        tiesEl.textContent = `🛡 ${clan.warTies ?? 0}T`;
+        lossesEl.textContent = `🛡 ${clan.warLosses ?? 0}L`;
+        winsEl.style.display = tiesEl.style.display = lossesEl.style.display = "inline-flex";
+      } else {
+        winsEl.style.display = tiesEl.style.display = lossesEl.style.display = "none";
+      }
+
+      if (clan.warWinStreak != null) {
+        streakEl.textContent = `🔥 ${clan.warWinStreak} Win Streak`;
+        streakEl.style.display = "inline-flex";
+      } else {
+        streakEl.style.display = "none";
+      }
+
+      const labelRow = document.getElementById("labelRow");
+      if (Array.isArray(clan.labels) && clan.labels.length > 0) {
+        labelRow.innerHTML = clan.labels.map(l => `<span class="label-pill">${l}</span>`).join(" ");
+      }
 
     } catch (error) {
       console.error(error);
       document.getElementById("member-count").textContent = "Unavailable";
       document.getElementById("clan-name").textContent = "InvidiaBandit";
       document.getElementById("clan-tag").textContent = "Unavailable";
-      document.getElementById("clan-level").textContent = "⭐ Level —";
-      document.getElementById("war-league").textContent = "🏆 Unavailable";
+      document.getElementById("clan-level-badge").textContent = "--";
+      document.getElementById("chip-members").textContent = "👥 Unavailable";
+      document.getElementById("chip-type").textContent = "Unavailable";
+      document.getElementById("chip-location").textContent = "📍 Unavailable";
+      document.getElementById("chip-league").textContent = "🎖 Unavailable";
+      document.getElementById("chip-points").textContent = "🏆 Unavailable";
+      document.getElementById("chip-capital").textContent = "💎 Unavailable";
+      document.getElementById("chip-hall").textContent = "🏛 Unavailable";
+      document.getElementById("chip-freq").textContent = "⏰ Unavailable";
+      document.getElementById("war-frequency").textContent = "Unavailable";
+      document.getElementById("war-log").textContent = "";
+      document.getElementById("chip-wins").style.display = "none";
+      document.getElementById("chip-ties").style.display = "none";
+      document.getElementById("chip-losses").style.display = "none";
+      document.getElementById("chip-streak").style.display = "none";
       document.getElementById("clan-location").textContent = "Unavailable";
       document.getElementById("war-frequency").textContent = "Unavailable";
       document.getElementById("war-log").textContent = "";
