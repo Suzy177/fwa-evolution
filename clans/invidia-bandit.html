@@ -313,6 +313,31 @@
       color: var(--text);
     }
 
+    .warlog-btn-wrap {
+      display: flex;
+      justify-content: center;
+      margin: -14px 0 34px;
+    }
+    .warlog-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: linear-gradient(135deg, var(--wlb-accent1), var(--wlb-accent2));
+      color: #0a0e1a;
+      font-weight: 800;
+      font-size: .88rem;
+      letter-spacing: .02em;
+      text-decoration: none;
+      padding: 11px 26px;
+      border-radius: 999px;
+      box-shadow: 0 8px 22px rgba(0,0,0,.35);
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .warlog-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(0,0,0,.45);
+    }
+
     /* ---- clan roster ---- */
     .roster-section {
       margin-bottom: 40px;
@@ -420,7 +445,7 @@
 
   </style>
 </head>
-<body class="sh2">
+<body class="sh2" style="--wlb-accent1:#22d3ee; --wlb-accent2:#0ea5a5;">
 
   <header class="sh2-topbar">
     <a href="/" class="sh2-logo"><img src="/assets/fwa-evolution-logo.png" alt="FWA Evolution">FWA Evolution</a>
@@ -474,6 +499,10 @@
         </div>
       </div>
 
+      <div class="warlog-btn-wrap">
+        <a href="/clans/war-log.html?clan=invidia-bandit" class="warlog-btn">📊 View War Log</a>
+      </div>
+
       <div class="stats-grid">
         <div class="info-card">
           <h3>👥 Members</h3>
@@ -509,7 +538,7 @@
       <div class="roster-section">
         <div class="roster-header">
           <h2>👥 Clan Roster</h2>
-          <span class="roster-note" id="rosterNote">Showing <strong>sample</strong> data — live roster coming soon</span>
+          <span class="roster-note" id="rosterNote">Loading roster…</span>
         </div>
         <div class="roster-controls">
           <input type="text" id="rosterSearch" class="roster-search" placeholder="Search member by name…">

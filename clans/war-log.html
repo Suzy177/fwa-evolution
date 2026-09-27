@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>War Log | FWA Evolution</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/stathut-v2.css">
+  <link rel="icon" type="image/png" href="/assets/fwa-evolution-logo.png">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GJLXJW3G7H"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-GJLXJW3G7H');
+  </script>
+
+  <style>
+    .wl-wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .wl-title-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+    .wl-title-row img {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+    }
+    .wl-title-row h1 {
+      font-family: "Orbitron", sans-serif;
+      font-size: 1.5rem;
+      margin: 0;
+      color: var(--text);
+    }
+    .wl-title-row .wl-sub {
+      color: var(--text-dim);
+      font-size: .85rem;
+    }
+
+    /* Tabs */
+    .wl-tabs {
+      display: flex;
+      gap: 28px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 22px;
+    }
+    .wl-tab {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-weight: 700;
+      font-size: .95rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      padding: 10px 2px 14px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: color .2s ease, border-color .2s ease;
+    }
+    .wl-tab.active {
+      color: var(--text);
+      border-bottom-color: var(--wl-accent1, var(--accent-fwa));
+    }
+    .wl-tab:hover { color: var(--text); }
+
+    /* Filter row */
+    .wl-filter-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+    .wl-pills {
+      display: flex;
+      gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 5px;
+    }
+    .wl-pill {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      font-weight: 700;
+      font-size: .78rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background .2s ease, color .2s ease;
+    }
+    .wl-pill.active {
+      background: var(--wl-accent1, var(--accent-fwa));
+      color: #0a0e1a;
+    }
+
+    .wl-size-select {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px 14px;
+      color: var(--text-dim);
+      font-size: .85rem;
+    }
+    .wl-size-select select {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: .85rem;
+    }
+    .wl-count-pill {
+      background: var(--surface-2);
+      border-radius: 999px;
+      padding: 2px 10px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .wl-level-heading {
+      color: var(--text-dim);
+      font-weight: 700;
+      font-size: .95rem;
+      margin: 22px 0 12px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    /* War card grid */
+    .wl-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-bottom: 8px;
+    }
+    @media (max-width: 900px) {
+      .wl-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 620px) {
+      .wl-grid { grid-template-columns: 1fr; }
+    }
+
+    .wl-card {
+      background:
+        linear-gradient(160deg, rgba(19,26,43,.82), rgba(10,14,26,.88)) padding-box,
+        linear-gradient(135deg, var(--wl-accent1, var(--accent-fwa)), var(--wl-accent2, var(--accent-fwa-2)) 60%, var(--wl-accent1, var(--accent-fwa))) border-box;
+      border: 1.5px solid transparent;
+      border-radius: 16px;
+      padding: 16px;
+    }
+    .wl-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .wl-size-badge {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 9px;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .03em;
+    }
+    .wl-date {
+      color: var(--text-dim);
+      font-size: .78rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .wl-result {
+      display: block;
+      width: fit-content;
+      margin: 0 auto 14px;
+      padding: 6px 22px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: .85rem;
+      letter-spacing: .03em;
+    }
+    .wl-result.win  { background: rgba(34,197,94,.18); color: #4ade80; }
+    .wl-result.lose { background: rgba(248,113,113,.18); color: #f87171; }
+    .wl-result.tie  { background: rgba(148,163,184,.18); color: #cbd5e1; }
+
+    .wl-sides {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .wl-side {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 0;
+    }
+    .wl-side.right { flex-direction: row-reverse; text-align: right; }
+    .wl-side img {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+    .wl-side-name {
+      font-size: .82rem;
+      font-weight: 700;
+      color: var(--text);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .wl-side-level {
+      font-size: .72rem;
+      color: var(--text-dim);
+    }
+
+    .wl-stat-row {
+      display: grid;
+      grid-template-columns: 22px 1fr 1fr;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: .82rem;
+    }
+    .wl-stat-row .wl-icon { text-align: center; }
+    .wl-stat-val {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .wl-stat-val.right { flex-direction: row-reverse; }
+    .wl-bar-track {
+      flex: 1;
+      height: 5px;
+      border-radius: 4px;
+      background: rgba(255,255,255,.08);
+      overflow: hidden;
+    }
+    .wl-bar-fill { height: 100%; border-radius: 4px; }
+    .wl-bar-fill.good { background: linear-gradient(90deg, #16a34a, #4ade80); }
+    .wl-bar-fill.bad  { background: linear-gradient(90deg, #b91c1c, #f87171); }
+
+    .wl-attacks-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: .82rem;
+    }
+    .wl-attacks-row .wl-bar-fill { background: linear-gradient(90deg, #1d4ed8, #60a5fa); }
+
+    /* Statistics tab */
+    .wl-stats-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 26px;
+      margin-bottom: 22px;
+    }
+    .wl-stats-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .wl-stats-header .wl-count-pill { font-size: .8rem; }
+    .wl-win-pct {
+      text-align: center;
+      font-family: "Orbitron", sans-serif;
+      font-weight: 800;
+      font-size: 1.6rem;
+      color: var(--text);
+      margin: 14px 0 6px;
+    }
+    .wl-win-bar {
+      max-width: 320px;
+      margin: 0 auto 22px;
+      height: 6px;
+      border-radius: 4px;
+      background: rgba(248,113,113,.3);
+      overflow: hidden;
+    }
+    .wl-win-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #16a34a, #4ade80);
+      border-radius: 4px;
+    }
+    table.wl-stats-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table.wl-stats-table th {
+      text-align: left;
+      color: var(--text-dim);
+      font-size: .78rem;
+      font-weight: 600;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    table.wl-stats-table td {
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--border);
+      font-size: .88rem;
+      vertical-align: middle;
+    }
+    table.wl-stats-table tr:last-child td { border-bottom: none; }
+    .wl-metric-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .wl-metric-total { font-weight: 700; color: var(--text); }
+    .wl-metric-sub { color: var(--text-dim); font-size: .76rem; }
+    .wl-metric-bar {
+      width: 90px;
+      height: 4px;
+      border-radius: 3px;
+      background: rgba(255,255,255,.08);
+      margin-top: 5px;
+      overflow: hidden;
+    }
+    .wl-metric-bar-fill { height: 100%; background: linear-gradient(90deg, #1d4ed8, #60a5fa); }
+
+    .wl-empty {
+      color: var(--text-dim);
+      text-align: center;
+      padding: 60px 0;
+    }
+
+    .wl-back-link {
+      display: inline-block;
+      margin-top: 10px;
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: .85rem;
+    }
+    .wl-back-link:hover { color: var(--text); }
+  </style>
+</head>
+<body class="sh2">
+
+  <header class="sh2-topbar">
+    <a href="/" class="sh2-logo"><img src="/assets/fwa-evolution-logo.png" alt="FWA Evolution">FWA Evolution</a>
+    <nav class="sh2-nav">
+      <a href="/">Home</a>
+      <a href="/family.html">Family</a>
+      <a href="/clans.html" class="active">Clans</a>
+      <a href="/fwa-war-status.html">War Status</a>
+      <a href="/rules.html">Rules</a>
+      <a href="/fwa-guide.html">Guide</a>
+      <a href="/base-guide.html">Bases</a>
+      <a href="/join.html">Join</a>
+    </nav>
+  </header>
+
+  <section class="sh2-section">
+    <div class="wl-wrap">
+
+      <div class="wl-title-row">
+        <img id="wlBadge" src="" alt="">
+        <div>
+          <h1 id="wlClanName">Loading...</h1>
+          <div class="wl-sub">War Log</div>
+        </div>
+      </div>
+
+      <div class="wl-tabs">
+        <button class="wl-tab active" data-tab="log">▦ Log</button>
+        <button class="wl-tab" data-tab="stats">📈 Statistics</button>
+      </div>
+
+      <div class="wl-filter-row">
+        <div class="wl-pills">
+          <button class="wl-pill active">Clan Wars</button>
+        </div>
+        <div class="wl-size-select">
+          <span>👥 War Size</span>
+          <select id="wlSizeFilter">
+            <option value="all">All</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="wlLogView"></div>
+      <div id="wlStatsView" style="display:none;"></div>
+
+      <a href="/clans.html" class="wl-back-link">← Back to Clans</a>
+
+    </div>
+  </section>
+
+  <footer class="sh2-footer">
+    <a href="https://stathut.in/">← Back to StatHut Home</a>
+    <div class="sh2-visitor-stat" id="sh2VisitorStat"></div>
+  </footer>
+
+  <script>
+    const CLAN_META = {
+      "the-shield": { name: "#THE SHIELD#", badge: "/assets/badges/shield-card.png", c1: "#ff9c2a", c2: "#ff6b00" },
+      "invidia-bandit": { name: "InvidiaBandit", badge: "/assets/badges/nvidiabandit.png.png", c1: "#22d3ee", c2: "#0ea5a5" },
+      "village-warriors": { name: "Vi11ageWarriors", badge: "/assets/badges/villagewarriors.png.png", c1: "#a78bfa", c2: "#7c3aed" },
+    };
+
+    const params = new URLSearchParams(location.search);
+    const slug = params.get("clan") || "the-shield";
+    const meta = CLAN_META[slug] || CLAN_META["the-shield"];
+
+    document.documentElement.style.setProperty("--wl-accent1", meta.c1);
+    document.documentElement.style.setProperty("--wl-accent2", meta.c2);
+    document.getElementById("wlBadge").src = meta.badge;
+    document.getElementById("wlBadge").alt = meta.name + " badge";
+    document.getElementById("wlClanName").textContent = meta.name;
+
+    let allWars = [];
+
+    function fmtDate(iso) {
+      // CoC API endTime format: 20260926T120000.000Z
+      const y = iso.slice(0,4), m = iso.slice(4,6), d = iso.slice(6,8);
+      const dt = new Date(`${y}-${m}-${d}T00:00:00Z`);
+      return dt.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
+    }
+
+    function resultClass(r) {
+      if (r === "win") return "win";
+      if (r === "lose") return "lose";
+      return "tie";
+    }
+    function resultLabel(r) {
+      if (r === "win") return "Victory";
+      if (r === "lose") return "Defeat";
+      return "Tie";
+    }
+
+    function barPair(aVal, bVal) {
+      const total = (aVal || 0) + (bVal || 0);
+      if (total === 0) return [0, 0];
+      return [ (aVal / total) * 100, (bVal / total) * 100 ];
+    }
+
+    function warCard(w) {
+      const [aPct, bPct] = barPair(w.clan.stars, w.opponent.stars);
+      const [aDPct, bDPct] = barPair(w.clan.destructionPercentage, w.opponent.destructionPercentage);
+      const attackPct = w.teamSize ? Math.min(100, ((w.clan.attacks || 0) / w.teamSize) * 100) : 0;
+
+      return `
+        <div class="wl-card">
+          <div class="wl-card-top">
+            <span class="wl-size-badge">${w.teamSize} VS ${w.teamSize}</span>
+            <span class="wl-date">🕐 ${fmtDate(w.endTime)}</span>
+          </div>
+          <span class="wl-result ${resultClass(w.result)}">${resultLabel(w.result)}</span>
+          <div class="wl-sides">
+            <div class="wl-side">
+              <img src="${(w.clan.badgeUrls && w.clan.badgeUrls.small) || meta.badge}" alt="" onerror="this.src='/assets/fwa-evolution-logo.png'">
+              <div>
+                <div class="wl-side-name">${w.clan.name}</div>
+                <div class="wl-side-level">Level ${w.clan.clanLevel}</div>
+              </div>
+            </div>
+            <div class="wl-side right">
+              <img src="${(w.opponent.badgeUrls && w.opponent.badgeUrls.small) || '/assets/fwa-evolution-logo.png'}" alt="" onerror="this.src='/assets/fwa-evolution-logo.png'">
+              <div>
+                <div class="wl-side-name">${w.opponent.name}</div>
+                <div class="wl-side-level">Level ${w.opponent.clanLevel}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="wl-stat-row">
+            <span class="wl-icon">⭐</span>
+            <div class="wl-stat-val">
+              <span>${w.clan.stars}</span>
+              <div class="wl-bar-track"><div class="wl-bar-fill ${aPct >= bPct ? 'good' : 'bad'}" style="width:${aPct}%"></div></div>
+            </div>
+            <div class="wl-stat-val right">
+              <span>${w.opponent.stars}</span>
+              <div class="wl-bar-track"><div class="wl-bar-fill ${bPct > aPct ? 'good' : 'bad'}" style="width:${bPct}%"></div></div>
+            </div>
+          </div>
+
+          <div class="wl-stat-row">
+            <span class="wl-icon">%</span>
+            <div class="wl-stat-val">
+              <span>${w.clan.destructionPercentage.toFixed(2)}</span>
+              <div class="wl-bar-track"><div class="wl-bar-fill ${aDPct >= bDPct ? 'good' : 'bad'}" style="width:${aDPct}%"></div></div>
+            </div>
+            <div class="wl-stat-val right">
+              <span>${w.opponent.destructionPercentage.toFixed(2)}</span>
+              <div class="wl-bar-track"><div class="wl-bar-fill ${bDPct > aDPct ? 'good' : 'bad'}" style="width:${bDPct}%"></div></div>
+            </div>
+          </div>
+
+          <div class="wl-attacks-row">
+            <span class="wl-icon">⚔</span>
+            <span>${w.clan.attacks}</span>
+            <div class="wl-bar-track"><div class="wl-bar-fill" style="width:${attackPct}%"></div></div>
+          </div>
+        </div>`;
+    }
+
+    function renderLog(wars) {
+      const view = document.getElementById("wlLogView");
+      if (!wars.length) {
+        view.innerHTML = `<div class="wl-empty">No wars found for this filter.</div>`;
+        return;
+      }
+      let html = "";
+      let lastLevel = null;
+      let group = [];
+
+      function flush() {
+        if (!group.length) return;
+        html += `<div class="wl-level-heading">Level ${lastLevel}</div><div class="wl-grid">${group.join("")}</div>`;
+        group = [];
+      }
+
+      wars.forEach(w => {
+        if (w.clan.clanLevel !== lastLevel) {
+          flush();
+          lastLevel = w.clan.clanLevel;
+        }
+        group.push(warCard(w));
+      });
+      flush();
+      view.innerHTML = html;
+    }
+
+    function mean(arr) { return arr.reduce((a,b) => a+b, 0) / arr.length; }
+    function median(arr) {
+      const s = [...arr].sort((a,b) => a-b);
+      const mid = Math.floor(s.length/2);
+      return s.length % 2 ? s[mid] : (s[mid-1] + s[mid]) / 2;
+    }
+    function stddev(arr, m) {
+      return Math.sqrt(arr.reduce((a,b) => a + Math.pow(b-m, 2), 0) / arr.length);
+    }
+    function fmt(n) { return n.toLocaleString(undefined, { maximumFractionDigits: 2 }); }
+
+    function statBlock(label, icon, wars) {
+      const stars = wars.map(w => w.clan.stars);
+      const destr = wars.map(w => w.clan.destructionPercentage);
+      const atks  = wars.map(w => w.clan.attacks);
+      const wins = wars.filter(w => w.result === "win").length;
+      const winPct = wars.length ? (wins / wars.length) * 100 : 0;
+
+      function row(icon, name, arr, isPct) {
+        const tot = arr.reduce((a,b) => a+b, 0);
+        const m = mean(arr);
+        const med = median(arr);
+        const sd = stddev(arr, m);
+        const varc = sd * sd;
+        const pctOf = (v) => isPct ? "" : "";
+        return `
+          <tr>
+            <td><div class="wl-metric-label">${icon} ${name}</div></td>
+            <td><div class="wl-metric-total">${fmt(tot)}</div></td>
+            <td><div class="wl-metric-total">${fmt(m)}</div><div class="wl-metric-bar"><div class="wl-metric-bar-fill" style="width:${Math.min(100,m)}%"></div></div></td>
+            <td><div class="wl-metric-total">${fmt(med)}</div></td>
+            <td><div class="wl-metric-total">${fmt(sd)}</div></td>
+            <td><div class="wl-metric-total">${fmt(varc)}</div></td>
+          </tr>`;
+      }
+
+      return `
+        <div class="wl-stats-block">
+          <div class="wl-stats-header">
+            <strong>${label}</strong>
+            <span class="wl-count-pill">${wars.length}</span>
+          </div>
+          <div class="wl-win-pct">${winPct.toFixed(2)}% Victory</div>
+          <div class="wl-win-bar"><div class="wl-win-bar-fill" style="width:${winPct}%"></div></div>
+          <table class="wl-stats-table">
+            <thead>
+              <tr><th></th><th>Total</th><th>Mean</th><th>Median</th><th>Std. Deviation</th><th>Variance</th></tr>
+            </thead>
+            <tbody>
+              ${row("⭐", "War Stars", stars)}
+              ${row("%", "Destroyed", destr, true)}
+              ${row("⚔", "Attacks", atks)}
+            </tbody>
+          </table>
+        </div>`;
+    }
+
+    function renderStats(wars) {
+      const view = document.getElementById("wlStatsView");
+      if (!wars.length) {
+        view.innerHTML = `<div class="wl-empty">No wars found for this filter.</div>`;
+        return;
+      }
+      let html = statBlock("All", "", wars);
+      const bySize = {};
+      wars.forEach(w => {
+        bySize[w.teamSize] = bySize[w.teamSize] || [];
+        bySize[w.teamSize].push(w);
+      });
+      Object.keys(bySize).sort((a,b) => b-a).forEach(size => {
+        html += statBlock(`${size} VS ${size}`, "", bySize[size]);
+      });
+      view.innerHTML = html;
+    }
+
+    function currentFiltered() {
+      const sizeVal = document.getElementById("wlSizeFilter").value;
+      if (sizeVal === "all") return allWars;
+      return allWars.filter(w => String(w.teamSize) === sizeVal);
+    }
+
+    function rerender() {
+      const wars = currentFiltered();
+      renderLog(wars);
+      renderStats(wars);
+    }
+
+    function populateSizeFilter() {
+      const sel = document.getElementById("wlSizeFilter");
+      const sizes = [...new Set(allWars.map(w => w.teamSize))].sort((a,b) => b-a);
+      sizes.forEach(s => {
+        const count = allWars.filter(w => w.teamSize === s).length;
+        const opt = document.createElement("option");
+        opt.value = String(s);
+        opt.textContent = `${s} vs ${s} (${count})`;
+        sel.appendChild(opt);
+      });
+      const allOpt = sel.querySelector('option[value="all"]');
+      allOpt.textContent = `All (${allWars.length})`;
+    }
+
+    document.querySelectorAll(".wl-tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        document.querySelectorAll(".wl-tab").forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        const isLog = tab.dataset.tab === "log";
+        document.getElementById("wlLogView").style.display = isLog ? "" : "none";
+        document.getElementById("wlStatsView").style.display = isLog ? "none" : "";
+      });
+    });
+
+    document.getElementById("wlSizeFilter").addEventListener("change", rerender);
+
+    async function loadWarLog() {
+      try {
+        const res = await fetch(`https://api.stathut.in/api/clan/${slug}/warlog`);
+        const data = await res.json();
+        if (!data.wars || !data.wars.length) throw new Error("empty");
+        allWars = data.wars;
+      } catch (e) {
+        allWars = SAMPLE_WARS;
+      }
+      populateSizeFilter();
+      rerender();
+    }
+
+    const SAMPLE_WARS = Array.from({ length: 10 }).map((_, i) => {
+      const win = i % 3 !== 1;
+      const tie = i === 5;
+      const myStars = tie ? 90 : (win ? 100 + (i * 7) % 50 : 60 + (i * 5) % 40);
+      const oppStars = tie ? 90 : (win ? 60 + (i * 3) % 40 : 100 + (i * 6) % 40);
+      const d = new Date();
+      d.setDate(d.getDate() - i * 2);
+      const iso = d.toISOString().slice(0,10).replace(/-/g,"") + "T120000.000Z";
+      return {
+        result: tie ? "tie" : (win ? "win" : "lose"),
+        endTime: iso,
+        teamSize: 50,
+        clan: {
+          name: meta.name, clanLevel: 34, attacks: 60 + (i*3)%15,
+          stars: myStars, destructionPercentage: Math.min(100, 50 + (i*7)%50),
+          badgeUrls: { small: meta.badge }
+        },
+        opponent: {
+          name: ["Yarrs Revenge","Web Rage Farm 2","ClashManiac-jp","Blood Oath","CATTIVISSIMO ME","Fight For Honor","Rowdy Rebels","Dark Purge","Elite Force","Farm Kingdom"][i],
+          clanLevel: 32 + (i % 8),
+          attacks: 55 + (i*4)%20,
+          stars: oppStars, destructionPercentage: Math.min(100, 45 + (i*5)%50),
+          badgeUrls: { small: "" }
+        }
+      };
+    });
+
+    loadWarLog();
+  </script>
+
+</body>
+</html>
