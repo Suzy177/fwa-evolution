@@ -443,6 +443,153 @@
       opacity: .8;
     }
 
+    /* ---- clan leaderboards ---- */
+    .leaderboards-section {
+      margin-bottom: 40px;
+    }
+    .leaderboards-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .leaderboards-header h2 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: var(--text);
+    }
+    .leaderboards-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .leaderboards-tab {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-weight: 700;
+      font-size: .78rem;
+      letter-spacing: .03em;
+      padding: 8px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background .18s ease, color .18s ease, border-color .18s ease;
+    }
+    .leaderboards-tab.active {
+      background: linear-gradient(135deg, var(--wlb-accent1), var(--wlb-accent2));
+      color: #0a0e1a;
+      border-color: transparent;
+    }
+    .leaderboards-tab:hover:not(.active) {
+      color: var(--text);
+      border-color: var(--wlb-accent1);
+    }
+    .leaderboards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 760px) {
+      .leaderboards-grid { grid-template-columns: 1fr; }
+    }
+    .leaderboards-col {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    .leaderboards-col-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: .92rem;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .leaderboards-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .leaderboards-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      font-size: .85rem;
+    }
+    .leaderboards-row:last-child { border-bottom: none; }
+    .leaderboards-rank {
+      width: 20px;
+      flex-shrink: 0;
+      font-weight: 800;
+      color: var(--text-dim);
+      text-align: center;
+    }
+    .leaderboards-row:nth-child(1) .leaderboards-rank { color: #facc15; }
+    .leaderboards-row:nth-child(2) .leaderboards-rank { color: #cbd5e1; }
+    .leaderboards-row:nth-child(3) .leaderboards-rank { color: #d97706; }
+    .leaderboards-name {
+      flex: 1;
+      color: var(--text);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 600;
+    }
+    .leaderboards-value {
+      font-weight: 700;
+      color: var(--wlb-accent1);
+      flex-shrink: 0;
+    }
+    .leaderboards-empty {
+      color: var(--text-dim);
+      font-size: .8rem;
+      padding: 10px 0;
+    }
+    .leaderboards-more {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .leaderboards-more-label {
+      color: var(--text-dim);
+      font-size: .78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .03em;
+      flex-shrink: 0;
+    }
+    .leaderboards-more-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .leaderboards-more-pill {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: .78rem;
+      padding: 6px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background .15s ease, color .15s ease, border-color .15s ease;
+    }
+    .leaderboards-more-pill:hover {
+      background: var(--surface);
+      color: var(--text);
+      border-color: var(--wlb-accent1);
+    }
+
   </style>
 </head>
 <body class="sh2" style="--wlb-accent1:#ff9c2a; --wlb-accent2:#ff6b00;">
@@ -559,6 +706,26 @@
           </table>
         </div>
       </div>
+
+            <div class="leaderboards-section">
+        <div class="leaderboards-header">
+          <h2>🎖️ Clan Leaderboards</h2>
+          <span class="roster-note" id="leaderboardsNote">Loading leaderboards…</span>
+        </div>
+        <div class="leaderboards-tabs" id="leaderboardsTabs">
+          <button class="leaderboards-tab active" data-tab="trophyRace">🏆 Trophy Race</button>
+          <button class="leaderboards-tab" data-tab="warHeroes">⚔️ War Heroes</button>
+          <button class="leaderboards-tab" data-tab="capital">💰 Capital &amp; Loot</button>
+          <button class="leaderboards-tab" data-tab="teamwork">🤝 Teamwork</button>
+          <button class="leaderboards-tab" data-tab="milestones">🎯 Milestones</button>
+        </div>
+        <div class="leaderboards-grid" id="leaderboardsGrid"></div>
+        <div class="leaderboards-more" id="leaderboardsMore">
+          <span class="leaderboards-more-label">More leaderboards:</span>
+          <div class="leaderboards-more-pills" id="leaderboardsMorePills"></div>
+        </div>
+      </div>
+
 
       <a href="/clans.html" class="back-link">← Back to Clans</a>
 
@@ -881,6 +1048,151 @@
   }
 
   loadRoster();
+
+  // ---- Clan Leaderboards ----
+  const LB_CATS = {
+    trophies:            { key: "trophies", label: "Trophies", icon: "🏆" },
+    bestTrophies:        { key: "bestTrophies", label: "Best Trophies", icon: "🌟" },
+    builderBaseTrophies: { key: "builderBaseTrophies", label: "Builder Trophies", icon: "🔨" },
+    bestBuilderBaseTrophies: { key: "bestBuilderBaseTrophies", label: "Best Builder Trophies", icon: "🔧" },
+    warStars:            { key: "warStars", label: "War Stars", icon: "⭐" },
+    attackWins:          { key: "attackWins", label: "Attack Wins", icon: "⚔️" },
+    defenseWins:         { key: "defenseWins", label: "Defense Wins", icon: "🛡️" },
+    "achv:Aggressive Capitalism": { key: "achv:Aggressive Capitalism", label: "Aggressive Capitalism", icon: "💰" },
+    "achv:Heroic Heist":          { key: "achv:Heroic Heist", label: "Heroic Heist", icon: "💎" },
+    "achv:Un-Build It":           { key: "achv:Un-Build It", label: "Un-Build It", icon: "🔨" },
+    "achv:Friend in Need":        { key: "achv:Friend in Need", label: "Friend in Need", icon: "🤝" },
+    "achv:Sharing is caring":     { key: "achv:Sharing is caring", label: "Sharing is Caring", icon: "✨" },
+    "achv:Nice and Tidy":         { key: "achv:Nice and Tidy", label: "Nice and Tidy", icon: "🧹" },
+    "achv:Conqueror":             { key: "achv:Conqueror", label: "Conqueror", icon: "⚔️" },
+    "achv:Unbreakable":           { key: "achv:Unbreakable", label: "Unbreakable", icon: "🛡️" },
+    "achv:Humiliator":            { key: "achv:Humiliator", label: "Humiliator", icon: "🏚️" },
+    "achv:Empire Builder":        { key: "achv:Empire Builder", label: "Empire Builder", icon: "🏗️" },
+    "achv:Games Champion":        { key: "achv:Games Champion", label: "Games Champion", icon: "🎮" },
+  };
+
+  const LB_TABS = {
+    trophyRace: ["trophies", "bestTrophies", "builderBaseTrophies"],
+    warHeroes:  ["warStars", "attackWins", "defenseWins"],
+    capital:    ["achv:Aggressive Capitalism", "achv:Heroic Heist", "achv:Un-Build It"],
+    teamwork:   ["achv:Friend in Need", "achv:Sharing is caring", "achv:Nice and Tidy"],
+    milestones: ["achv:Conqueror", "achv:Unbreakable", "achv:Humiliator"],
+  };
+
+  let lbPlayers = [];
+  let activeLbTab = "trophyRace";
+  let activeLbCats = [...LB_TABS.trophyRace];
+
+  function getLbValue(player, key) {
+    if (key.startsWith("achv:")) return (player.achievements && player.achievements[key.slice(5)]) || 0;
+    return player[key] || 0;
+  }
+
+  function renderLbColumn(catKey) {
+    const cat = LB_CATS[catKey];
+    const top5 = [...lbPlayers]
+      .sort((a, b) => getLbValue(b, catKey) - getLbValue(a, catKey))
+      .slice(0, 5);
+
+    if (!top5.length) {
+      return `<div class="leaderboards-col"><div class="leaderboards-col-title">${cat.icon} ${cat.label}</div><div class="leaderboards-empty">No data</div></div>`;
+    }
+
+    const rows = top5.map((p, i) => `
+      <li class="leaderboards-row">
+        <span class="leaderboards-rank">${i + 1}</span>
+        <span class="leaderboards-name">${p.name}</span>
+        <span class="leaderboards-value">${getLbValue(p, catKey).toLocaleString()}</span>
+      </li>`).join("");
+
+    return `
+      <div class="leaderboards-col">
+        <div class="leaderboards-col-title">${cat.icon} ${cat.label}</div>
+        <ul class="leaderboards-list">${rows}</ul>
+      </div>`;
+  }
+
+  function renderLbMore() {
+    const container = document.getElementById("leaderboardsMorePills");
+    const more = Object.keys(LB_CATS).filter(k => !activeLbCats.includes(k));
+    container.innerHTML = more.map(k => {
+      const cat = LB_CATS[k];
+      return `<span class="leaderboards-more-pill" data-key="${k}">${cat.icon} ${cat.label}</span>`;
+    }).join("");
+
+    container.querySelectorAll(".leaderboards-more-pill").forEach(el => {
+      el.addEventListener("click", () => {
+        const key = el.dataset.key;
+        activeLbCats[activeLbCats.length - 1] = key;
+        renderLeaderboards();
+      });
+    });
+  }
+
+  function renderLeaderboards() {
+    const grid = document.getElementById("leaderboardsGrid");
+    grid.innerHTML = activeLbCats.map(renderLbColumn).join("");
+    renderLbMore();
+  }
+
+  document.querySelectorAll(".leaderboards-tab").forEach(tab => {
+    tab.addEventListener("click", () => {
+      document.querySelectorAll(".leaderboards-tab").forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+      activeLbTab = tab.dataset.tab;
+      activeLbCats = [...LB_TABS[activeLbTab]];
+      renderLeaderboards();
+    });
+  });
+
+  function fabricateSampleLeaderboards(members) {
+    return members.map((m, i) => {
+      const seed = (i + 1) * 37;
+      const achv = (n) => (seed * n) % 4000;
+      return {
+        name: m.name,
+        trophies: m.trophies || 0,
+        bestTrophies: (m.trophies || 0) + (seed % 300),
+        builderBaseTrophies: 2500 + (seed % 1800),
+        bestBuilderBaseTrophies: 2800 + (seed % 1800),
+        warStars: 400 + (seed % 900),
+        attackWins: 100 + (seed % 400),
+        defenseWins: 20 + (seed % 120),
+        achievements: {
+          "Aggressive Capitalism": achv(11),
+          "Friend in Need": achv(7),
+          "Sharing is caring": achv(5),
+          "Nice and Tidy": achv(3),
+          "Conqueror": achv(9),
+          "Unbreakable": achv(4),
+          "Humiliator": achv(13),
+          "Un-Build It": achv(6),
+          "Heroic Heist": achv(2),
+          "Empire Builder": achv(8),
+          "Games Champion": achv(1) % 4000,
+        },
+      };
+    });
+  }
+
+  async function loadLeaderboards() {
+    const note = document.getElementById("leaderboardsNote");
+    try {
+      const res = await fetch(`https://api.stathut.in/api/clan/the-shield/leaderboards`);
+      if (!res.ok) throw new Error("leaderboards endpoint not live yet");
+      const data = await res.json();
+      if (!Array.isArray(data.players) || data.players.length === 0) throw new Error("empty leaderboards");
+      lbPlayers = data.players;
+      note.innerHTML = "<strong>Live</strong> data";
+    } catch (err) {
+      lbPlayers = fabricateSampleLeaderboards(SAMPLE_MEMBERS);
+      note.innerHTML = "Showing <strong>sample</strong> data — live leaderboards coming soon";
+    }
+    renderLeaderboards();
+  }
+
+  loadLeaderboards();
+
 
   loadClanData();
   </script>
