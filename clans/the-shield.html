@@ -681,7 +681,74 @@
       background: linear-gradient(135deg, var(--wlb-accent1), var(--wlb-accent2));
       color: #0a0e1a; border-color: transparent;
     }
-    #profileTabOverview[hidden], #profileTabHistory[hidden] { display: none; }
+    #profileTabOverview[hidden], #profileTabHistory[hidden], #profileTabRankings[hidden] { display: none; }
+    #profileTabArmy[hidden] { display: none; }
+    .profile-tabs { flex-wrap: wrap; }
+    .army-summary { display: flex; align-items: center; gap: 14px; margin: 16px 0 6px; padding: 12px 14px;
+      background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; flex-wrap: wrap; }
+    .army-summary b { font-size: 1.5rem; color: var(--wlb-accent1); line-height: 1; }
+    .army-summary small { display: block; font-size: .72rem; color: var(--text-dim); margin-top: 3px; }
+    .army-summary-bar { flex: 1 1 160px; height: 8px; border-radius: 99px; background: rgba(255,255,255,.07); overflow: hidden; }
+    .army-summary-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--wlb-accent2), var(--wlb-accent1)); }
+    .army-sec-head { display: flex; justify-content: space-between; align-items: baseline; margin: 20px 0 8px;
+      font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); font-weight: 800; }
+    .army-sec-head b { color: var(--wlb-accent1); letter-spacing: 0; text-transform: none; font-size: .74rem; }
+    .army-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(86px, 1fr)); gap: 8px; }
+    .army-tile { position: relative; background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px;
+      padding: 8px 6px 7px; text-align: center; }
+    .army-tile.maxed { border-color: rgba(255, 200, 80, .55); box-shadow: inset 0 0 0 1px rgba(255, 200, 80, .15); }
+    .army-tile.active { border-color: var(--wlb-accent1); }
+    .army-art { height: 46px; display: flex; align-items: center; justify-content: center; }
+    .army-art img { max-width: 46px; max-height: 46px; object-fit: contain; }
+    .army-initials { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: .85rem; color: var(--text-dim); background: rgba(255,255,255,.06); border: 1px dashed var(--border); }
+    .army-name { font-size: .64rem; color: var(--text-dim); margin-top: 4px; line-height: 1.15; min-height: 1.5em;
+      overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    .army-lvl { font-weight: 800; font-size: .86rem; color: var(--text); margin-top: 3px; }
+    .army-lvl small { font-weight: 600; color: var(--text-dim); font-size: .66rem; }
+    .army-tile.maxed .army-lvl { color: #ffc850; }
+    .army-bar { height: 3px; border-radius: 99px; background: rgba(255,255,255,.08); margin-top: 5px; overflow: hidden; }
+    .army-bar i { display: block; height: 100%; background: var(--wlb-accent1); }
+    .army-tile.maxed .army-bar i { background: #ffc850; }
+    .army-heroes { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .army-hero { background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 10px 12px; }
+    .army-hero.maxed { border-color: rgba(255, 200, 80, .55); }
+    .army-hero-top { display: flex; align-items: center; gap: 10px; }
+    .army-hero-top img { width: 44px; height: 44px; object-fit: contain; }
+    .army-hero-top .army-initials { width: 44px; height: 44px; }
+    .army-hero-name { font-weight: 700; font-size: .86rem; }
+    .army-hero-lvl { font-size: .74rem; color: var(--text-dim); }
+    .army-hero-lvl b { color: var(--wlb-accent1); font-size: .95rem; }
+    .army-hero.maxed .army-hero-lvl b { color: #ffc850; }
+    .army-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+    .army-chip { font-size: .66rem; padding: 3px 8px; border-radius: 999px; background: rgba(255,255,255,.05);
+      border: 1px solid var(--border); color: var(--text-dim); white-space: nowrap; }
+    .army-chip b { color: var(--text); font-weight: 700; margin-left: 3px; }
+    .army-chip.maxed b { color: #ffc850; }
+    .army-chip.equipped { border-color: var(--wlb-accent1); color: var(--text); }
+    .rank-summary { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 4px; }
+    .rank-summary-tile {
+      flex: 1 1 140px; background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 10px 14px;
+    }
+    .rank-summary-tile b { display: block; font-size: 1.25rem; color: var(--wlb-accent1); }
+    .rank-summary-tile span { font-size: .72rem; color: var(--text-dim); }
+    .rank-row { padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,.05); }
+    .rank-row-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .rank-label { flex: 1 1 150px; font-size: .86rem; color: var(--text); font-weight: 600; }
+    .rank-value { font-size: .82rem; color: var(--text-dim); min-width: 78px; text-align: right; }
+    .rank-chips { display: flex; gap: 6px; }
+    .rank-chip {
+      font-size: .72rem; padding: 3px 9px; border-radius: 999px;
+      background: var(--surface-2); border: 1px solid var(--border); color: var(--text-dim); white-space: nowrap;
+    }
+    .rank-chip b { color: var(--text); margin-left: 3px; }
+    .rank-chip i { font-style: normal; opacity: .6; }
+    .rank-chip.gold { border-color: #facc15; } .rank-chip.gold b { color: #facc15; }
+    .rank-chip.silver { border-color: #cbd5e1; } .rank-chip.silver b { color: #cbd5e1; }
+    .rank-chip.bronze { border-color: #d97706; } .rank-chip.bronze b { color: #d97706; }
+    .rank-bar { height: 5px; margin-top: 7px; border-radius: 999px; background: rgba(255,255,255,.07); overflow: hidden; }
+    .rank-bar span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--wlb-accent2), var(--wlb-accent1)); }
     .profile-empty { color: var(--text-dim); font-size: .85rem; padding: 18px 0; }
     .profile-hist-list { margin-top: 18px; padding-left: 6px; }
     .profile-hist-item {
@@ -1420,6 +1487,8 @@
       </div>
       <div class="profile-tabs">
         <button class="profile-tab active" data-ptab="overview">Overview</button>
+        <button class="profile-tab" data-ptab="army">Army</button>
+        <button class="profile-tab" data-ptab="rankings">Rankings</button>
         <button class="profile-tab" data-ptab="history">History</button>
       </div>
       <div id="profileTabOverview">
@@ -1429,6 +1498,8 @@
         <div class="profile-achv">${achv}</div>
         ${link}
       </div>
+      <div id="profileTabArmy" hidden></div>
+      <div id="profileTabRankings" hidden></div>
       <div id="profileTabHistory" hidden></div>`;
     document.querySelectorAll(".profile-tab").forEach(btn => {
       btn.addEventListener("click", () => switchProfileTab(btn.dataset.ptab, p));
@@ -1488,11 +1559,234 @@
     return `<div class="profile-hist-list">${items}</div><div class="profile-hist-note">${note}</div>`;
   }
 
+  const THIS_CLAN = "the-shield";
+  let familyPromise = null;
+
+  function loadFamily() {
+    if (familyPromise) return familyPromise;
+    familyPromise = Promise.all(Object.keys(CLAN_NAMES).map(async slug => {
+      if (slug === THIS_CLAN) return lbPlayers.map(x => ({ ...x, clan: slug }));
+      try {
+        const res = await fetch(`https://api.stathut.in/api/clan/${slug}/leaderboards`);
+        if (!res.ok) throw new Error("leaderboards unavailable");
+        const data = await res.json();
+        return (data.players || []).map(x => ({ ...x, clan: slug }));
+      } catch (err) {
+        return [];
+      }
+    })).then(lists => {
+      if (lists.some(l => !l.length)) familyPromise = null;
+      return lists.flat();
+    });
+    return familyPromise;
+  }
+
+  function rankOf(list, player, key) {
+    const v = getLbValue(player, key);
+    return 1 + list.filter(x => getLbValue(x, key) > v).length;
+  }
+
+  function rankChip(label, rank, total) {
+    const cls = rank === 1 ? "gold" : rank === 2 ? "silver" : rank === 3 ? "bronze" : "";
+    return `<span class="rank-chip ${cls}">${label}<b>#${rank}</b><i>/${total}</i></span>`;
+  }
+
+  async function renderRankingsTab(p) {
+    const box = document.getElementById("profileTabRankings");
+    if (!p.tag) {
+      box.innerHTML = `<div class="profile-empty">Rankings need the live player tag.</div>`;
+      return;
+    }
+    box.innerHTML = `<div class="profile-empty">Calculating rankings\u2026</div>`;
+    const family = await loadFamily();
+    const clanList = family.filter(x => x.clan === THIS_CLAN);
+    const me = family.find(x => x.tag === p.tag);
+    if (!me || !clanList.length) {
+      box.innerHTML = `<div class="profile-empty">Not enough data to rank this player yet.</div>`;
+      return;
+    }
+
+    const groupNames = {
+      trophyRace: "Trophy Race", warHeroes: "War Heroes", capital: "Capital & Loot",
+      teamwork: "Teamwork", milestones: "Milestones", more: "More",
+    };
+    const groups = { ...LB_TABS };
+    groups.more = Object.keys(LB_CATS).filter(k => !Object.values(LB_TABS).flat().includes(k));
+
+    let clanTop3 = 0, familyTop3 = 0;
+    const sections = Object.keys(groups).map(g => {
+      const rows = groups[g].map(k => {
+        const cat = LB_CATS[k];
+        const cr = rankOf(clanList, me, k);
+        const fr = rankOf(family, me, k);
+        if (cr <= 3) clanTop3++;
+        if (fr <= 3) familyTop3++;
+        const pct = Math.max(4, Math.round((1 - (fr - 1) / family.length) * 100));
+        return `
+          <div class="rank-row">
+            <div class="rank-row-top">
+              <div class="rank-label">${cat.icon} ${cat.label}</div>
+              <div class="rank-value">${getLbValue(me, k).toLocaleString()}</div>
+              <div class="rank-chips">${rankChip("Clan ", cr, clanList.length)}${rankChip("Family ", fr, family.length)}</div>
+            </div>
+            <div class="rank-bar"><span style="width:${pct}%"></span></div>
+          </div>`;
+      }).join("");
+      return `<div class="profile-section-title">${groupNames[g]}</div>${rows}`;
+    }).join("");
+
+    box.innerHTML = `
+      <div class="rank-summary">
+        <div class="rank-summary-tile"><b>${clanTop3}</b><span>top-3 finishes in clan</span></div>
+        <div class="rank-summary-tile"><b>${familyTop3}</b><span>top-3 finishes in the family</span></div>
+      </div>
+      ${sections}
+      <div class="profile-hist-note">Family = all three FWA Evolution clans (${family.length} players). Ranks update with the leaderboards data.</div>`;
+  }
+
+  const AR = "/assets/";
+  const ARMY_ICONS = {
+    heroes: {
+      "Barbarian King": AR + "heroes/Icons_by_Leonart93_FIverr-22.png",
+      "Archer Queen": AR + "heroes/Icons_by_Leonart93_FIverr-23.png",
+      "Grand Warden": AR + "heroes/Icons_by_Leonart93_FIverr-24.png",
+      "Royal Champion": AR + "heroes/RC_Wastelands_01_NoShadow.png",
+      "Minion Prince": AR + "heroes/MinionPrince_wwe_f82_3k.png",
+      "Dragon Duke": AR + "heroes/DD_SoundOfClash_f10_4k.png",
+    },
+    pets: {
+      "L.A.S.S.I": "Icon_HV_Hero_Pets_LASSI.png", "Electro Owl": "Icon_HV_Hero_Pets_Electro_Owl.png",
+      "Mighty Yak": "Icon_HV_Hero_Pets_Mighty_Yak.png", "Unicorn": "Icon_HV_Hero_Pets_Unicorn.png",
+      "Frosty": "Icon_HV_Hero_Pets_Frosty.png", "Diggy": "Icon_HV_Hero_Pets_Diggy.png",
+      "Poison Lizard": "Icon_HV_Hero_Pets_Poison_Lizard.png", "Phoenix": "Icon_HV_Hero_Pets_Phoenix.png",
+      "Spirit Fox": "Icon_HV_Hero_Pets_Spirit_Fox.png", "Angry Jelly": "Hero_Pet_HV_Angry_Jelly_05.png",
+      "Sneezy": "Icon_HV_Hero_Pets_Sneezy.png", "Greedy Raven": "Greedy_Raven_info2.png",
+    },
+    siege: {
+      "Wall Wrecker": "Icons_by_Leonart93_Fiverr-02.png", "Stone Slammer": "Icons_by_Leonart93_Fiverr-03.png",
+      "Battle Blimp": "Icons_by_Leonart93_Fiverr-14.png", "Siege Barracks": "Avatar_Siege_Barracks.png",
+      "Log Launcher": "Avatar_Log_Launcher.png", "Flame Flinger": "Avatar_Flame_Flinger.png",
+      "Battle Drill": "Avatar_Battle_Drill.png", "Troop Launcher": "Avatar_Troop_Launcher.png",
+    },
+    superTroops: {
+      "Super Barbarian": "Super_Barb.PNG", "Super Archer": "Super_Archer.PNG", "Super Giant": "Super_Giant.PNG",
+      "Sneaky Goblin": "Super_Goblin.PNG", "Super Wall Breaker": "Super_Wall_breaker.PNG",
+      "Rocket Balloon": "Rocket_ballon.PNG", "Super Wizard": "Super_Wizard.PNG", "Super Minion": "Super_Minion.PNG",
+      "Super Valkyrie": "Super_Valk.PNG", "Super Witch": "Super_Witch.PNG", "Ice Hound": "Ice_hound.PNG",
+      "Super Bowler": "Super_Bowler.PNG", "Super Miner": "Super_Miner.PNG", "Super Hog Rider": "Super_Hogs.PNG",
+      "Super Yeti": "Super_Yeti.PNG", "Super Dragon": "Super_Baby_Dragon.PNG", "Super Baby Dragon": "Super_Baby_Dragon.PNG",
+    },
+  };
+  const ARMY_FOLDER = { pets: "pets/", siege: "Siege machines/", superTroops: "super troops/" };
+  const ARMY_TROOP_FILES = {
+    "Barbarian": "barbarian", "Archer": "archer", "Giant": "giant", "Goblin": "goblin", "Wall Breaker": "wall breaker",
+    "Balloon": "ballon", "Wizard": "wizard", "Healer": "healer", "Dragon": "dragon", "P.E.K.K.A": "pekka",
+    "Baby Dragon": "baby dragon", "Miner": "miner", "Electro Dragon": "electro dragon", "Yeti": "yeti",
+    "Dragon Rider": "dragon raider", "Electro Titan": "electro titan", "Apprentice Warden": "apprentice warden",
+    "Root Rider": "root raider", "Minion": "minion", "Hog Rider": "hogs", "Valkyrie": "valk", "Witch": "witch",
+    "Lava Hound": "lava hound", "Bowler": "bowler", "Ice Golem": "ice golem", "Golem": "golem",
+    "Headhunter": "head hunter", "Druid": "druid", "Furnace": "furnace", "Meteor Golem": "meteor golem",
+    "Thrower": "thrower",
+  };
+
+  function armyIcon(group, name) {
+    if (group === "heroes") return ARMY_ICONS.heroes[name] || null;
+    if (group === "troops") return ARMY_TROOP_FILES[name] ? AR + "elixir troops/" + ARMY_TROOP_FILES[name] + ".png" : null;
+    if (group === "spells") return AR + "spells/" + (name === "Clone Spell" ? "Clone_Spell_info.png" : name + ".png");
+    const f = (ARMY_ICONS[group] || {})[name];
+    return f ? AR + ARMY_FOLDER[group] + f : null;
+  }
+
+  function armyInitials(name) {
+    return String(name || "?").split(/[\s.]+/).filter(Boolean).slice(0, 2).map(w => w[0]).join("").toUpperCase();
+  }
+
+  function armyArt(group, name) {
+    const src = armyIcon(group, name);
+    return src ? `<img src="${src}" alt="" loading="lazy" onerror="this.outerHTML='<span class=&quot;army-initials&quot;>${esc(armyInitials(name))}</span>'">`
+               : `<span class="army-initials">${esc(armyInitials(name))}</span>`;
+  }
+
+  function armyTile(group, it) {
+    const maxed = it.level >= it.maxLevel;
+    const pct = Math.round(100 * it.level / Math.max(1, it.maxLevel));
+    return `<div class="army-tile${maxed ? " maxed" : ""}${it.active ? " active" : ""}" title="${esc(it.name)} ${it.level}/${it.maxLevel}">
+      <div class="army-art">${armyArt(group, it.name)}</div>
+      <div class="army-name">${esc(it.name)}</div>
+      <div class="army-lvl">${it.level}<small>/${it.maxLevel}</small></div>
+      <div class="army-bar"><i style="width:${pct}%"></i></div>
+    </div>`;
+  }
+
+  function armySection(title, group, items) {
+    if (!items || !items.length) return "";
+    const maxed = items.filter(i => i.level >= i.maxLevel).length;
+    return `<div class="army-sec-head"><span>${title}</span><b>${maxed}/${items.length} maxed</b></div>
+      <div class="army-grid">${items.map(i => armyTile(group, i)).join("")}</div>`;
+  }
+
+  function renderArmy(data) {
+    const g = data.groups || {}, s = data.summary || { level: 0, max: 1, maxed: 0, total: 0 };
+    const pct = Math.round(100 * s.level / Math.max(1, s.max));
+    const eqByName = {};
+    (g.equipment || []).forEach(e => { eqByName[e.name] = e; });
+    const chip = (e, equipped) => `<span class="army-chip${e.level >= e.maxLevel ? " maxed" : ""}${equipped ? " equipped" : ""}">${esc(e.name)}<b>${e.level}/${e.maxLevel}</b></span>`;
+    const heroes = (g.heroes || []).length ? `<div class="army-sec-head"><span>Heroes</span><b>${g.heroes.filter(h => h.level >= h.maxLevel).length}/${g.heroes.length} maxed</b></div>
+      <div class="army-heroes">${g.heroes.map(h => `
+        <div class="army-hero${h.level >= h.maxLevel ? " maxed" : ""}">
+          <div class="army-hero-top">${armyArt("heroes", h.name)}
+            <div><div class="army-hero-name">${esc(h.name)}</div><div class="army-hero-lvl"><b>${h.level}</b> / ${h.maxLevel}</div></div>
+          </div>
+          ${(h.equipped || []).length ? `<div class="army-chips">${h.equipped.map(n => eqByName[n] ? chip(eqByName[n], true) : "").join("")}</div>` : ""}
+        </div>`).join("")}</div>` : "";
+    const equipped = new Set((g.heroes || []).flatMap(h => h.equipped || []));
+    const spare = (g.equipment || []).filter(e => !equipped.has(e.name));
+    const vault = spare.length ? `<div class="army-sec-head"><span>Equipment vault</span><b>${spare.filter(e => e.level >= e.maxLevel).length}/${spare.length} maxed</b></div>
+      <div class="army-chips">${spare.map(e => chip(e, false)).join("")}</div>` : "";
+    const builder = [...(g.builderHeroes || []), ...(g.builderTroops || [])];
+    return `
+      <div class="army-summary">
+        <div><b>${pct}%</b><small>of the max army for this Town Hall</small></div>
+        <div class="army-summary-bar"><i style="width:${pct}%"></i></div>
+        <div><b>${s.maxed}</b><small>of ${s.total} maxed</small></div>
+      </div>
+      ${heroes}
+      ${vault}
+      ${armySection("Pets", "pets", g.pets)}
+      ${armySection("Troops", "troops", g.troops)}
+      ${armySection("Super troops", "superTroops", g.superTroops)}
+      ${armySection("Siege machines", "siege", g.siege)}
+      ${armySection("Spells", "spells", g.spells)}
+      ${armySection("Builder base", "builder", builder)}`;
+  }
+
+  const armyCache = {};
+  async function renderArmyTab(p) {
+    const box = document.getElementById("profileTabArmy");
+    if (!p.tag) { box.innerHTML = `<div class="profile-empty">Army needs the live player tag.</div>`; return; }
+    if (!armyCache[p.tag]) {
+      box.innerHTML = `<div class="profile-empty">Loading army…</div>`;
+      try {
+        const res = await fetch(`https://api.stathut.in/api/player/${encodeURIComponent(p.tag)}/army`);
+        if (!res.ok) throw new Error("army endpoint error");
+        armyCache[p.tag] = await res.json();
+      } catch (err) {
+        box.innerHTML = `<div class="profile-empty">Couldn't load the army right now.</div>`;
+        return;
+      }
+    }
+    box.innerHTML = renderArmy(armyCache[p.tag]);
+  }
+
   async function switchProfileTab(tab, p) {
     document.querySelectorAll(".profile-tab").forEach(b => b.classList.toggle("active", b.dataset.ptab === tab));
     document.getElementById("profileTabOverview").hidden = tab !== "overview";
+    document.getElementById("profileTabRankings").hidden = tab !== "rankings";
+    document.getElementById("profileTabArmy").hidden = tab !== "army";
     const box = document.getElementById("profileTabHistory");
     box.hidden = tab !== "history";
+    if (tab === "army") { renderArmyTab(p); return; }
+    if (tab === "rankings") { renderRankingsTab(p); return; }
     if (tab !== "history") return;
     if (!p.tag) {
       box.innerHTML = `<div class="profile-empty">History needs the live player tag.</div>`;
