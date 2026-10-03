@@ -67,6 +67,16 @@
     .cwl-table .nm span { overflow: hidden; text-overflow: ellipsis; }
     .cwl-table tr.us td { background: rgba(251,113,133,.08); }
     .cwl-table tr.us td:first-child { box-shadow: inset 3px 0 0 var(--cwl-a1); }
+    .cwl-col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+    .th-row { display: grid; grid-template-columns: 46px 1fr; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.05); align-items: center; }
+    .th-row:last-child { border-bottom: none; }
+    .th-row img { width: 44px; height: 44px; object-fit: contain; }
+    .th-top { display: flex; justify-content: space-between; align-items: baseline; font-size: .86rem; color: var(--text); font-weight: 800; }
+    .th-top span { font-size: .72rem; color: var(--text-dim); font-weight: 700; }
+    .th-bar { height: 5px; border-radius: 99px; background: rgba(255,255,255,.07); margin: 6px 0 7px; overflow: hidden; }
+    .th-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--cwl-a2), var(--cwl-a1)); }
+    .th-names { display: flex; flex-wrap: wrap; gap: 5px; }
+    .th-names em { font-style: normal; font-size: .68rem; padding: 2px 8px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-dim); }
     .cwl-note { font-size: .86rem; color: var(--text-dim); padding: 22px 6px; text-align: center; line-height: 1.5; }
     .cwl-note a { color: var(--cwl-a1); font-weight: 700; text-decoration: none; }
     .cwl-updated { font-size: .74rem; color: var(--text-dim); }
@@ -173,6 +183,24 @@
       return html;
     }
 
+    function thRosterHtml(members) {
+      const groups = {};
+      members.forEach(m => { (groups[m.townhallLevel] = groups[m.townhallLevel] || []).push(m); });
+      const levels = Object.keys(groups).map(Number).sort((a, b) => b - a);
+      const max = Math.max(1, ...levels.map(l => groups[l].length));
+      return levels.map(l => {
+        const list = groups[l].slice().sort((a, b) => (a.mapPosition || 99) - (b.mapPosition || 99));
+        return `<div class="th-row">
+          <img src="/assets/th/th${l}.png" alt="TH${l}" onerror="this.style.visibility='hidden'">
+          <div>
+            <div class="th-top">TH${l}<span>${list.length} ${list.length === 1 ? "player" : "players"}</span></div>
+            <div class="th-bar"><i style="width:${Math.round(100 * list.length / max)}%"></i></div>
+            <div class="th-names">${list.map(m => `<em>${esc(m.name)}</em>`).join("")}</div>
+          </div>
+        </div>`;
+      }).join("");
+    }
+
     function membersHtml(members) {
       const rows = members.slice().sort((a, b) => (a.mapPosition || 99) - (b.mapPosition || 99));
       return `<table class="cwl-table"><thead><tr><th>#</th><th>Player</th><th>TH</th><th>Atk</th><th>\u2605</th><th>Avg dest.</th></tr></thead><tbody>
@@ -201,7 +229,10 @@
         (d.season ? `<span class="cwl-chip">Season ${esc(d.season)}</span>` : "");
       view.innerHTML = heroHtml(d, extra) + `
         <div class="cwl-grid">
-          <div class="cwl-card"><div class="cwl-card-title"><span>Rounds</span><span class="cwl-updated">${(d.rounds || []).length} of ${d.roundsTotal || 7}</span></div>${roundsHtml(d)}</div>
+          <div class="cwl-col">
+            <div class="cwl-card"><div class="cwl-card-title"><span>Rounds</span><span class="cwl-updated">${(d.rounds || []).length} of ${d.roundsTotal || 7}</span></div>${roundsHtml(d)}</div>
+            <div class="cwl-card"><div class="cwl-card-title"><span>Town Hall roster</span><span class="cwl-updated">${(d.members || []).length} players</span></div>${thRosterHtml(d.members || [])}</div>
+          </div>
           <div class="cwl-card"><div class="cwl-card-title"><span>Roster &amp; performance</span><span class="cwl-updated">${(d.members || []).length} players</span></div>${membersHtml(d.members || [])}</div>
         </div>`;
     }
