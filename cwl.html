@@ -92,6 +92,21 @@
     .cwl-note a { color: var(--cwl-a1); font-weight: 700; text-decoration: none; }
     .cwl-updated { font-size: .74rem; color: var(--text-dim); }
     @media (max-width: 560px) { .cwl-table .nm { max-width: 130px; } .cwl-table th, .cwl-table td { padding-left: 4px; padding-right: 4px; } }
+    .hist-card { margin-top: 16px; }
+    .hist-item { border-top: 1px solid rgba(255,255,255,.06); }
+    .hist-item:first-of-type { border-top: none; }
+    .hist-item summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 12px 2px; color: var(--text); font-weight: 800; font-size: .92rem; }
+    .hist-item summary::-webkit-details-marker { display: none; }
+    .hist-item summary::before { content: "\25B8"; color: var(--text-dim); font-size: .8rem; transition: transform .15s; }
+    .hist-item[open] summary::before { transform: rotate(90deg); }
+    .hist-sum { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; }
+    .hist-body { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 4px 2px 16px; }
+    @media (max-width: 760px) { .hist-body { grid-template-columns: 1fr; } }
+    .hist-sub { font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--text-dim); margin: 0 0 4px; font-weight: 800; }
+    .hist-top { display: grid; grid-template-columns: 22px 1fr auto; gap: 8px; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,.05); font-size: .84rem; color: var(--text); }
+    .hist-top:last-child { border-bottom: none; }
+    .hist-top b { color: var(--text-dim); }
+    .hist-top span.s { color: var(--text-dim); white-space: nowrap; font-size: .78rem; }
   </style>
 </head>
 <body class="sh2">
@@ -127,6 +142,7 @@
       </div>
 
       <div id="cwlView"><div class="cwl-note">Loading CWL…</div></div>
+      <div id="cwlHistory"></div>
     </div>
   </section>
 
@@ -313,6 +329,39 @@
       document.getElementById("cwlUpdated").innerHTML = (isLive(cache[m]) ? '<span class="live-dot"></span>Live \u00b7 ' : "") + "Updated " + t;
     }
 
+    const histCache = {};
+    function seasonLabel(s) {
+      const m = /^(\d{4})-(\d{2})/.exec(s || "");
+      if (!m) return s || "Season";
+      return new Date(+m[1], +m[2] - 1, 1).toLocaleString("en", { month: "long", year: "numeric" });
+    }
+    function histItem(s) {
+      const rounds = (s.rounds || []).map(r => `
+        <div class="cwl-row"><span class="cwl-r">R${esc(r.round)}</span>
+          <div class="cwl-opp"><span>${esc(r.opponent || "Unknown")}</span></div>
+          <div class="cwl-res"><span class="res ${esc(r.result)}">${esc(String(r.result || "").toUpperCase())}</span>${esc(r.usStars)}\u2605 \u2013 ${esc(r.oppStars)}\u2605</div></div>`).join("");
+      const top = (s.members || []).slice().sort((a, b) => (b.totalStars || 0) - (a.totalStars || 0) || (b.avgDestruction || 0) - (a.avgDestruction || 0)).slice(0, 5)
+        .map((m, i) => `<div class="hist-top"><b>${i + 1}</b><span>${esc(m.name)}${m.townHallLevel ? " \u00b7 TH" + esc(m.townHallLevel) : ""}</span><span class="s">${esc(m.totalStars || 0)}\u2605 \u00b7 ${esc(m.avgDestruction || 0)}%</span></div>`).join("");
+      return `<details class="hist-item"><summary>${esc(seasonLabel(s.season))}
+        <span class="hist-sum"><span class="res win">${esc(s.wins)}W</span><span class="res loss">${esc(s.losses)}L</span><span class="res tie">${esc(s.ties)}T</span><span class="res">${esc(s.stars)}\u2605</span></span></summary>
+        <div class="hist-body"><div><p class="hist-sub">Rounds</p>${rounds}</div><div><p class="hist-sub">Top performers</p>${top || '<div class="cwl-note">No data</div>'}</div></div></details>`;
+    }
+    async function loadHistory(m) {
+      const el = document.getElementById("cwlHistory");
+      if (histCache[m] === undefined) {
+        try {
+          const r = await fetch(API + m + "/history");
+          if (!r.ok) throw new Error("bad status");
+          histCache[m] = (await r.json()).seasons || [];
+        } catch (e) { histCache[m] = null; }
+      }
+      if (m !== mode) return;
+      const s = histCache[m];
+      if (s === null) { el.innerHTML = ""; return; }
+      el.innerHTML = `<div class="cwl-card hist-card"><div class="cwl-card-title"><span>Past seasons</span><span class="cwl-updated">${s.length} saved</span></div>` +
+        (s.length ? s.map(histItem).join("") : `<div class="cwl-note">Finished seasons are saved here automatically. The first one will appear when this season ends.</div>`) + `</div>`;
+    }
+
     let timer;
     function schedule() {
       clearTimeout(timer);
@@ -336,10 +385,12 @@
       mode = b.dataset.mode;
       document.querySelectorAll(".cwl-mode").forEach(x => x.classList.toggle("active", x === b));
       setAccent(mode);
+      loadHistory(mode);
       load(mode, false).then(schedule);
     });
 
     setAccent(mode);
+    loadHistory(mode);
     load(mode, true).then(schedule);
   })();
   </script>
