@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hall of Fame | FWA Evolution</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/stathut-v2.css">
+  <link rel="icon" type="image/png" href="/assets/fwa-evolution-logo.png">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GJLXJW3G7H"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-GJLXJW3G7H');
+  </script>
+  <style>
+    :root { --hof-a1: #fbbf24; --hof-a2: #f59e0b; }
+    .hof-wrap { max-width: 1100px; margin: 0 auto; }
+    .hof-title { margin-bottom: 18px; }
+    .hof-title h1 { margin: 0; font-family: "Orbitron", sans-serif; font-size: 1.6rem; color: var(--text); }
+    .hof-sub { color: var(--text-dim); font-size: .86rem; margin: 4px 0 0; }
+    .hof-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; align-items: center; }
+    .hof-chip {
+      background: var(--surface-2); border: 1px solid var(--border); color: var(--text-dim);
+      font-weight: 800; font-size: .8rem; padding: 8px 15px; border-radius: 999px; cursor: pointer; white-space: nowrap;
+    }
+    .hof-chip:hover { color: var(--text); }
+    .hof-chip.active { background: linear-gradient(135deg, var(--hof-a1), var(--hof-a2)); color: #0a0e1a; border-color: transparent; }
+    .hof-chip.sm { font-size: .74rem; padding: 6px 12px; }
+    .hof-label { font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); font-weight: 800; margin-right: 4px; }
+
+    .hof-podium { display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 14px; align-items: end; margin: 20px 0 16px; }
+    .hof-pcard {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 18px 14px 16px;
+      text-align: center; text-decoration: none; color: var(--text); position: relative; overflow: hidden; min-width: 0;
+      transition: transform .15s, border-color .15s;
+    }
+    .hof-pcard:hover { transform: translateY(-3px); }
+    .hof-pcard::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--c); }
+    .hof-pcard.p1 { --c: linear-gradient(90deg, #fbbf24, #f59e0b); padding-top: 26px; padding-bottom: 22px; border-color: rgba(251,191,36,.45); }
+    .hof-pcard.p2 { --c: linear-gradient(90deg, #e2e8f0, #94a3b8); }
+    .hof-pcard.p3 { --c: linear-gradient(90deg, #fb923c, #c2410c); }
+    .hof-medal { font-size: 1.7rem; line-height: 1; }
+    .hof-pcard img { width: 56px; height: 56px; object-fit: contain; margin: 8px auto 4px; display: block; }
+    .hof-pcard.p1 img { width: 68px; height: 68px; }
+    .hof-pname { font-weight: 800; font-size: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .hof-pclan { font-size: .72rem; color: var(--text-dim); margin-top: 2px; }
+    .hof-pval { font-family: "Orbitron", sans-serif; font-size: 1.35rem; font-weight: 900; margin-top: 8px; color: var(--hof-a1); }
+    .hof-pcard.p1 .hof-pval { font-size: 1.7rem; }
+    .hof-punit { font-size: .66rem; color: var(--text-dim); letter-spacing: .1em; text-transform: uppercase; }
+    @media (max-width: 640px) {
+      .hof-podium { grid-template-columns: 1fr; align-items: stretch; }
+      .hof-pcard { display: grid; grid-template-columns: 56px 1fr auto; gap: 4px 12px; text-align: left; align-items: center; padding: 14px; }
+      .hof-pcard.p1 { padding: 14px; }
+      .hof-pcard .hof-medal { display: none; }
+      .hof-pcard img, .hof-pcard.p1 img { width: 48px; height: 48px; margin: 0; grid-row: 1 / span 2; }
+      .hof-pcard .hof-pname { grid-column: 2; }
+      .hof-pcard .hof-pclan { grid-column: 2; margin: 0; }
+      .hof-pcard .hof-pval, .hof-pcard.p1 .hof-pval { grid-column: 3; grid-row: 1 / span 2; font-size: 1.15rem; margin: 0; text-align: right; }
+      .hof-pcard .hof-punit { display: none; }
+      .hof-pcard.p1 { order: 1; } .hof-pcard.p2 { order: 2; } .hof-pcard.p3 { order: 3; }
+    }
+
+    .hof-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 8px 18px; margin-bottom: 22px; }
+    .hof-list a {
+      display: grid; grid-template-columns: 30px 38px 1fr auto; gap: 12px; align-items: center; padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,.05); text-decoration: none; color: var(--text); font-size: .9rem; min-width: 0;
+    }
+    .hof-list a:last-child { border-bottom: none; }
+    .hof-list a:hover .hof-n { color: var(--hof-a1); }
+    .hof-rk { font-weight: 800; color: var(--text-dim); font-size: .8rem; text-align: center; }
+    .hof-list img { width: 34px; height: 34px; object-fit: contain; }
+    .hof-n { font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .hof-c { font-size: .72rem; color: var(--text-dim); }
+    .hof-v { font-weight: 800; font-variant-numeric: tabular-nums; }
+    .hof-empty { color: var(--text-dim); font-size: .86rem; padding: 22px 6px; text-align: center; }
+
+    .hof-h2 { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); font-weight: 800; margin: 26px 0 12px; }
+    .hof-wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; margin-bottom: 30px; }
+    .hof-w {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 12px 14px; cursor: pointer;
+      text-align: left; color: var(--text); min-width: 0; font: inherit;
+    }
+    .hof-w:hover { border-color: var(--hof-a1); }
+    .hof-w small { display: block; font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text-dim); font-weight: 800; }
+    .hof-w b { display: block; margin-top: 6px; font-size: .92rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .hof-w span { font-size: .78rem; color: var(--hof-a1); font-weight: 800; }
+    .hof-updated { font-size: .74rem; color: var(--text-dim); margin-top: 6px; }
+  </style>
+</head>
+<body class="sh2">
+
+  <header class="sh2-topbar">
+    <a href="/" class="sh2-logo"><img src="/assets/fwa-evolution-logo.png" alt="FWA Evolution">FWA Evolution</a>
+    <nav class="sh2-nav">
+      <a href="/">Home</a>
+      <a href="/family.html">Family</a>
+      <a href="/clans.html">Clans</a>
+      <a href="/fwa-war-status.html">War Status</a>
+      <a href="/cwl.html">CWL</a>
+      <a href="/hall-of-fame.html" class="active">Hall of Fame</a>
+      <a href="/rules.html">Rules</a>
+      <a href="/fwa-guide.html">Guide</a>
+      <a href="/base-guide.html">Bases</a>
+      <a href="/join.html">Join</a>
+    </nav>
+  </header>
+
+  <section class="sh2-section">
+    <div class="hof-wrap">
+      <div class="hof-title">
+        <h1>Hall of Fame</h1>
+        <p class="hof-sub">The best players across all three FWA Evolution clans. Tap anyone to open their profile.</p>
+        <div class="hof-updated" id="hofUpdated"></div>
+      </div>
+
+      <div class="hof-row" id="hofClans"></div>
+      <div class="hof-row" id="hofGroups"></div>
+      <div class="hof-row" id="hofCats"></div>
+
+      <div id="hofBoard"><div class="hof-empty">Loading the Hall of Fame…</div></div>
+
+      <div class="hof-h2">Champions wall</div>
+      <div class="hof-wall" id="hofWall"></div>
+    </div>
+  </section>
+
+  <footer class="sh2-footer">
+    <a href="https://stathut.in/">&larr; Back to StatHut Home</a>
+    <div class="sh2-visitor-stat" id="sh2VisitorStat"></div>
+  </footer>
+
+  <script>
+  (function () {
+    const API = "https://api.stathut.in/api/clan/";
+    const CLANS = [
+      { slug: "the-shield", name: "The Shield" },
+      { slug: "invidia-bandit", name: "Invidia Bandit" },
+      { slug: "village-warriors", name: "Village Warriors" }
+    ];
+    const ach = n => p => (p.achievements && p.achievements[n]) || 0;
+    const CATS = [
+      { key: "trophies", group: "Trophies", label: "Trophies", icon: "\u{1F3C6}", get: p => p.trophies },
+      { key: "bestTrophies", group: "Trophies", label: "Best Trophies", icon: "\u{1F31F}", get: p => p.bestTrophies },
+      { key: "builderBaseTrophies", group: "Trophies", label: "Builder Trophies", icon: "\u{1F528}", get: p => p.builderBaseTrophies },
+      { key: "bestBuilderBaseTrophies", group: "Trophies", label: "Best Builder", icon: "\u{1F527}", get: p => p.bestBuilderBaseTrophies },
+      { key: "warStars", group: "War", label: "War Stars", icon: "⭐", get: p => p.warStars },
+      { key: "attackWins", group: "War", label: "Attack Wins", icon: "⚔️", get: p => p.attackWins },
+      { key: "defenseWins", group: "War", label: "Defense Wins", icon: "\u{1F6E1}️", get: p => p.defenseWins },
+      { key: "donations", group: "Generosity", label: "Donated", icon: "\u{1F381}", get: p => p.donations },
+      { key: "donationsReceived", group: "Generosity", label: "Received", icon: "\u{1F4E6}", get: p => p.donationsReceived },
+      { key: "a1", group: "Legacy", label: "Aggressive Capitalism", icon: "\u{1F4B0}", get: ach("Aggressive Capitalism") },
+      { key: "a2", group: "Legacy", label: "Heroic Heist", icon: "\u{1F48E}", get: ach("Heroic Heist") },
+      { key: "a3", group: "Legacy", label: "Un-Build It", icon: "\u{1F9F1}", get: ach("Un-Build It") },
+      { key: "a4", group: "Legacy", label: "Friend in Need", icon: "\u{1F91D}", get: ach("Friend in Need") },
+      { key: "a5", group: "Legacy", label: "Sharing is Caring", icon: "✨", get: ach("Sharing is caring") },
+      { key: "a6", group: "Legacy", label: "Nice and Tidy", icon: "\u{1F9F9}", get: ach("Nice and Tidy") },
+      { key: "a7", group: "Legacy", label: "Conqueror", icon: "\u{1F5E1}️", get: ach("Conqueror") },
+      { key: "a8", group: "Legacy", label: "Unbreakable", icon: "\u{1F9F1}", get: ach("Unbreakable") },
+      { key: "a9", group: "Legacy", label: "Humiliator", icon: "\u{1F3DA}️", get: ach("Humiliator") },
+      { key: "a10", group: "Legacy", label: "Empire Builder", icon: "\u{1F3D7}️", get: ach("Empire Builder") },
+      { key: "a11", group: "Legacy", label: "Games Champion", icon: "\u{1F3AE}", get: ach("Games Champion") }
+    ];
+    const GROUPS = ["Trophies", "War", "Generosity", "Legacy"];
+    const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const num = v => Number(v || 0).toLocaleString();
+
+    let people = [];
+    let clan = "all", group = "Trophies", cat = "trophies";
+
+    function pool() { return people.filter(p => clan === "all" || p.clanSlug === clan); }
+    function ranked(c) {
+      return pool().map(p => ({ p, v: Number(c.get(p) || 0) })).filter(x => x.v > 0).sort((a, b) => b.v - a.v);
+    }
+    const catOf = k => CATS.find(c => c.key === k);
+
+    function icon(p) { return p.townHallLevel ? `/assets/th/th${Math.max(9, Math.min(18, p.townHallLevel))}.png` : "/assets/fwa-evolution-logo.png"; }
+    function href(p) { return `/clans/${p.clanSlug}.html?player=${encodeURIComponent(p.tag || "")}`; }
+
+    function chips() {
+      document.getElementById("hofClans").innerHTML = '<span class="hof-label">Clan</span>' +
+        [{ slug: "all", name: "Whole family" }].concat(CLANS).map(c => `<button class="hof-chip sm ${c.slug === clan ? "active" : ""}" data-clan="${c.slug}">${esc(c.name)}</button>`).join("");
+      document.getElementById("hofGroups").innerHTML = GROUPS.map(g => `<button class="hof-chip ${g === group ? "active" : ""}" data-group="${g}">${g}</button>`).join("");
+      document.getElementById("hofCats").innerHTML = CATS.filter(c => c.group === group).map(c =>
+        `<button class="hof-chip sm ${c.key === cat ? "active" : ""}" data-cat="${c.key}">${c.icon} ${esc(c.label)}</button>`).join("");
+    }
+
+    function board() {
+      const c = catOf(cat), r = ranked(c);
+      const el = document.getElementById("hofBoard");
+      if (!r.length) { el.innerHTML = `<div class="hof-card"><div class="hof-empty">No data for this category yet.</div></div>`; return; }
+      const medals = ["\u{1F947}", "\u{1F948}", "\u{1F949}"];
+      const top = r.slice(0, 3).map((x, i) => `
+        <a class="hof-pcard p${i + 1}" href="${href(x.p)}">
+          <div class="hof-medal">${medals[i]}</div>
+          <img src="${icon(x.p)}" alt="" onerror="this.style.visibility='hidden'">
+          <div class="hof-pname">${esc(x.p.name)}</div>
+          <div class="hof-pclan">${esc(x.p.clanName)}</div>
+          <div class="hof-pval">${num(x.v)}<div class="hof-punit">${esc(c.label)}</div></div>
+        </a>`);
+      const order = top.length === 3 ? [top[1], top[0], top[2]] : top;
+      const rest = r.slice(3, 10).map((x, i) => `
+        <a href="${href(x.p)}"><span class="hof-rk">${i + 4}</span><img src="${icon(x.p)}" alt="" onerror="this.style.visibility='hidden'">
+          <span><span class="hof-n">${esc(x.p.name)}</span><br><span class="hof-c">${esc(x.p.clanName)}</span></span>
+          <span class="hof-v">${num(x.v)}</span></a>`).join("");
+      el.innerHTML = `<div class="hof-podium">${order.join("")}</div>` + (rest ? `<div class="hof-card hof-list">${rest}</div>` : "");
+    }
+
+    function wall() {
+      document.getElementById("hofWall").innerHTML = CATS.map(c => {
+        const r = ranked(c)[0];
+        if (!r) return "";
+        return `<button class="hof-w" data-wall="${c.key}"><small>${c.icon} ${esc(c.label)}</small><b>${esc(r.p.name)}</b><span>${num(r.v)}</span></button>`;
+      }).join("");
+    }
+
+    function renderAll() { chips(); board(); wall(); }
+
+    document.addEventListener("click", e => {
+      const b = e.target.closest("[data-clan],[data-group],[data-cat],[data-wall]");
+      if (!b) return;
+      if (b.dataset.clan) clan = b.dataset.clan;
+      if (b.dataset.group) { group = b.dataset.group; cat = CATS.find(c => c.group === group).key; }
+      if (b.dataset.cat) cat = b.dataset.cat;
+      if (b.dataset.wall) { cat = b.dataset.wall; group = catOf(cat).group; window.scrollTo({ top: 0, behavior: "smooth" }); }
+      renderAll();
+    });
+
+    async function getJson(url) {
+      try { const r = await fetch(url); return r.ok ? await r.json() : null; } catch (e) { return null; }
+    }
+
+    async function load() {
+      const results = await Promise.all(CLANS.map(async c => {
+        const [lb, mem] = await Promise.all([getJson(API + c.slug + "/leaderboards"), getJson(API + c.slug + "/members")]);
+        const members = Array.isArray(mem) ? mem : (mem && mem.members) || [];
+        const byTag = {};
+        members.forEach(m => { byTag[m.tag] = Object.assign({}, m); });
+        ((lb && lb.players) || []).forEach(p => { byTag[p.tag] = Object.assign({}, byTag[p.tag] || {}, p); });
+        return { c, list: Object.values(byTag).map(p => Object.assign(p, { clanSlug: c.slug, clanName: c.name })), at: lb && lb.fetchedAt };
+      }));
+      people = results.flatMap(r => r.list);
+      if (!people.length) {
+        document.getElementById("hofBoard").innerHTML = `<div class="hof-card"><div class="hof-empty">The Hall of Fame is unavailable right now. Please try again in a minute.</div></div>`;
+        return;
+      }
+      const at = Math.min.apply(null, results.map(r => r.at).filter(Boolean));
+      if (isFinite(at)) {
+        const mins = Math.max(0, Math.round((Date.now() / 1000 - at) / 60));
+        document.getElementById("hofUpdated").textContent = "Updated " + (mins < 1 ? "just now" : mins < 60 ? mins + " min ago" : Math.round(mins / 60) + "h ago");
+      }
+      renderAll();
+    }
+
+    chips();
+    load();
+  })();
+  </script>
+  <script src="/visitor-counter.js" defer></script>
+  <script src="/war-ticker.js" defer></script>
+</body>
+</html>
