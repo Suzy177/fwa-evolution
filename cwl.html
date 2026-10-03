@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CWL | FWA Evolution</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/stathut-v2.css">
+  <link rel="icon" type="image/png" href="/assets/fwa-evolution-logo.png">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GJLXJW3G7H"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-GJLXJW3G7H');
+  </script>
+
+  <style>
+    :root { --cwl-a1: #fb7185; --cwl-a2: #e11d48; }
+    .cwl-wrap { max-width: 1180px; margin: 0 auto; }
+    .cwl-title-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
+    .cwl-title-row h1 { margin: 0; font-family: "Orbitron", sans-serif; font-size: 1.6rem; color: var(--text); }
+    .cwl-sub { color: var(--text-dim); font-size: .86rem; margin: 4px 0 0; }
+    .cwl-modes { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+    .cwl-mode {
+      background: var(--surface-2); border: 1px solid var(--border); color: var(--text-dim);
+      font-weight: 800; font-size: .86rem; padding: 10px 20px; border-radius: 12px; cursor: pointer;
+    }
+    .cwl-mode.active { background: linear-gradient(135deg, var(--cwl-a1), var(--cwl-a2)); color: #0a0e1a; border-color: transparent; }
+    .cwl-hero {
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap; padding: 18px 20px; margin-bottom: 18px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 18px; position: relative; overflow: hidden;
+    }
+    .cwl-hero::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: linear-gradient(180deg, var(--cwl-a1), var(--cwl-a2)); }
+    .cwl-hero img { width: 64px; height: 64px; object-fit: contain; }
+    .cwl-hero-name { font-size: 1.25rem; font-weight: 800; color: var(--text); }
+    .cwl-hero-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+    .cwl-chip { font-size: .72rem; padding: 4px 11px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-dim); font-weight: 700; }
+    .cwl-chip.live { color: var(--cwl-a1); border-color: var(--cwl-a1); }
+    .cwl-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 16px; }
+    @media (max-width: 860px) { .cwl-grid { grid-template-columns: 1fr; } }
+    .cwl-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px 18px; min-width: 0; }
+    .cwl-card-title { display: flex; justify-content: space-between; align-items: center; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); font-weight: 800; margin-bottom: 12px; }
+    .cwl-row { display: grid; grid-template-columns: 30px 1fr auto; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,.05); font-size: .86rem; }
+    .cwl-row:last-child { border-bottom: none; }
+    .cwl-row.dim { opacity: .5; }
+    .cwl-r { font-weight: 800; color: var(--text-dim); font-size: .74rem; }
+    .cwl-opp { display: flex; align-items: center; gap: 8px; min-width: 0; color: var(--text); }
+    .cwl-opp img { width: 24px; height: 24px; object-fit: contain; flex-shrink: 0; }
+    .cwl-opp span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cwl-res { display: flex; align-items: center; gap: 8px; font-size: .8rem; color: var(--text-dim); white-space: nowrap; }
+    .res { font-size: .66rem; font-weight: 800; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-dim); }
+    .res.win { color: #34d399; border-color: rgba(52,211,153,.5); }
+    .res.loss { color: #f87171; border-color: rgba(248,113,113,.5); }
+    .res.tie { color: #facc15; border-color: rgba(250,204,21,.5); }
+    .res.live { color: var(--cwl-a1); border-color: var(--cwl-a1); }
+    .cwl-table { width: 100%; border-collapse: collapse; font-size: .84rem; }
+    .cwl-table th { text-align: right; font-size: .66rem; letter-spacing: .08em; text-transform: uppercase; color: var(--text-dim); padding: 4px 6px 8px; }
+    .cwl-table th:nth-child(1), .cwl-table th:nth-child(2) { text-align: left; }
+    .cwl-table td { padding: 8px 6px; border-top: 1px solid rgba(255,255,255,.05); text-align: right; color: var(--text); white-space: nowrap; }
+    .cwl-table td:nth-child(1) { text-align: left; color: var(--text-dim); font-weight: 800; width: 26px; }
+    .cwl-table td:nth-child(2) { text-align: left; }
+    .cwl-table .nm { display: flex; align-items: center; gap: 8px; max-width: 190px; }
+    .cwl-table .nm img { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
+    .cwl-table .nm span { overflow: hidden; text-overflow: ellipsis; }
+    .cwl-table tr.us td { background: rgba(251,113,133,.08); }
+    .cwl-table tr.us td:first-child { box-shadow: inset 3px 0 0 var(--cwl-a1); }
+    .cwl-note { font-size: .86rem; color: var(--text-dim); padding: 22px 6px; text-align: center; line-height: 1.5; }
+    .cwl-note a { color: var(--cwl-a1); font-weight: 700; text-decoration: none; }
+    .cwl-updated { font-size: .74rem; color: var(--text-dim); }
+    @media (max-width: 560px) { .cwl-table th:nth-child(6), .cwl-table td:nth-child(6) { display: none; } .cwl-table .nm { max-width: 120px; } }
+  </style>
+</head>
+<body class="sh2">
+
+  <header class="sh2-topbar">
+    <a href="/" class="sh2-logo"><img src="/assets/fwa-evolution-logo.png" alt="FWA Evolution">FWA Evolution</a>
+    <nav class="sh2-nav">
+      <a href="/">Home</a>
+      <a href="/family.html">Family</a>
+      <a href="/clans.html">Clans</a>
+      <a href="/fwa-war-status.html">War Status</a>
+      <a href="/cwl.html" class="active">CWL</a>
+      <a href="/rules.html">Rules</a>
+      <a href="/fwa-guide.html">Guide</a>
+      <a href="/base-guide.html">Bases</a>
+      <a href="/join.html">Join</a>
+    </nav>
+  </header>
+
+  <section class="sh2-section">
+    <div class="cwl-wrap">
+      <div class="cwl-title-row">
+        <div>
+          <h1>Clan War League</h1>
+          <p class="cwl-sub">Live rounds and league standings for our serious and casual CWL clans.</p>
+        </div>
+        <span class="cwl-updated" id="cwlUpdated"></span>
+      </div>
+
+      <div class="cwl-modes" id="cwlModes">
+        <button class="cwl-mode active" data-mode="serious">Serious CWL</button>
+        <button class="cwl-mode" data-mode="casual">Casual CWL</button>
+      </div>
+
+      <div id="cwlView"><div class="cwl-note">Loading CWL…</div></div>
+    </div>
+  </section>
+
+  <footer class="sh2-footer">
+    <a href="https://stathut.in/">&larr; Back to StatHut Home</a>
+    <div class="sh2-visitor-stat" id="sh2VisitorStat"></div>
+  </footer>
+
+  <script>
+  (function () {
+    const API = "https://api.stathut.in/api/cwl/";
+    const ACCENT = { serious: ["#fb7185", "#e11d48"], casual: ["#34d399", "#10b981"] };
+    const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const cache = {};
+    let mode = "serious";
+
+    function setAccent(m) {
+      document.documentElement.style.setProperty("--cwl-a1", ACCENT[m][0]);
+      document.documentElement.style.setProperty("--cwl-a2", ACCENT[m][1]);
+    }
+
+    function badge(url) { return url ? `<img src="${esc(url)}" alt="" onerror="this.style.visibility='hidden'">` : ""; }
+
+    function heroHtml(d, extra) {
+      const c = d.clan || {};
+      return `<div class="cwl-hero">
+        ${c.badge ? `<img src="${esc(c.badge)}" alt="">` : ""}
+        <div>
+          <div class="cwl-hero-name">${esc(c.name || "CWL clan")}</div>
+          <div class="cwl-hero-meta">
+            ${c.tag ? `<span class="cwl-chip">${esc(c.tag)}</span>` : ""}
+            ${c.level ? `<span class="cwl-chip">Level ${esc(c.level)}</span>` : ""}
+            ${c.league ? `<span class="cwl-chip">${esc(c.league)}</span>` : ""}
+            ${extra || ""}
+          </div>
+        </div>
+      </div>`;
+    }
+
+    function roundsHtml(rounds) {
+      return rounds.map(r => {
+        if (!r.opponent) {
+          return `<div class="cwl-row dim"><span class="cwl-r">R${r.round}</span><span class="cwl-opp"><span>${r.state === "notStarted" ? "Not started yet" : "Unknown"}</span></span><span></span></div>`;
+        }
+        const chip = r.result ? `<span class="res ${r.result}">${r.result === "win" ? "WIN" : r.result === "loss" ? "LOSS" : "TIE"}</span>`
+          : `<span class="res live">${r.state === "preparation" ? "PREP" : "LIVE"}</span>`;
+        return `<div class="cwl-row"><span class="cwl-r">R${r.round}</span>
+          <span class="cwl-opp">${badge(r.opponent.badge)}<span>${esc(r.opponent.name)}</span></span>
+          <span class="cwl-res">${r.state === "preparation" ? "" : r.clan.stars + " ★ " + r.opponent.stars} ${chip}</span></div>`;
+      }).join("");
+    }
+
+    function standingsHtml(rows) {
+      return `<table class="cwl-table"><thead><tr><th>#</th><th>Clan</th><th>W</th><th>L</th><th>T</th><th>★</th><th>Dest.</th></tr></thead><tbody>
+        ${rows.map(r => `<tr class="${r.isUs ? "us" : ""}"><td>${r.rank}</td>
+          <td><div class="nm">${badge(r.badge)}<span>${esc(r.name)}</span></div></td>
+          <td>${r.wins}</td><td>${r.losses}</td><td>${r.ties}</td><td>${r.stars}</td><td>${r.destruction}%</td></tr>`).join("")}
+      </tbody></table>`;
+    }
+
+    function render(d) {
+      const view = document.getElementById("cwlView");
+      if (!d) { view.innerHTML = `<div class="cwl-card"><div class="cwl-note">CWL data is unavailable right now. Please try again in a minute.</div></div>`; return; }
+      if (d.configured === false) {
+        view.innerHTML = `<div class="cwl-card"><div class="cwl-note">The ${mode} CWL clan hasn't been set up yet — it will appear here as soon as it's added.</div></div>`;
+        return;
+      }
+      if (!d.active) {
+        view.innerHTML = heroHtml(d, `<span class="cwl-chip">Off-season</span>`) +
+          `<div class="cwl-card"><div class="cwl-note">CWL isn't running right now. Rounds and standings appear here when the next season starts.<br>Looking for medal info? See the <a href="/cwl-bonus.html">CWL bonus guide</a>.</div></div>`;
+        return;
+      }
+      const live = d.rounds.some(r => r.state === "inWar" || r.state === "preparation");
+      view.innerHTML = heroHtml(d, `<span class="cwl-chip ${live ? "live" : ""}">Season ${esc(d.season || "")}</span>`) + `
+        <div class="cwl-grid">
+          <div class="cwl-card"><div class="cwl-card-title"><span>Rounds</span></div>${roundsHtml(d.rounds)}</div>
+          <div class="cwl-card"><div class="cwl-card-title"><span>League standings</span><span class="cwl-updated">finished wars only</span></div>${standingsHtml(d.standings || [])}</div>
+        </div>`;
+    }
+
+    async function load(m, force) {
+      if (!force && cache[m]) { render(cache[m]); return; }
+      document.getElementById("cwlView").innerHTML = `<div class="cwl-note">Loading CWL…</div>`;
+      try {
+        const res = await fetch(API + m);
+        if (!res.ok) throw new Error("bad status");
+        cache[m] = await res.json();
+      } catch (e) { cache[m] = null; }
+      if (m === mode) render(cache[m]);
+      document.getElementById("cwlUpdated").textContent = "Updated " + new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    }
+
+    document.getElementById("cwlModes").addEventListener("click", e => {
+      const b = e.target.closest(".cwl-mode");
+      if (!b) return;
+      mode = b.dataset.mode;
+      document.querySelectorAll(".cwl-mode").forEach(x => x.classList.toggle("active", x === b));
+      setAccent(mode);
+      load(mode, false);
+    });
+
+    setAccent(mode);
+    load(mode, true);
+    setInterval(() => load(mode, true), 120000);
+  })();
+  </script>
+  <script src="/visitor-counter.js" defer></script>
+</body>
+</html>
