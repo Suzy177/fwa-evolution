@@ -398,6 +398,17 @@
     }
 
     table.roster-table td.num, table.roster-table th.num { text-align: right; }
+    .roster-name-cell { display: inline-flex; align-items: center; gap: 10px; }
+    .role-badge { display: inline-flex; vertical-align: middle; margin-right: 8px; }
+    .role-badge svg { width: 22px; height: 22px; }
+    .roster-troop-icon {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+      flex-shrink: 0;
+      border-radius: 5px;
+      background: rgba(255,255,255,.04);
+    }
     table.roster-table tr:last-child td { border-bottom: none; }
 
     table.roster-table td.role.leader,
@@ -860,6 +871,13 @@
   const ROLE_ICON = { leader: "👑", coLeader: "🔰", admin: "⭐", member: "🔹" };
   const ROLE_LABEL = { leader: "Leader", coLeader: "Co-Leader", admin: "Elder", member: "Member" };
 
+  const ROLE_SVG = {
+    leader: '<svg viewBox="0 0 24 24"><defs><linearGradient id="rgL" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fde047"/><stop offset="1" stop-color="#d97706"/></linearGradient></defs><path d="M3 8l4.5 4L12 4.5 16.5 12 21 8l-2 11H5z" fill="url(#rgL)" stroke="#92400e" stroke-width="1" stroke-linejoin="round"/><circle cx="12" cy="4" r="1.4" fill="#fde047"/><circle cx="3" cy="7.5" r="1.2" fill="#fde047"/><circle cx="21" cy="7.5" r="1.2" fill="#fde047"/></svg>',
+    coLeader: '<svg viewBox="0 0 24 24"><defs><linearGradient id="rgC" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdba74"/><stop offset="1" stop-color="#ea580c"/></linearGradient></defs><path d="M12 2.5l8 3v6.2c0 4.6-3.3 8.2-8 9.8-4.7-1.6-8-5.2-8-9.8V5.5z" fill="url(#rgC)" stroke="#9a3412" stroke-width="1" stroke-linejoin="round"/><path d="M8 10.5l4 3 4-3M8 14l4 3 4-3" fill="none" stroke="#fff7ed" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    admin: '<svg viewBox="0 0 24 24"><defs><linearGradient id="rgE" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1f5f9"/><stop offset="1" stop-color="#94a3b8"/></linearGradient></defs><path d="M12 2.8l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.6 6.6 19.5l1.1-6.1L3.2 9.2l6.1-.8z" fill="url(#rgE)" stroke="#475569" stroke-width="1" stroke-linejoin="round"/></svg>',
+    member: '<svg viewBox="0 0 24 24"><defs><linearGradient id="rgM" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#93c5fd"/><stop offset="1" stop-color="#2563eb"/></linearGradient></defs><path d="M12 4l7 8-7 8-7-8z" fill="url(#rgM)" stroke="#1e3a8a" stroke-width="1" stroke-linejoin="round"/></svg>',
+  };
+
   const SAMPLE_MEMBERS = [
   {
     "name": "ShieldKing",
@@ -1004,8 +1022,8 @@
     } else {
       tbody.innerHTML = sorted.map(m => `
         <tr>
-          <td class="role ${m.role}">${ROLE_ICON[m.role] || "🔹"} ${ROLE_LABEL[m.role] || "Member"}</td>
-          <td>${m.name}</td>
+          <td class="role ${m.role}"><span class="role-badge">${ROLE_SVG[m.role] || ROLE_SVG.member}</span>${ROLE_LABEL[m.role] || "Member"}</td>
+          <td><span class="roster-name-cell"><img class="roster-troop-icon" src="${getPlayerIcon({ topTroop: topTroopFor(m), townHallLevel: m.townHallLevel })}" alt="" /><span>${m.name}</span></span></td>
           <td class="num">TH${m.townHallLevel ?? "—"}</td>
           <td class="num">${(m.trophies ?? 0).toLocaleString()}</td>
           <td class="num">${(m.donations ?? 0).toLocaleString()}</td>
@@ -1129,6 +1147,11 @@
     return `/assets/th/th${th}.png`;
   }
 
+  function topTroopFor(m) {
+    const hit = lbPlayers.find(p => (m.tag && p.tag === m.tag) || p.name === m.name);
+    return hit ? hit.topTroop : null;
+  }
+
   function getLbValue(player, key) {
     if (key.startsWith("achv:")) return (player.achievements && player.achievements[key.slice(5)]) || 0;
     return player[key] || 0;
@@ -1239,6 +1262,7 @@
       note.innerHTML = "Showing <strong>sample</strong> data — live leaderboards coming soon";
     }
     renderLeaderboards();
+    renderTable();
   }
 
   loadLeaderboards();
