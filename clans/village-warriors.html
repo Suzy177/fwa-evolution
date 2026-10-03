@@ -1519,10 +1519,15 @@
       const data = await res.json();
       if (!Array.isArray(data.players) || data.players.length === 0) throw new Error("empty leaderboards");
       lbPlayers = data.players;
-      note.innerHTML = "<strong>Live</strong> data";
+      let when = "";
+      if (data.fetchedAt) {
+        const mins = Math.max(0, Math.round((Date.now() / 1000 - data.fetchedAt) / 60));
+        when = " \u00b7 updated " + (mins < 1 ? "just now" : mins < 60 ? mins + " min ago" : Math.round(mins / 60) + "h ago");
+      }
+      note.innerHTML = "<strong>Live</strong> data" + when;
     } catch (err) {
       lbPlayers = fabricateSampleLeaderboards(SAMPLE_MEMBERS);
-      note.innerHTML = "Showing <strong>sample</strong> data — live leaderboards coming soon";
+      note.innerHTML = "Live data is unavailable right now — showing <strong>sample</strong> data";
     }
     renderLeaderboards();
     renderTable();
