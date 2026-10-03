@@ -534,6 +534,14 @@
     .leaderboards-row:nth-child(1) .leaderboards-rank { color: #facc15; }
     .leaderboards-row:nth-child(2) .leaderboards-rank { color: #cbd5e1; }
     .leaderboards-row:nth-child(3) .leaderboards-rank { color: #d97706; }
+    .leaderboards-icon {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      flex-shrink: 0;
+      border-radius: 5px;
+      background: rgba(255,255,255,.04);
+    }
     .leaderboards-name {
       flex: 1;
       color: var(--text);
@@ -1083,6 +1091,44 @@
   let activeLbTab = "trophyRace";
   let activeLbCats = [...LB_TABS.trophyRace];
 
+  const TROOP_ICON_MAP = {
+    "Barbarian": "/assets/elixir troops/barbarian.png",
+    "Archer": "/assets/elixir troops/archer.png",
+    "Giant": "/assets/elixir troops/giant.png",
+    "Goblin": "/assets/elixir troops/goblin.png",
+    "Wall Breaker": "/assets/elixir troops/wall breaker.png",
+    "Balloon": "/assets/elixir troops/ballon.png",
+    "Wizard": "/assets/elixir troops/wizard.png",
+    "Healer": "/assets/elixir troops/healer.png",
+    "Dragon": "/assets/elixir troops/dragon.png",
+    "P.E.K.K.A": "/assets/elixir troops/pekka.png",
+    "Baby Dragon": "/assets/elixir troops/baby dragon.png",
+    "Miner": "/assets/elixir troops/miner.png",
+    "Electro Dragon": "/assets/elixir troops/electro dragon.png",
+    "Yeti": "/assets/elixir troops/yeti.png",
+    "Dragon Rider": "/assets/elixir troops/dragon raider.png",
+    "Electro Titan": "/assets/elixir troops/electro titan.png",
+    "Apprentice Warden": "/assets/elixir troops/apprentice warden.png",
+    "Root Rider": "/assets/elixir troops/root raider.png",
+    "Minion": "/assets/elixir troops/minion.png",
+    "Hog Rider": "/assets/elixir troops/hogs.png",
+    "Valkyrie": "/assets/elixir troops/valk.png",
+    "Witch": "/assets/elixir troops/witch.png",
+    "Lava Hound": "/assets/elixir troops/lava hound.png",
+    "Bowler": "/assets/elixir troops/bowler.png",
+    "Ice Golem": "/assets/elixir troops/ice golem.png",
+    "Golem": "/assets/elixir troops/golem.png",
+    "Headhunter": "/assets/elixir troops/head hunter.png",
+    "Druid": "/assets/elixir troops/druid.png",
+  };
+
+  function getPlayerIcon(p) {
+    const mapped = TROOP_ICON_MAP[p.topTroop];
+    if (mapped) return mapped;
+    const th = Math.max(8, Math.min(18, p.townHallLevel || 10));
+    return `/assets/th/th${th}.png`;
+  }
+
   function getLbValue(player, key) {
     if (key.startsWith("achv:")) return (player.achievements && player.achievements[key.slice(5)]) || 0;
     return player[key] || 0;
@@ -1101,6 +1147,7 @@
     const rows = top5.map((p, i) => `
       <li class="leaderboards-row">
         <span class="leaderboards-rank">${i + 1}</span>
+        <img class="leaderboards-icon" src="${getPlayerIcon(p)}" alt="" />
         <span class="leaderboards-name">${p.name}</span>
         <span class="leaderboards-value">${getLbValue(p, catKey).toLocaleString()}</span>
       </li>`).join("");
@@ -1149,8 +1196,11 @@
     return members.map((m, i) => {
       const seed = (i + 1) * 37;
       const achv = (n) => (seed * n) % 4000;
+      const SAMPLE_TROOPS = ["Barbarian", "Archer", "Giant", "Goblin", "Wall Breaker", "Balloon", "Wizard", "Healer", "Dragon", "P.E.K.K.A", "Baby Dragon", "Miner", "Valkyrie", "Golem", "Hog Rider", "Witch", "Bowler", "Yeti"];
       return {
         name: m.name,
+        topTroop: SAMPLE_TROOPS[seed % SAMPLE_TROOPS.length],
+        townHallLevel: 10 + (seed % 8),
         trophies: m.trophies || 0,
         bestTrophies: (m.trophies || 0) + (seed % 300),
         builderBaseTrophies: 2500 + (seed % 1800),
