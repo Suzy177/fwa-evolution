@@ -176,6 +176,19 @@
       height: 16px;
       width: 60%;
     }
+    .ps-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 22px; position: relative; }
+    .ps-card h3 { margin: 0 0 4px; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-dim); }
+    .ps-card p.ps-sub { margin: 0 0 12px; font-size: 13px; color: var(--text-dim); }
+    .ps-input { width: 100%; box-sizing: border-box; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text); font-size: 15px; outline: none; }
+    .ps-input:focus { border-color: var(--accent-fwa); }
+    .ps-results { margin-top: 10px; display: grid; gap: 6px; }
+    .ps-row { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text); text-decoration: none; }
+    .ps-row:hover, .ps-row.ps-first { border-color: var(--accent-fwa); }
+    .ps-name { font-weight: 700; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .ps-meta { font-size: 12px; color: var(--text-dim); white-space: nowrap; }
+    .ps-th { font-size: 11px; font-weight: 800; padding: 2px 7px; border-radius: 999px; background: rgba(255,255,255,.07); }
+    .ps-empty { font-size: 13px; color: var(--text-dim); padding: 6px 2px; }
+    @media (max-width: 480px) { .ps-meta.ps-clan { display: none; } }
   </style>
 </head>
 <body class="sh2">
@@ -206,6 +219,13 @@
     <div class="dashboard-meta">
       <span id="lastUpdatedText">Loading live data…</span>
       <button class="refresh-btn" id="refreshBtn" onclick="loadFamily()">↻ Refresh</button>
+    </div>
+
+    <div class="ps-card">
+      <h3>🔍 Find a player</h3>
+      <p class="ps-sub">Search every member in the family by name or tag.</p>
+      <input class="ps-input" id="psInput" type="search" placeholder="Type a name or #tag…" autocomplete="off">
+      <div class="ps-results" id="psResults"></div>
     </div>
 
     <div class="stats-grid">
@@ -337,6 +357,53 @@
   </script>
 
   <script src="/visitor-counter.js" defer></script>
+  <script>
+  (function () {
+    const CLANS = [
+      { slug: "the-shield", name: "The Shield" },
+      { slug: "invidia-bandit", name: "Invidia Bandit" },
+      { slug: "village-warriors", name: "Village Warriors" }
+    ];
+    const input = document.getElementById("psInput");
+    const out = document.getElementById("psResults");
+    let people = null, loading = null;
+    const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+    function loadPeople() {
+      if (loading) return loading;
+      loading = Promise.all(CLANS.map(c =>
+        fetch("https://api.stathut.in/api/clan/" + c.slug + "/members")
+          .then(r => r.ok ? r.json() : [])
+          .then(d => (Array.isArray(d) ? d : d.members || []).map(m => Object.assign({}, m, { clanSlug: c.slug, clanName: c.name })))
+          .catch(() => [])
+      )).then(lists => { people = [].concat.apply([], lists); return people; });
+      return loading;
+    }
+
+    function render() {
+      const q = input.value.trim().toLowerCase();
+      if (q.length < 2) { out.innerHTML = ""; return; }
+      if (!people) { out.innerHTML = '<div class="ps-empty">Loading members…</div>'; loadPeople().then(render); return; }
+      const hits = people.filter(p => (p.name || "").toLowerCase().includes(q) || (p.tag || "").toLowerCase().includes(q))
+        .sort((a, b) => ((a.name || "").toLowerCase().startsWith(q) ? 0 : 1) - ((b.name || "").toLowerCase().startsWith(q) ? 0 : 1) || (b.trophies || 0) - (a.trophies || 0))
+        .slice(0, 10);
+      if (!hits.length) { out.innerHTML = '<div class="ps-empty">No member found. Check the spelling or try the tag.</div>'; return; }
+      out.innerHTML = hits.map((p, i) =>
+        '<a class="ps-row' + (i === 0 ? ' ps-first' : '') + '" href="/clans/' + p.clanSlug + '.html?player=' + encodeURIComponent(p.tag || "") + '">' +
+        '<span class="ps-name">' + esc(p.name) + '</span>' +
+        (p.townHallLevel ? '<span class="ps-th">TH' + p.townHallLevel + '</span>' : '') +
+        '<span class="ps-meta ps-clan">' + esc(p.clanName) + '</span>' +
+        '<span class="ps-meta">🏆 ' + Number(p.trophies || 0).toLocaleString() + '</span></a>'
+      ).join("");
+    }
+
+    input.addEventListener("focus", loadPeople, { once: true });
+    input.addEventListener("input", render);
+    input.addEventListener("keydown", e => {
+      if (e.key === "Enter") { const a = out.querySelector(".ps-row"); if (a) location.href = a.href; }
+    });
+  })();
+  </script>
   <script src="/war-ticker.js" defer></script>
 </body>
 </html>

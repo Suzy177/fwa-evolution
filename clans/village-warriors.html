@@ -1320,6 +1320,24 @@
 
   loadRoster();
 
+  // Deep link: ?player=%23TAG opens that member's profile pop-up (used by Family page search)
+  (function () {
+    const want = new URLSearchParams(location.search).get("player");
+    if (!want) return;
+    const tag = want.toUpperCase();
+    const started = Date.now();
+    const timer = setInterval(() => {
+      const m = allMembers.find(x => x.tag && x.tag.toUpperCase() === tag);
+      const waited = Date.now() - started;
+      if (m && (lbPlayers.length || waited > 6000)) {
+        clearInterval(timer);
+        openProfile(profileKey(m));
+      } else if (waited > 12000) {
+        clearInterval(timer);
+      }
+    }, 300);
+  })();
+
   // ---- Clan Leaderboards ----
   const LB_CATS = {
     trophies:            { key: "trophies", label: "Trophies", icon: "🏆" },
