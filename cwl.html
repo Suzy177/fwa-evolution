@@ -62,7 +62,7 @@
     .cwl-table td { padding: 8px 6px; border-top: 1px solid rgba(255,255,255,.05); text-align: right; color: var(--text); white-space: nowrap; }
     .cwl-table td:nth-child(1) { text-align: left; color: var(--text-dim); font-weight: 800; width: 26px; }
     .cwl-table td:nth-child(2) { text-align: left; }
-    .cwl-table .nm { display: flex; align-items: center; gap: 8px; max-width: 190px; }
+    .cwl-table .nm { display: flex; align-items: center; gap: 8px; max-width: 220px; }
     .cwl-table .nm img { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
     .cwl-table .nm span { overflow: hidden; text-overflow: ellipsis; }
     .cwl-table tr.us td { background: rgba(251,113,133,.08); }
@@ -70,7 +70,7 @@
     .cwl-note { font-size: .86rem; color: var(--text-dim); padding: 22px 6px; text-align: center; line-height: 1.5; }
     .cwl-note a { color: var(--cwl-a1); font-weight: 700; text-decoration: none; }
     .cwl-updated { font-size: .74rem; color: var(--text-dim); }
-    @media (max-width: 560px) { .cwl-table th:nth-child(6), .cwl-table td:nth-child(6) { display: none; } .cwl-table .nm { max-width: 120px; } }
+    @media (max-width: 560px) { .cwl-table .nm { max-width: 130px; } .cwl-table th, .cwl-table td { padding-left: 4px; padding-right: 4px; } }
   </style>
 </head>
 <body class="sh2">
@@ -95,7 +95,7 @@
       <div class="cwl-title-row">
         <div>
           <h1>Clan War League</h1>
-          <p class="cwl-sub">Live rounds and league standings for our serious and casual CWL clans.</p>
+          <p class="cwl-sub">Live rounds and roster performance for our serious and casual CWL clans.</p>
         </div>
         <span class="cwl-updated" id="cwlUpdated"></span>
       </div>
@@ -145,24 +145,41 @@
       </div>`;
     }
 
-    function roundsHtml(rounds) {
-      return rounds.map(r => {
-        if (!r.opponent) {
-          return `<div class="cwl-row dim"><span class="cwl-r">R${r.round}</span><span class="cwl-opp"><span>${r.state === "notStarted" ? "Not started yet" : "Unknown"}</span></span><span></span></div>`;
-        }
-        const chip = r.result ? `<span class="res ${r.result}">${r.result === "win" ? "WIN" : r.result === "loss" ? "LOSS" : "TIE"}</span>`
-          : `<span class="res live">${r.state === "preparation" ? "PREP" : "LIVE"}</span>`;
-        return `<div class="cwl-row"><span class="cwl-r">R${r.round}</span>
-          <span class="cwl-opp">${badge(r.opponent.badge)}<span>${esc(r.opponent.name)}</span></span>
-          <span class="cwl-res">${r.state === "preparation" ? "" : r.clan.stars + " ★ " + r.opponent.stars} ${chip}</span></div>`;
-      }).join("");
+    const STATE_LABEL = { preparation: "Preparation day", inWar: "Battle day", warEnded: "Round ended" };
+
+    function resultOf(r) {
+      if (r.state !== "warEnded") return null;
+      const a = r.us || {}, b = r.opponent || {};
+      if ((a.stars || 0) !== (b.stars || 0)) return (a.stars || 0) > (b.stars || 0) ? "win" : "loss";
+      const da = a.destructionPercentage || 0, db = b.destructionPercentage || 0;
+      return da === db ? "tie" : da > db ? "win" : "loss";
     }
 
-    function standingsHtml(rows) {
-      return `<table class="cwl-table"><thead><tr><th>#</th><th>Clan</th><th>W</th><th>L</th><th>T</th><th>★</th><th>Dest.</th></tr></thead><tbody>
-        ${rows.map(r => `<tr class="${r.isUs ? "us" : ""}"><td>${r.rank}</td>
-          <td><div class="nm">${badge(r.badge)}<span>${esc(r.name)}</span></div></td>
-          <td>${r.wins}</td><td>${r.losses}</td><td>${r.ties}</td><td>${r.stars}</td><td>${r.destruction}%</td></tr>`).join("")}
+    function roundsHtml(d) {
+      const rounds = d.rounds || [];
+      const total = d.roundsTotal || 7;
+      let html = rounds.map(r => {
+        const o = r.opponent || {}, u = r.us || {};
+        const res = resultOf(r);
+        const chip = res ? `<span class="res ${res}">${res === "win" ? "WIN" : res === "loss" ? "LOSS" : "TIE"}</span>`
+          : `<span class="res live">${r.state === "preparation" ? "PREP" : "LIVE"}</span>`;
+        return `<div class="cwl-row"><span class="cwl-r">R${esc(r.round)}</span>
+          <span class="cwl-opp">${badge(o.badge)}<span>${esc(o.name)}</span></span>
+          <span class="cwl-res">${r.state === "preparation" ? esc(r.teamSize ? r.teamSize + "v" + r.teamSize : "") : (u.stars || 0) + " \u2605 " + (o.stars || 0)} ${chip}</span></div>`;
+      }).join("");
+      for (let i = rounds.length + 1; i <= total; i++) {
+        html += `<div class="cwl-row dim"><span class="cwl-r">R${i}</span><span class="cwl-opp"><span>Not started yet</span></span><span></span></div>`;
+      }
+      return html;
+    }
+
+    function membersHtml(members) {
+      const rows = members.slice().sort((a, b) => (a.mapPosition || 99) - (b.mapPosition || 99));
+      return `<table class="cwl-table"><thead><tr><th>#</th><th>Player</th><th>TH</th><th>Atk</th><th>\u2605</th><th>Avg dest.</th></tr></thead><tbody>
+        ${rows.map(m => `<tr><td>${esc(m.mapPosition)}</td>
+          <td><div class="nm"><span>${esc(m.name)}</span></div></td>
+          <td>${esc(m.townhallLevel)}</td><td>${m.attacksUsed || 0}/${m.roundsPlayed || 0}</td>
+          <td>${m.totalStars || 0}</td><td>${(Number(m.avgDestruction) || 0).toFixed(0)}%</td></tr>`).join("")}
       </tbody></table>`;
     }
 
@@ -170,19 +187,22 @@
       const view = document.getElementById("cwlView");
       if (!d) { view.innerHTML = `<div class="cwl-card"><div class="cwl-note">CWL data is unavailable right now. Please try again in a minute.</div></div>`; return; }
       if (d.configured === false) {
-        view.innerHTML = `<div class="cwl-card"><div class="cwl-note">The ${mode} CWL clan hasn't been set up yet — it will appear here as soon as it's added.</div></div>`;
+        view.innerHTML = `<div class="cwl-card"><div class="cwl-note">The ${mode} CWL clan hasn't been set up yet \u2014 it will appear here as soon as it's added.</div></div>`;
         return;
       }
-      if (!d.active) {
+      const inLeague = d.inLeague !== false && d.active !== false;
+      if (!inLeague) {
         view.innerHTML = heroHtml(d, `<span class="cwl-chip">Off-season</span>`) +
-          `<div class="cwl-card"><div class="cwl-note">CWL isn't running right now. Rounds and standings appear here when the next season starts.<br>Looking for medal info? See the <a href="/cwl-bonus.html">CWL bonus guide</a>.</div></div>`;
+          `<div class="cwl-card"><div class="cwl-note">CWL isn't running right now. Rounds and the roster appear here when the next season starts.<br>Looking for medal info? See the <a href="/cwl-bonus.html">CWL bonus guide</a>.</div></div>`;
         return;
       }
-      const live = d.rounds.some(r => r.state === "inWar" || r.state === "preparation");
-      view.innerHTML = heroHtml(d, `<span class="cwl-chip ${live ? "live" : ""}">Season ${esc(d.season || "")}</span>`) + `
+      const live = d.state === "inWar" || (d.rounds || []).some(r => r.state === "inWar");
+      const extra = `<span class="cwl-chip ${live || d.state === "preparation" ? "live" : ""}">${esc(STATE_LABEL[d.state] || d.state || "Active")}</span>` +
+        (d.season ? `<span class="cwl-chip">Season ${esc(d.season)}</span>` : "");
+      view.innerHTML = heroHtml(d, extra) + `
         <div class="cwl-grid">
-          <div class="cwl-card"><div class="cwl-card-title"><span>Rounds</span></div>${roundsHtml(d.rounds)}</div>
-          <div class="cwl-card"><div class="cwl-card-title"><span>League standings</span><span class="cwl-updated">finished wars only</span></div>${standingsHtml(d.standings || [])}</div>
+          <div class="cwl-card"><div class="cwl-card-title"><span>Rounds</span><span class="cwl-updated">${(d.rounds || []).length} of ${d.roundsTotal || 7}</span></div>${roundsHtml(d)}</div>
+          <div class="cwl-card"><div class="cwl-card-title"><span>Roster &amp; performance</span><span class="cwl-updated">${(d.members || []).length} players</span></div>${membersHtml(d.members || [])}</div>
         </div>`;
     }
 
