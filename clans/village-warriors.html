@@ -454,6 +454,46 @@
       opacity: .8;
     }
 
+    /* ---- war room ---- */
+    .warroom { margin: 28px 0 40px; }
+    .warroom-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+    .warroom-head h2 { margin: 0; font-size: 1.2rem; color: var(--text); }
+    .warroom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 760px) { .warroom-grid { grid-template-columns: 1fr; } }
+    .wr-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px 18px; min-width: 0; }
+    .wr-title { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); font-weight: 800; margin-bottom: 12px; }
+    .wr-tag { font-size: .68rem; letter-spacing: 0; text-transform: none; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text); font-weight: 700; }
+    .wr-tag.live { border-color: var(--wlb-accent1); color: var(--wlb-accent1); }
+    .wr-tag.prep { border-color: #facc15; color: #facc15; }
+    .wr-versus { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 10px; text-align: center; }
+    @media (max-width: 480px) { .wr-score { font-size: 1.45rem; } .wr-side img { width: 38px !important; height: 38px !important; } }
+    .wr-side img { width: 48px; height: 48px; object-fit: contain; }
+    .wr-side-name { font-size: .78rem; font-weight: 700; color: var(--text); margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .wr-score { font-size: 1.9rem; font-weight: 900; color: var(--text); line-height: 1; white-space: nowrap; }
+    .wr-score small { display: block; font-size: .64rem; font-weight: 700; color: var(--text-dim); letter-spacing: .1em; margin-top: 6px; }
+    .wr-bars { margin-top: 14px; display: grid; gap: 6px; }
+    .wr-bar { display: grid; grid-template-columns: 38px 1fr 38px; align-items: center; gap: 8px; font-size: .72rem; color: var(--text-dim); }
+    .wr-bar-track { height: 6px; border-radius: 99px; background: rgba(255,255,255,.07); position: relative; overflow: hidden; }
+    .wr-bar-track i { position: absolute; top: 0; bottom: 0; left: 0; background: var(--wlb-accent1); border-radius: 99px; }
+    .wr-bar-track i.opp { left: auto; right: 0; background: #64748b; }
+    .wr-bar b:last-child { text-align: right; }
+    .wr-foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-top: 14px; font-size: .78rem; color: var(--text-dim); }
+    .wr-foot b { color: var(--wlb-accent1); }
+    .wr-note { font-size: .84rem; color: var(--text-dim); padding: 18px 4px; text-align: center; }
+    .cwl-row { display: grid; grid-template-columns: 52px 1fr auto; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,.05); font-size: .84rem; }
+    .cwl-row:last-child { border-bottom: none; }
+    .cwl-row.dim { opacity: .5; }
+    .cwl-r { font-weight: 800; color: var(--text-dim); font-size: .74rem; }
+    .cwl-opp { display: flex; align-items: center; gap: 8px; min-width: 0; color: var(--text); }
+    .cwl-opp img { width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
+    .cwl-opp span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .cwl-res { display: flex; align-items: center; gap: 8px; font-size: .78rem; color: var(--text-dim); white-space: nowrap; }
+    .cwl-chip { font-size: .66rem; font-weight: 800; padding: 3px 9px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text-dim); }
+    .cwl-chip.win { color: #34d399; border-color: rgba(52,211,153,.5); }
+    .cwl-chip.lose, .cwl-chip.loss { color: #f87171; border-color: rgba(248,113,113,.5); }
+    .cwl-chip.tie { color: #facc15; border-color: rgba(250,204,21,.5); }
+    .cwl-chip.live { color: var(--wlb-accent1); border-color: var(--wlb-accent1); }
+
     /* ---- clan leaderboards ---- */
     .leaderboards-section {
       margin-bottom: 40px;
@@ -860,6 +900,17 @@
         <div class="info-card">
           <h3>🏆 Alliance</h3>
           <p id="alliance-name">Loading...</p>
+        </div>
+      </div>
+
+      <div class="warroom" id="warRoom">
+        <div class="warroom-head">
+          <h2>⚔️ War Room</h2>
+          <span class="roster-note" id="warRoomNote">Checking the battlefield…</span>
+        </div>
+        <div class="warroom-grid">
+          <div class="wr-card"><div class="wr-title"><span>Current war</span><span class="wr-tag" id="warTag">—</span></div><div id="warBody"><div class="wr-note">Loading…</div></div></div>
+          <div class="wr-card"><div class="wr-title"><span>Recent wars</span><span class="wr-tag" id="recentTag">—</span></div><div id="recentBody"><div class="wr-note">Loading…</div></div></div>
         </div>
       </div>
 
@@ -1858,6 +1909,95 @@
 
   loadClanData();
   </script>
+
+  <script>
+  (function () {
+    const SLUG = "village-warriors";
+    const API = "https://api.stathut.in/api/clan/" + SLUG;
+    const wEsc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const parseCoc = t => {
+      const m = /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})/.exec(t || "");
+      return m ? Date.UTC(+m[1], m[2] - 1, +m[3], +m[4], +m[5], +m[6]) : null;
+    };
+    function fmtLeft(ms) {
+      if (ms <= 0) return "any moment";
+      const h = Math.floor(ms / 3600000), m = Math.floor((ms % 3600000) / 60000), s = Math.floor((ms % 60000) / 1000);
+      return h + "h " + String(m).padStart(2, "0") + "m " + String(s).padStart(2, "0") + "s";
+    }
+    const warBadge = s => { const u = s.badge || (s.badgeUrls && s.badgeUrls.small); return u ? `<img src="${wEsc(u)}" alt="">` : ""; };
+    const note = t => `<div class="wr-note">${t}</div>`;
+    const setTag = (id, text, cls) => { const e = document.getElementById(id); e.textContent = text; e.className = "wr-tag" + (cls ? " " + cls : ""); };
+    let timerTarget = null, timerLabel = "";
+
+    function renderWar(war) {
+      const body = document.getElementById("warBody");
+      timerTarget = null;
+      if (!war || war.state === "unavailable") { setTag("warTag", "Unavailable"); body.innerHTML = note("War data isn't available right now (the war log may be private)."); return; }
+      if (war.state === "notInWar") { setTag("warTag", "Not in war"); body.innerHTML = note("No war is running. The next one will show up here automatically."); return; }
+      const c = war.clan || {}, o = war.opponent || {};
+      const label = war.state === "preparation" ? ["Prep day", "prep"] : war.state === "inWar" ? ["Battle day", "live"] : ["War ended", ""];
+      setTag("warTag", label[0], label[1]);
+      const pct = v => Math.max(0, Math.min(100, Number(v) || 0));
+      const total = (war.teamSize || 0) * (war.attacksPerMember || 2);
+      let foot = "";
+      if (war.state === "preparation") { timerTarget = parseCoc(war.startTime) || (parseCoc(war.endTime) ? parseCoc(war.endTime) - 86400000 : null); timerLabel = "Battle starts in"; }
+      else if (war.state === "inWar") { timerTarget = parseCoc(war.endTime); timerLabel = "War ends in"; }
+      if (timerTarget) foot += `<span>${timerLabel} <b id="warTimer">\u2014</b></span>`;
+      const used = c.attacksUsed != null ? c.attacksUsed : c.attacks;
+      if (war.state !== "preparation" && total && used != null) foot += `<span>Attacks used <b>${used}/${total}</b>${o.attacks != null ? ` \u00b7 them <b>${o.attacks}/${total}</b>` : ""}</span>`;
+      body.innerHTML = `
+        <div class="wr-versus">
+          <div class="wr-side">${warBadge(c)}<div class="wr-side-name">${wEsc(c.name)}</div></div>
+          <div class="wr-score">${c.stars || 0} \u2605 ${o.stars || 0}<small>STARS${war.teamSize ? " \u00b7 " + war.teamSize + "v" + war.teamSize : ""}</small></div>
+          <div class="wr-side">${warBadge(o)}<div class="wr-side-name">${wEsc(o.name)}</div></div>
+        </div>
+        <div class="wr-bars"><div class="wr-bar"><b>${(Number(c.destructionPercentage) || 0).toFixed(1)}%</b>
+          <div class="wr-bar-track"><i style="width:${pct(c.destructionPercentage) / 2}%"></i><i class="opp" style="width:${pct(o.destructionPercentage) / 2}%"></i></div>
+          <b>${(Number(o.destructionPercentage) || 0).toFixed(1)}%</b></div></div>
+        <div class="wr-foot">${foot}</div>`;
+      tick();
+    }
+
+    function tick() {
+      const el = document.getElementById("warTimer");
+      if (el && timerTarget) el.textContent = fmtLeft(timerTarget - Date.now());
+    }
+
+    function fmtWarDate(iso) {
+      const m = /^(\d{4})(\d{2})(\d{2})/.exec(iso || "");
+      return m ? new Date(Date.UTC(+m[1], m[2] - 1, +m[3])).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" }) : "";
+    }
+
+    function renderRecent(d) {
+      const body = document.getElementById("recentBody");
+      const wars = d && d.wars ? d.wars.slice(0, 5) : [];
+      if (!wars.length) { setTag("recentTag", "No data"); body.innerHTML = note("No finished wars to show yet."); return; }
+      const wins = wars.filter(w => w.result === "win").length;
+      setTag("recentTag", wins + "W \u00b7 " + wars.filter(w => w.result === "lose").length + "L");
+      body.innerHTML = wars.map(w => {
+        const res = w.result === "win" ? "win" : w.result === "lose" ? "lose" : "tie";
+        const opp = w.opponent || {}, us = w.clan || {};
+        return `<div class="cwl-row"><span class="cwl-r">${fmtWarDate(w.endTime)}</span>
+          <span class="cwl-opp">${warBadge(opp)}<span>${wEsc(opp.name)}</span></span>
+          <span class="cwl-res">${us.stars || 0} \u2605 ${opp.stars || 0} <span class="cwl-chip ${res}">${res === "win" ? "WIN" : res === "lose" ? "LOSS" : "TIE"}</span></span></div>`;
+      }).join("") + `<div class="wr-foot"><a href="/clans/war-log.html?clan=${SLUG}" style="color:var(--wlb-accent1);text-decoration:none;font-weight:700">Full war log \u2192</a></div>`;
+    }
+
+    async function load() {
+      const [war, recent] = await Promise.all([
+        fetch(API + "/currentwar").then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(API + "/warlog").then(r => r.ok ? r.json() : null).catch(() => null),
+      ]);
+      renderWar(war);
+      renderRecent(recent);
+      document.getElementById("warRoomNote").textContent = "Updated " + new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    }
+    load();
+    setInterval(load, 60000);
+    setInterval(tick, 1000);
+  })();
+  </script>
+
 
   <script src="/visitor-counter.js" defer></script>
 </body>
