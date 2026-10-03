@@ -77,6 +77,11 @@
     .th-bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--cwl-a2), var(--cwl-a1)); }
     .th-names { display: flex; flex-wrap: wrap; gap: 5px; }
     .th-names em { font-style: normal; font-size: .68rem; padding: 2px 8px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--border); color: var(--text-dim); }
+    .cwl-sort { display: inline-flex; gap: 4px; }
+    .cwl-sort button { background: var(--surface-2); border: 1px solid var(--border); color: var(--text-dim); font-size: .66rem; font-weight: 800; letter-spacing: .04em; text-transform: none; padding: 4px 10px; border-radius: 999px; cursor: pointer; }
+    .cwl-sort button.active { background: linear-gradient(135deg, var(--cwl-a1), var(--cwl-a2)); color: #0a0e1a; border-color: transparent; }
+    .cwl-table td.rk1 { color: #facc15; } .cwl-table td.rk2 { color: #cbd5e1; } .cwl-table td.rk3 { color: #fb923c; }
+    .cwl-table tbody tr { transition: background .2s; }
     .cwl-note { font-size: .86rem; color: var(--text-dim); padding: 22px 6px; text-align: center; line-height: 1.5; }
     .cwl-note a { color: var(--cwl-a1); font-weight: 700; text-decoration: none; }
     .cwl-updated { font-size: .74rem; color: var(--text-dim); }
@@ -201,17 +206,37 @@
       }).join("");
     }
 
+    let sortMode = "auto";   // auto | performance | map
+    let lastData = null;
+
+    function effectiveSort(members) {
+      if (sortMode !== "auto") return sortMode;
+      return members.some(m => (m.attacksUsed || 0) > 0) ? "performance" : "map";
+    }
+
     function membersHtml(members) {
-      const rows = members.slice().sort((a, b) => (a.mapPosition || 99) - (b.mapPosition || 99));
+      const mode = effectiveSort(members);
+      const rows = members.slice().sort(mode === "performance"
+        ? (a, b) => (b.totalStars || 0) - (a.totalStars || 0) || (b.avgDestruction || 0) - (a.avgDestruction || 0) || (a.mapPosition || 99) - (b.mapPosition || 99)
+        : (a, b) => (a.mapPosition || 99) - (b.mapPosition || 99));
       return `<table class="cwl-table"><thead><tr><th>#</th><th>Player</th><th>TH</th><th>Atk</th><th>\u2605</th><th>Avg dest.</th></tr></thead><tbody>
-        ${rows.map(m => `<tr><td>${esc(m.mapPosition)}</td>
+        ${rows.map((m, i) => {
+          const n = mode === "performance" ? i + 1 : m.mapPosition;
+          return `<tr><td class="${mode === "performance" && n <= 3 ? "rk" + n : ""}">${esc(n)}</td>
           <td><div class="nm"><span>${esc(m.name)}</span></div></td>
           <td>${esc(m.townhallLevel)}</td><td>${m.attacksUsed || 0}/${m.roundsPlayed || 0}</td>
-          <td>${m.totalStars || 0}</td><td>${(Number(m.avgDestruction) || 0).toFixed(0)}%</td></tr>`).join("")}
+          <td>${m.totalStars || 0}</td><td>${(Number(m.avgDestruction) || 0).toFixed(0)}%</td></tr>`;
+        }).join("")}
       </tbody></table>`;
     }
 
+    function sortToggleHtml(members) {
+      const mode = effectiveSort(members);
+      return `<span class="cwl-sort"><button data-sort="performance" class="${mode === "performance" ? "active" : ""}">Performance</button><button data-sort="map" class="${mode === "map" ? "active" : ""}">Map order</button></span>`;
+    }
+
     function render(d) {
+      lastData = d;
       const view = document.getElementById("cwlView");
       if (!d) { view.innerHTML = `<div class="cwl-card"><div class="cwl-note">CWL data is unavailable right now. Please try again in a minute.</div></div>`; return; }
       if (d.configured === false) {
@@ -233,7 +258,7 @@
             <div class="cwl-card"><div class="cwl-card-title"><span>Rounds</span><span class="cwl-updated">${(d.rounds || []).length} of ${d.roundsTotal || 7}</span></div>${roundsHtml(d)}</div>
             <div class="cwl-card"><div class="cwl-card-title"><span>Town Hall roster</span><span class="cwl-updated">${(d.members || []).length} players</span></div>${thRosterHtml(d.members || [])}</div>
           </div>
-          <div class="cwl-card"><div class="cwl-card-title"><span>Roster &amp; performance</span><span class="cwl-updated">${(d.members || []).length} players</span></div>${membersHtml(d.members || [])}</div>
+          <div class="cwl-card"><div class="cwl-card-title"><span>Roster &amp; performance</span>${sortToggleHtml(d.members || [])}</div>${membersHtml(d.members || [])}</div>
         </div>`;
     }
 
@@ -248,6 +273,13 @@
       if (m === mode) render(cache[m]);
       document.getElementById("cwlUpdated").textContent = "Updated " + new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     }
+
+    document.getElementById("cwlView").addEventListener("click", e => {
+      const b = e.target.closest(".cwl-sort button");
+      if (!b || !lastData) return;
+      sortMode = b.dataset.sort;
+      render(lastData);
+    });
 
     document.getElementById("cwlModes").addEventListener("click", e => {
       const b = e.target.closest(".cwl-mode");
