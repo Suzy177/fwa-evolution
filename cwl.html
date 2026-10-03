@@ -82,6 +82,12 @@
     .cwl-sort button.active { background: linear-gradient(135deg, var(--cwl-a1), var(--cwl-a2)); color: #0a0e1a; border-color: transparent; }
     .cwl-table td.rk1 { color: #facc15; } .cwl-table td.rk2 { color: #cbd5e1; } .cwl-table td.rk3 { color: #fb923c; }
     .cwl-table tbody tr { transition: background .2s; }
+    .mv { font-size: .6rem; margin-left: 4px; font-weight: 800; }
+    .mv.up { color: #34d399; } .mv.down { color: #f87171; }
+    .cwl-table tr.flash td { animation: cwlflash 3s ease-out; }
+    @keyframes cwlflash { from { background: rgba(250,204,21,.28); } to { background: transparent; } }
+    .live-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #34d399; margin-right: 6px; box-shadow: 0 0 0 0 rgba(52,211,153,.6); animation: cwlpulse 1.8s infinite; }
+    @keyframes cwlpulse { 70% { box-shadow: 0 0 0 7px rgba(52,211,153,0); } 100% { box-shadow: 0 0 0 0 rgba(52,211,153,0); } }
     .cwl-note { font-size: .86rem; color: var(--text-dim); padding: 22px 6px; text-align: center; line-height: 1.5; }
     .cwl-note a { color: var(--cwl-a1); font-weight: 700; text-decoration: none; }
     .cwl-updated { font-size: .74rem; color: var(--text-dim); }
@@ -206,6 +212,31 @@
       }).join("");
     }
 
+    const snap = {};     // clan mode -> { tag: {rank, stars, atk} }
+    const deltas = {};   // clan mode -> { tag: {move, changed} }
+
+    function perfSort(a, b) {
+      return (b.totalStars || 0) - (a.totalStars || 0) || (b.avgDestruction || 0) - (a.avgDestruction || 0) || (a.mapPosition || 99) - (b.mapPosition || 99);
+    }
+
+    function trackChanges(m, d) {
+      if (!d || !d.members) return;
+      const ranked = d.members.slice().sort(perfSort);
+      const cur = {};
+      ranked.forEach((x, i) => { cur[x.tag] = { rank: i + 1, stars: x.totalStars || 0, atk: x.attacksUsed || 0 }; });
+      const prev = snap[m], out = {};
+      if (prev) ranked.forEach(x => {
+        const a = prev[x.tag], b = cur[x.tag];
+        if (!a) return;
+        const move = a.rank - b.rank, changed = a.stars !== b.stars || a.atk !== b.atk;
+        if (move || changed) out[x.tag] = { move, changed };
+      });
+      snap[m] = cur;
+      deltas[m] = out;
+    }
+
+    const curDeltas = () => deltas[mode] || {};
+
     let sortMode = "auto";   // auto | performance | map
     let lastData = null;
 
@@ -216,13 +247,14 @@
 
     function membersHtml(members) {
       const mode = effectiveSort(members);
-      const rows = members.slice().sort(mode === "performance"
-        ? (a, b) => (b.totalStars || 0) - (a.totalStars || 0) || (b.avgDestruction || 0) - (a.avgDestruction || 0) || (a.mapPosition || 99) - (b.mapPosition || 99)
-        : (a, b) => (a.mapPosition || 99) - (b.mapPosition || 99));
+      const dl = curDeltas();
+      const rows = members.slice().sort(mode === "performance" ? perfSort : (a, b) => (a.mapPosition || 99) - (b.mapPosition || 99));
       return `<table class="cwl-table"><thead><tr><th>#</th><th>Player</th><th>TH</th><th>Atk</th><th>\u2605</th><th>Avg dest.</th></tr></thead><tbody>
         ${rows.map((m, i) => {
           const n = mode === "performance" ? i + 1 : m.mapPosition;
-          return `<tr><td class="${mode === "performance" && n <= 3 ? "rk" + n : ""}">${esc(n)}</td>
+          const dd = dl[m.tag] || {};
+          const arrow = mode === "performance" && dd.move ? `<span class="mv ${dd.move > 0 ? "up" : "down"}">${dd.move > 0 ? "\u25b2" : "\u25bc"}${Math.abs(dd.move)}</span>` : "";
+          return `<tr class="${dd.changed ? "flash" : ""}"><td class="${mode === "performance" && n <= 3 ? "rk" + n : ""}">${esc(n)}${arrow}</td>
           <td><div class="nm"><span>${esc(m.name)}</span></div></td>
           <td>${esc(m.townhallLevel)}</td><td>${m.attacksUsed || 0}/${m.roundsPlayed || 0}</td>
           <td>${m.totalStars || 0}</td><td>${(Number(m.avgDestruction) || 0).toFixed(0)}%</td></tr>`;
@@ -262,17 +294,34 @@
         </div>`;
     }
 
-    async function load(m, force) {
+    function isLive(d) {
+      return !!d && d.inLeague !== false && d.active !== false &&
+        (d.state === "inWar" || d.state === "preparation" || (d.rounds || []).some(r => r.state === "inWar" || r.state === "preparation"));
+    }
+
+    async function load(m, force, silent) {
       if (!force && cache[m]) { render(cache[m]); return; }
-      document.getElementById("cwlView").innerHTML = `<div class="cwl-note">Loading CWL…</div>`;
+      if (!silent) document.getElementById("cwlView").innerHTML = `<div class="cwl-note">Loading CWL\u2026</div>`;
       try {
         const res = await fetch(API + m);
         if (!res.ok) throw new Error("bad status");
         cache[m] = await res.json();
-      } catch (e) { cache[m] = null; }
+        trackChanges(m, cache[m]);
+      } catch (e) { if (!silent || !cache[m]) cache[m] = null; }
       if (m === mode) render(cache[m]);
-      document.getElementById("cwlUpdated").textContent = "Updated " + new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      const t = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      document.getElementById("cwlUpdated").innerHTML = (isLive(cache[m]) ? '<span class="live-dot"></span>Live \u00b7 ' : "") + "Updated " + t;
     }
+
+    let timer;
+    function schedule() {
+      clearTimeout(timer);
+      timer = setTimeout(async () => {
+        if (!document.hidden) await load(mode, true, true);
+        schedule();
+      }, isLive(cache[mode]) ? 30000 : 300000);
+    }
+    document.addEventListener("visibilitychange", () => { if (!document.hidden) load(mode, true, true); });
 
     document.getElementById("cwlView").addEventListener("click", e => {
       const b = e.target.closest(".cwl-sort button");
@@ -287,12 +336,11 @@
       mode = b.dataset.mode;
       document.querySelectorAll(".cwl-mode").forEach(x => x.classList.toggle("active", x === b));
       setAccent(mode);
-      load(mode, false);
+      load(mode, false).then(schedule);
     });
 
     setAccent(mode);
-    load(mode, true);
-    setInterval(() => load(mode, true), 120000);
+    load(mode, true).then(schedule);
   })();
   </script>
   <script src="/visitor-counter.js" defer></script>
