@@ -725,6 +725,12 @@
       border: 1px solid var(--border); color: var(--text-dim); white-space: nowrap; }
     .army-chip b { color: var(--text); font-weight: 700; margin-left: 3px; }
     .army-chip.maxed b { color: #ffc850; }
+
+    .les-card { margin: 16px 0 4px; padding: 12px 14px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; }
+    .les-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+    .les-head b { font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; color: var(--text); }
+    .les-head span { font-size: .7rem; color: var(--text-dim); }
+    .les-note { font-size: .78rem; color: var(--text-dim); padding: 6px 0 2px; }
     .army-chip.equipped { border-color: var(--wlb-accent1); color: var(--text); }
     .rank-summary { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 4px; }
     .rank-summary-tile {
@@ -1591,6 +1597,38 @@
     return `<span class="rank-chip ${cls}">${label}<b>#${rank}</b><i>/${total}</i></span>`;
   }
 
+  const LES_STATS = [
+    ["trophies", "🏆 Home trophies"], ["builderBaseTrophies", "🔨 Builder trophies"],
+    ["expLevel", "⭐ XP level"], ["donations", "🎁 Donations (season)"],
+  ];
+  const lesCache = {};
+  async function loadLesotho(tag) {
+    if (lesCache[tag]) return lesCache[tag];
+    try {
+      const res = await fetch(`https://api.stathut.in/api/player/${encodeURIComponent(tag)}/lesotho`);
+      if (!res.ok) throw new Error("lesotho unavailable");
+      const d = await res.json();
+      if (d.ready) lesCache[tag] = d;
+      return d;
+    } catch (err) { return null; }
+  }
+  function renderLesotho(d) {
+    if (!d) return `<div class="les-card"><div class="les-head"><b>🇱🇸 Lesotho</b></div><div class="les-note">Lesotho ranking is unavailable right now.</div></div>`;
+    if (!d.ready) return `<div class="les-card"><div class="les-head"><b>🇱🇸 Lesotho</b></div><div class="les-note">Lesotho ranking is still being built — check back shortly.</div></div>`;
+    if (!d.found) return `<div class="les-card"><div class="les-head"><b>🇱🇸 Lesotho</b></div><div class="les-note">This player isn't in a Lesotho-located clan, so there is no Lesotho rank.</div></div>`;
+    const rows = LES_STATS.map(([k, label]) => {
+      const r = d.ranks && d.ranks[k];
+      if (!r) return "";
+      const pct = Math.max(4, Math.round((1 - (r.rank - 1) / d.total) * 100));
+      return `<div class="rank-row"><div class="rank-row-top">
+        <div class="rank-label">${label}</div><div class="rank-value">${Number(r.value).toLocaleString()}</div>
+        <div class="rank-chips">${rankChip("Lesotho ", r.rank, d.total)}</div></div>
+        <div class="rank-bar"><span style="width:${pct}%"></span></div></div>`;
+    }).join("");
+    const upd = d.updated ? `Updated ${fmtDate(d.updated)}` : "";
+    return `<div class="les-card"><div class="les-head"><b>🇱🇸 Lesotho</b><span>${d.total.toLocaleString()} players in ${d.clans.toLocaleString()} clans · ${upd}</span></div>${rows}</div>`;
+  }
+
   async function renderRankingsTab(p) {
     const box = document.getElementById("profileTabRankings");
     if (!p.tag) {
@@ -1598,7 +1636,7 @@
       return;
     }
     box.innerHTML = `<div class="profile-empty">Calculating rankings\u2026</div>`;
-    const family = await loadFamily();
+    const [family, lesotho] = await Promise.all([loadFamily(), loadLesotho(p.tag)]);
     const clanList = family.filter(x => x.clan === THIS_CLAN);
     const me = family.find(x => x.tag === p.tag);
     if (!me || !clanList.length) {
@@ -1640,6 +1678,7 @@
         <div class="rank-summary-tile"><b>${clanTop3}</b><span>top-3 finishes in clan</span></div>
         <div class="rank-summary-tile"><b>${familyTop3}</b><span>top-3 finishes in the family</span></div>
       </div>
+      ${renderLesotho(lesotho)}
       ${sections}
       <div class="profile-hist-note">Family = all three FWA Evolution clans (${family.length} players). Ranks update with the leaderboards data.</div>`;
   }
