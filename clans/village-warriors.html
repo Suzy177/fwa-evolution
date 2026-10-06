@@ -1591,7 +1591,7 @@
         <div class="profile-stats">${stats}</div>
         <div class="profile-section-title">Achievements</div>
         <div class="profile-achv">${achv}</div>
-        ${link}
+        ${link}${window.fwaMe ? window.fwaMe.buttonHtml(p) : ""}
       </div>
       <div id="profileTabArmy" hidden></div>
       <div id="profileTabRankings" hidden></div>
@@ -2039,5 +2039,6 @@
 
   <script src="/visitor-counter.js" defer></script>
   <script src="/war-ticker.js" defer></script>
+  <script src="/my-profile.js" defer></script>
 </body>
 </html>
