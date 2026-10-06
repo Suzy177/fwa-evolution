@@ -132,7 +132,7 @@
       <div class="cwl-title-row">
         <div>
           <h1>Clan War League</h1>
-          <p class="cwl-sub">Live rounds and roster performance for our serious and casual CWL clans.</p>
+          <p class="cwl-sub">Live rounds and roster performance for our CWL clans: Serious, Casual and Asphyxiated.</p>
         </div>
         <span class="cwl-updated" id="cwlUpdated"></span>
       </div>
@@ -140,6 +140,7 @@
       <div class="cwl-modes" id="cwlModes">
         <button class="cwl-mode active" data-mode="serious">Serious CWL</button>
         <button class="cwl-mode" data-mode="casual">Casual CWL</button>
+        <button class="cwl-mode" data-mode="asphyxiated">Asphyxiated</button>
       </div>
 
       <div id="cwlView"><div class="cwl-note">Loading CWL…</div></div>
@@ -155,7 +156,7 @@
   <script>
   (function () {
     const API = "https://api.stathut.in/api/cwl/";
-    const ACCENT = { serious: ["#fb7185", "#e11d48"], casual: ["#34d399", "#10b981"] };
+    const ACCENT = { serious: ["#fb7185", "#e11d48"], casual: ["#34d399", "#10b981"], asphyxiated: ["#60a5fa", "#3b82f6"] };
     const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
     const cache = {};
     let mode = "serious";
