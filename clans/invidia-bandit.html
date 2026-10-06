@@ -50,14 +50,54 @@
       z-index: 0;
     }
 
+    .detail-hero-bg {
+      --ha1: var(--wlb-accent1, var(--accent-fwa));
+      --ha2: var(--wlb-accent2, var(--accent-fwa-2));
+      --ray-from: 10deg; --ray-x: 30.5%; --ray-y: 50%;
+      overflow: hidden;
+    }
+
+    /* light rays fanning out from behind the badge */
     .detail-hero-bg::before {
       content: "";
       position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
-      background-size: 34px 34px;
+      inset: -40%;
+      background:
+        conic-gradient(from var(--ray-from) at var(--ray-x) var(--ray-y),
+          transparent 0deg,
+          color-mix(in srgb, var(--ha1) 46%, transparent) 9deg, transparent 20deg,
+          color-mix(in srgb, var(--ha2) 34%, transparent) 33deg, transparent 47deg,
+          color-mix(in srgb, var(--ha1) 36%, transparent) 62deg, transparent 78deg,
+          color-mix(in srgb, var(--ha2) 26%, transparent) 94deg, transparent 112deg,
+          color-mix(in srgb, var(--ha1) 22%, transparent) 130deg, transparent 150deg,
+          transparent 360deg);
+      -webkit-mask-image: radial-gradient(ellipse 50% 40% at 42% 50%, #000 15%, transparent 100%);
+      mask-image: radial-gradient(ellipse 50% 40% at 42% 50%, #000 15%, transparent 100%);
+      animation: heroRays 26s ease-in-out infinite alternate;
+    }
+
+    /* castle ramparts along the bottom edge */
+    .detail-hero-bg::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 46%;
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 480 120%22 preserveAspectRatio=%22none%22%3E%3Cpath d=%22M0 120 V84 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 H100 V44 H97 L120 18 L143 44 H140 V84 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 H245 V30 H242 L262 8 L282 30 H279 V84 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 H382 V52 H379 L400 24 L421 52 H418 V84 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 V78 h6 V84 h6 H480 V120 Z%22 fill=%22%2306080f%22 fill-opacity=%22.86%22/%3E%3Crect x=%22115%22 y=%2258%22 width=%223%22 height=%226%22 rx=%221%22 fill=%22%23fbbf24%22 opacity=%22.75%22/%3E%3Crect x=%22124%22 y=%2270%22 width=%223%22 height=%226%22 rx=%221%22 fill=%22%23fbbf24%22 opacity=%22.75%22/%3E%3Crect x=%22117%22 y=%2284%22 width=%223%22 height=%226%22 rx=%221%22 fill=%22%23fbbf24%22 opacity=%22.75%22/%3E%3Crect x=%22257%22 y=%2244%22 width=%223%22 height=%226%22 rx=%221%22 fill=%22%23fbbf24%22 opacity=%22.75%22/%3E%3Crect x=%22266%22 y=%2256%22 width=%223%22 height=%226%22 rx=%221%22 fill=%22%23fbbf24%22 opacity=%22.75%22/%3E%3Crect x=%22259%22 y=%2270%22 width=%223%22 height=%226%22 rx=%221%22 fill=%22%23fbbf24%22 opacity=%22.75%22/%3E%3Crect x=%22395%22 y=%2266%22 width=%223%22 height=%226%22 rx=%221%22 fill=%22%23fbbf24%22 opacity=%22.75%22/%3E%3Crect x=%22404%22 y=%2278%22 width=%223%22 height=%226%22 rx=%221%22 fill=%22%23fbbf24%22 opacity=%22.75%22/%3E%3Crect x=%22397%22 y=%2292%22 width=%223%22 height=%226%22 rx=%221%22 fill=%22%23fbbf24%22 opacity=%22.75%22/%3E%3C/svg%3E") repeat-x left bottom / auto 100%,
+        linear-gradient(to top, color-mix(in srgb, var(--ha1) 16%, transparent), transparent 70%);
+      opacity: .95;
+    }
+
+    @keyframes heroRays {
+      from { transform: rotate(-4deg) scale(1); }
+      to   { transform: rotate(4deg) scale(1.06); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .detail-hero-bg::before { animation: none; }
+    }
+    @media (max-width: 560px) {
+      .detail-hero-bg { --ray-from: 0deg; --ray-x: 50%; --ray-y: 33%; }
+      .detail-hero-bg::after { height: 26%; }
     }
 
     .detail-hero-body {
