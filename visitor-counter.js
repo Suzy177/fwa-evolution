@@ -50,7 +50,7 @@
     fetch(API_ENDPOINT, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ visitor_id: getVisitorId() }),
+      body: JSON.stringify({ visitor_id: getVisitorId(), host: location.hostname, path: location.pathname, ref: (function () { try { return document.referrer ? new URL(document.referrer).hostname : ""; } catch (e) { return ""; } })() }),
     })
       .then(function (r) {
         if (!r.ok) throw new Error("API " + r.status);

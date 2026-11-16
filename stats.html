@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Site Stats | FWA Evolution</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/stathut-v2.css">
+  <link rel="icon" type="image/png" href="/assets/fwa-evolution-logo.png">
+  <style>
+    :root { --st-a: #60a5fa; --st-b: #fbbf24; }
+    .st-wrap { max-width: 1100px; margin: 0 auto; }
+    .st-title h1 { margin: 0; font-family: "Orbitron", sans-serif; font-size: 1.6rem; color: var(--text); }
+    .st-sub { color: var(--text-dim); font-size: .86rem; margin: 4px 0 16px; }
+    .st-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; align-items: center; }
+    .st-label { font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); font-weight: 800; margin-right: 4px; }
+    .st-chip { background: var(--surface-2); border: 1px solid var(--border); color: var(--text-dim); font-weight: 800; font-size: .78rem; padding: 7px 14px; border-radius: 999px; cursor: pointer; white-space: nowrap; font-family: inherit; }
+    .st-chip:hover { color: var(--text); }
+    .st-chip.active { background: linear-gradient(135deg, var(--st-a), #3b82f6); color: #0a0e1a; border-color: transparent; }
+    .st-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 14px 0 18px; }
+    .st-kpi { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; }
+    .st-kpi small { display: block; font-size: .66rem; letter-spacing: .1em; text-transform: uppercase; color: var(--text-dim); font-weight: 800; }
+    .st-kpi b { display: block; margin-top: 6px; font-family: "Orbitron", sans-serif; font-size: 1.5rem; color: var(--text); }
+    .st-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px 18px; margin-bottom: 16px; min-width: 0; }
+    .st-card h2 { margin: 0 0 12px; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); font-weight: 800; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .st-legend { display: inline-flex; gap: 12px; text-transform: none; letter-spacing: 0; font-size: .74rem; }
+    .st-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+    .st-chart svg { width: 100%; height: auto; display: block; }
+    .st-chart text { fill: var(--text-dim); font-size: 11px; font-family: inherit; }
+    .st-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 760px) { .st-grid { grid-template-columns: 1fr; } }
+    .st-bar { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.05); font-size: .86rem; color: var(--text); }
+    .st-bar:last-child { border-bottom: none; }
+    .st-bar span.n { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .st-bar span.c { font-weight: 800; font-variant-numeric: tabular-nums; }
+    .st-bar .t { grid-column: 1 / -1; height: 5px; border-radius: 99px; background: rgba(255,255,255,.07); overflow: hidden; }
+    .st-bar .t i { display: block; height: 100%; background: linear-gradient(90deg, #3b82f6, var(--st-a)); }
+    .st-empty { color: var(--text-dim); font-size: .86rem; padding: 18px 4px; text-align: center; line-height: 1.5; }
+    .st-note { color: var(--text-dim); font-size: .76rem; margin-top: 6px; }
+  </style>
+</head>
+<body class="sh2">
+
+  <header class="sh2-topbar">
+    <a href="/" class="sh2-logo"><img src="/assets/fwa-evolution-logo.png" alt="FWA Evolution">FWA Evolution</a>
+    <nav class="sh2-nav">
+      <a href="/">Home</a>
+      <a href="/family.html">Family</a>
+      <a href="/clans.html">Clans</a>
+      <a href="/fwa-war-status.html">War Status</a>
+      <a href="/cwl.html">CWL</a>
+      <a href="/hall-of-fame.html">Hall of Fame</a>
+      <a href="/rules.html">Rules</a>
+      <a href="/fwa-guide.html">Guide</a>
+      <a href="/base-guide.html">Bases</a>
+      <a href="/join.html">Join</a>
+    </nav>
+  </header>
+
+  <section class="sh2-section">
+    <div class="st-wrap">
+      <div class="st-title">
+        <h1>Site Stats</h1>
+        <p class="st-sub">Visits to our site: how many, which pages, and where visitors come from. No names or IP addresses are stored.</p>
+      </div>
+
+      <div class="st-row" id="stSite"></div>
+      <div class="st-row" id="stRange"></div>
+
+      <div class="st-kpis" id="stKpis"></div>
+
+      <div class="st-card">
+        <h2><span>Visits per day</span>
+          <span class="st-legend"><span><i style="background:var(--st-a)"></i>Visits</span><span><i style="background:var(--st-b)"></i>Unique visitors</span></span>
+        </h2>
+        <div class="st-chart" id="stChart"><div class="st-empty">Loading stats…</div></div>
+      </div>
+
+      <div class="st-grid">
+        <div class="st-card"><h2>Top pages</h2><div id="stPages"></div></div>
+        <div class="st-card"><h2>Where visitors come from</h2><div id="stRefs"></div></div>
+      </div>
+      <p class="st-note">Daily counts use India time (IST). Obvious bots are skipped. Numbers here and in Google Analytics can differ slightly, because they count in different ways.</p>
+    </div>
+  </section>
+
+  <footer class="sh2-footer">
+    <a href="https://stathut.in/">&larr; Back to StatHut Home</a>
+  </footer>
+
+  <script>
+  (function () {
+    var API = "https://api.stathut.in/api/visitors/stats";
+    var site = "fwa.stathut.in", days = 30;
+    var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+    var num = function (v) { return Number(v || 0).toLocaleString(); };
+
+    function chips(hosts) {
+      var list = [{ k: "fwa.stathut.in", n: "This site" }, { k: "", n: "All sites" }];
+      document.getElementById("stSite").innerHTML = '<span class="st-label">Site</span>' +
+        list.map(function (x) { return '<button class="st-chip ' + (x.k === site ? "active" : "") + '" data-site="' + x.k + '">' + x.n + "</button>"; }).join("");
+      document.getElementById("stRange").innerHTML = '<span class="st-label">Period</span>' +
+        [7, 30, 90].map(function (d) { return '<button class="st-chip ' + (d === days ? "active" : "") + '" data-days="' + d + '">' + d + " days</button>"; }).join("");
+    }
+
+    function chart(series) {
+      var W = 760, H = 240, L = 34, B = 26, T = 10, R = 6;
+      var max = Math.max.apply(null, series.map(function (s) { return s.visits; }).concat([1]));
+      var step = max <= 5 ? 1 : max <= 10 ? 2 : Math.ceil(max / 5 / 5) * 5;
+      var top = Math.ceil(max / step) * step;
+      var iw = W - L - R, ih = H - T - B, bw = iw / series.length;
+      var y = function (v) { return T + ih - (v / top) * ih; };
+      var s = '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Visits per day">';
+      for (var g = 0; g <= top; g += step) {
+        s += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(g) + '" y2="' + y(g) + '" stroke="rgba(255,255,255,.07)"/>' +
+             '<text x="' + (L - 6) + '" y="' + (y(g) + 4) + '" text-anchor="end">' + g + "</text>";
+      }
+      var every = Math.ceil(series.length / 8);
+      series.forEach(function (d, i) {
+        var x = L + i * bw, w = Math.max(2, bw * 0.7), x0 = x + (bw - w) / 2;
+        s += '<g><title>' + esc(d.date) + ": " + d.visits + " visits, " + d.uniques + " unique</title>" +
+             '<rect x="' + x0 + '" y="' + y(d.visits) + '" width="' + w + '" height="' + (T + ih - y(d.visits)) + '" rx="2" fill="#60a5fa" opacity=".85"/>' +
+             '<rect x="' + (x0 + w * 0.25) + '" y="' + y(d.uniques) + '" width="' + (w * 0.5) + '" height="' + (T + ih - y(d.uniques)) + '" rx="2" fill="#fbbf24"/></g>';
+        if (i % every === 0) {
+          s += '<text x="' + (x + bw / 2) + '" y="' + (H - 8) + '" text-anchor="middle">' + esc(d.date.slice(5)) + "</text>";
+        }
+      });
+      return s + "</svg>";
+    }
+
+    function bars(list, el, label) {
+      if (!list.length) { document.getElementById(el).innerHTML = '<div class="st-empty">No data yet.</div>'; return; }
+      var m = list[0].count || 1;
+      document.getElementById(el).innerHTML = list.map(function (x) {
+        return '<div class="st-bar"><span class="n">' + esc(label(x.name)) + '</span><span class="c">' + num(x.count) + '</span><div class="t"><i style="width:' + Math.max(3, x.count / m * 100) + '%"></i></div></div>';
+      }).join("");
+    }
+
+    function render(d) {
+      var today = d.series.length ? d.series[d.series.length - 1] : { visits: 0, uniques: 0 };
+      var avg = d.series.length ? d.totalVisits / d.series.length : 0;
+      document.getElementById("stKpis").innerHTML = [
+        ["Visits", num(d.totalVisits)], ["Unique visitors", num(d.uniqueVisitors)],
+        ["Per day (avg)", avg.toFixed(1)], ["Today", num(today.visits)]
+      ].map(function (k) { return '<div class="st-kpi"><small>' + k[0] + "</small><b>" + k[1] + "</b></div>"; }).join("");
+      document.getElementById("stChart").innerHTML = d.totalVisits
+        ? chart(d.series)
+        : '<div class="st-empty">No visits recorded in this period yet. Stats started collecting on the day this page went live, so the chart fills in over the next days.</div>';
+      bars(d.pages, "stPages", function (n) { return n === "/" ? "/ (home)" : n; });
+      bars(d.refs, "stRefs", function (n) { return n === "direct" ? "Direct / typed link / chat app" : n; });
+    }
+
+    function load() {
+      chips();
+      fetch(API + "?days=" + days + (site ? "&host=" + encodeURIComponent(site) : ""))
+        .then(function (r) { if (!r.ok) throw new Error("bad"); return r.json(); })
+        .then(render)
+        .catch(function () { document.getElementById("stChart").innerHTML = '<div class="st-empty">Stats are unavailable right now. Please try again in a minute.</div>'; });
+    }
+
+    document.addEventListener("click", function (e) {
+      var b = e.target.closest("[data-site],[data-days]");
+      if (!b) return;
+      if (b.hasAttribute("data-site")) site = b.getAttribute("data-site");
+      if (b.hasAttribute("data-days")) days = parseInt(b.getAttribute("data-days"), 10);
+      load();
+    });
+    load();
+  })();
+  </script>
+  <script src="/mobile-nav.js" defer></script>
+  <script src="/my-profile.js" defer></script>
+</body>
+</html>
