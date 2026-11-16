@@ -482,3 +482,17 @@ body.sh2 {
   .sh2-warbar-inner { flex-direction: column; align-items: stretch; text-align: center; }
   .sh2-warbar-chips { justify-content: center; }
 }
+
+/* ---------- motion: smooth page-to-page fade, button feel ---------- */
+@view-transition { navigation: auto; }
+::view-transition-old(root) { animation: fx-out .18s ease both; }
+::view-transition-new(root) { animation: fx-in-v .28s ease both; }
+@keyframes fx-out { to { opacity: 0; } }
+@keyframes fx-in-v { from { opacity: 0; } }
+.sh2-nav a { transition: color .18s ease, transform .18s ease; }
+.sh2-nav a:hover { transform: translateY(-1px); }
+button, .btn { transition: transform .15s ease, filter .15s ease, background .18s ease, color .18s ease; }
+button:active, .btn:active { transform: scale(.96); }
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+}
