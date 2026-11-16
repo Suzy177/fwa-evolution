@@ -1455,7 +1455,7 @@
   function getPlayerIcon(p) {
     const mapped = TROOP_ICON_MAP[p.topTroop];
     if (mapped) return mapped;
-    const th = Math.max(8, Math.min(18, p.townHallLevel || 10));
+    const th = Math.max(8, Math.min(19, p.townHallLevel || 10));
     return `/assets/th/th${th}.png`;
   }
 

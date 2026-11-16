@@ -185,7 +185,7 @@
     }
     const catOf = k => CATS.find(c => c.key === k);
 
-    function icon(p) { return p.townHallLevel ? `/assets/th/th${Math.max(9, Math.min(18, p.townHallLevel))}.png` : "/assets/fwa-evolution-logo.png"; }
+    function icon(p) { return p.townHallLevel ? `/assets/th/th${Math.max(9, Math.min(19, p.townHallLevel))}.png` : "/assets/fwa-evolution-logo.png"; }
     function href(p) { return `/clans/${p.clanSlug}.html?player=${encodeURIComponent(p.tag || "")}`; }
 
     function chips() {
