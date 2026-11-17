@@ -377,7 +377,14 @@
     }
 
     .book-callout strong { color: var(--text); }
-  </style>
+      .th19-rules { margin: 18px auto 18px; max-width: 760px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px 20px; }
+    .th19-rules-title { margin: 0 0 10px; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 800; color: #fbbf24; }
+    .th19-rules ul { list-style: none; margin: 0; padding: 0; }
+    .th19-rules li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.06); font-size: .9rem; color: var(--text-dim); line-height: 1.5; }
+    .th19-rules li:last-child { border-bottom: none; }
+    .th19-rules li strong { display: inline-block; min-width: 150px; color: var(--text); }
+    @media (max-width: 560px) { .th19-rules li strong { display: block; min-width: 0; } }
+</style>
   <meta name="description" content="Approved FWA base layouts by Town Hall level.">
   <meta property="og:site_name" content="FWA Evolution">
   <meta property="og:type" content="website">
@@ -423,7 +430,7 @@
           <div class="book-emblem">
             <img src="/assets/fwa-evolution-logo.png" alt="FWA Evolution">
           </div>
-          <span class="book-tag">TH8 – TH18 COVERED</span>
+          <span class="book-tag">TH8 – TH19 COVERED</span>
         </div>
       </div>
 
@@ -447,6 +454,17 @@
       </div>
       <p class="th-carousel-label" id="thCarouselLabel"></p>
 
+      <div class="th19-rules">
+        <p class="th19-rules-title">TH19 · FWA base layout guidelines</p>
+        <ul>
+          <li><strong>Town Hall</strong> Any setting is fine, original preferred. Same rules for position and gaps.</li>
+          <li><strong>Squad Barracks</strong> In the Town Hall section with the other non-damage-dealing buildings.</li>
+          <li><strong>Guardian Shrine</strong> In the Queen section, any setting. Must be exposed and not overlap other sections.</li>
+          <li><strong>Spiky Towers</strong> In the Queen section, exposed (preferably on the edge of the map).</li>
+          <li><strong>Firecracker Towers</strong> In the Queen section, in the same spot as the Scattershots they replaced.</li>
+        </ul>
+      </div>
+
       <div class="book-callout danger">
         <strong>Your base is still your responsibility.</strong>&nbsp;These links are a starting point — confirm your layout matches current FWA rules after every Town Hall upgrade. See the <a href="/fwa-guide.html" style="color:var(--accent-mwl);font-weight:700;">Guide</a> for full base requirements.
       </div>
@@ -461,6 +479,7 @@
 
   <script>
   const TH_LAYOUTS = [
+    { label: "TH19", img: "/assets/bases/th19.jpg", collection: "", layout: "https://link.clashofclans.com/en?action=OpenLayout&id=TH19%3AWB%3AAAAAAgAAAAMz5X5PxUks1unXfuvUXbgO" },
     { label: "TH18", img: "/assets/bases/th18.jpg", collection: "http://tiny.cc/fwabases18", layout: "https://link.clashofclans.com/en?action=OpenLayout&id=TH18%3AWB%3AAAAAAgAAAAMIFXlpMp2DcHS1uqUMNgA4" },
     { label: "TH17", img: "/assets/bases/th17.jpg", collection: "http://tiny.cc/fwabases17", layout: "https://link.clashofclans.com/en?action=OpenLayout&id=TH17%3AWB%3AAAAAMwAAAAJvKqSJR0K6j5vKXNzKC0Eo" },
     { label: "TH16", img: "/assets/bases/th16.jpg", collection: "http://tiny.cc/fwabases16", layout: "https://link.clashofclans.com/en?action=OpenLayout&id=TH16%3AWB%3AAAAAWQAAAAHYhYD8UAx4YzwvwSR5_kYp" },
@@ -491,7 +510,7 @@
         <div class="th-body">
           <span class="th-sub">TOWN HALL ${item.label.replace("TH", "")}</span>
           <div class="th-links">
-            <a href="${item.collection}" target="_blank" onclick="event.stopPropagation()">Collection</a>
+            ${item.collection ? `<a href="${item.collection}" target="_blank" onclick="event.stopPropagation()">Collection</a>` : ""}
             <a class="primary" href="${item.layout}" target="_blank" onclick="event.stopPropagation()">Open Layout</a>
           </div>
         </div>
