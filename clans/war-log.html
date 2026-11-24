@@ -380,6 +380,21 @@
       .wp-row .wp-val { grid-column:3; grid-row:1; }
       .wp-row .wp-bar-cell { grid-column:2 / 4; grid-row:2; }
     }
+
+    /* Trends tab */
+    .tr-chips { display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:12px; margin-bottom:18px; }
+    .tr-chip { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 14px; }
+    .tr-chip b { display:block; font-size:1.35rem; }
+    .tr-chip span { color:var(--text-dim); font-size:.75rem; text-transform:uppercase; letter-spacing:.04em; }
+    @media (max-width:620px) { .tr-chips { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+    @media (max-width:620px) { .wl-tabs { gap:12px; overflow-x:auto; } .wl-tab { font-size:.78rem; white-space:nowrap; } }
+    .tr-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 16px; margin-bottom:18px; }
+    .tr-card h3 { margin:0 0 4px; font-size:.95rem; }
+    .tr-legend { display:flex; gap:16px; flex-wrap:wrap; color:var(--text-dim); font-size:.78rem; margin-bottom:8px; }
+    .tr-legend i { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:6px; vertical-align:-1px; }
+    .tr-scroll { overflow-x:auto; }
+    .tr-scroll svg { display:block; }
+    .tr-scroll text { fill:var(--text-dim); font-size:11px; }
   </style>
   <meta name="description" content="Recent war results and statistics for FWA Evolution clans.">
   <meta property="og:site_name" content="FWA Evolution">
@@ -422,6 +437,7 @@
       <div class="wl-tabs">
         <button class="wl-tab active" data-tab="log">▦ Log</button>
         <button class="wl-tab" data-tab="stats">📈 Statistics</button>
+        <button class="wl-tab" data-tab="trends">📊 Trends</button>
         <button class="wl-tab" data-tab="players">🏅 Players</button>
       </div>
 
@@ -439,6 +455,7 @@
 
       <div id="wlLogView"></div>
       <div id="wlStatsView" style="display:none;"></div>
+      <div id="wlTrendsView" style="display:none;"><div class="wl-empty">Loading war trends...</div></div>
       <div id="wlPlayersView" style="display:none;">
         <div class="wp-toolbar">
           <div class="wl-pills">
@@ -709,7 +726,9 @@
         document.getElementById("wlLogView").style.display = t === "log" ? "" : "none";
         document.getElementById("wlStatsView").style.display = t === "stats" ? "" : "none";
         document.getElementById("wlPlayersView").style.display = t === "players" ? "" : "none";
-        document.querySelector(".wl-filter-row").style.display = t === "players" ? "none" : "";
+        document.getElementById("wlTrendsView").style.display = t === "trends" ? "" : "none";
+        document.querySelector(".wl-filter-row").style.display = (t === "players" || t === "trends") ? "none" : "";
+        if (t === "trends" && !trLoaded) loadTrends();
         if (t === "players" && !wpData.wins) loadPlayers();
       });
     });
@@ -809,6 +828,91 @@
       });
     });
     document.getElementById("wpMinAttacks").addEventListener("change", renderPlayers);
+
+    // ---- Trends tab: war-by-war charts from app.stathut.in ----
+    let trLoaded = false;
+    async function loadTrends() {
+      const view = document.getElementById("wlTrendsView");
+      try {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 10000);
+        const res = await fetch(`https://app.stathut.in/clans/${CLAN_TAGS[slug]}/war-stats`, { signal: ctrl.signal });
+        clearTimeout(timer);
+        if (!res.ok) throw new Error(res.status);
+        const data = await res.json();
+        trLoaded = true;
+        renderTrends(data.summary || {}, (data.trend || []).slice(-30));
+      } catch (e) {
+        view.innerHTML = `<div class="wl-empty">Couldn't load war trends right now. Try again later.</div>`;
+      }
+    }
+    function trDate(iso) {
+      const d = new Date(`${iso.slice(0,4)}-${iso.slice(4,6)}-${iso.slice(6,8)}T00:00:00Z`);
+      return d.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+    }
+    function trWon(w) {
+      return w.clan_stars > w.opponent_stars || (w.clan_stars === w.opponent_stars && w.clan_destruction > w.opponent_destruction);
+    }
+    function trStarsChart(wars) {
+      const H = 240, padL = 36, padB = 46, padT = 10, slot = 30;
+      const W = Math.max(640, padL + wars.length * slot + 10);
+      const max = Math.max(10, ...wars.map(w => Math.max(w.clan_stars, w.opponent_stars)));
+      const top = Math.ceil(max / 25) * 25;
+      const y = v => padT + (H - padT - padB) * (1 - v / top);
+      let g = "";
+      for (let v = 0; v <= top; v += top / 5) {
+        g += `<line x1="${padL}" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="rgba(148,163,184,.15)"/><text x="${padL - 6}" y="${y(v) + 4}" text-anchor="end">${Math.round(v)}</text>`;
+      }
+      wars.forEach((w, i) => {
+        const x = padL + i * slot + 4, bw = 10, won = trWon(w);
+        const tip = `${wpEsc(w.opponent_name)} · ${trDate(w.start_time)}\nUs ${w.clan_stars} ⭐ vs ${w.opponent_stars} ⭐ · ${won ? "Win" : "Loss"}`;
+        g += `<g><title>${tip}</title>
+          <rect x="${x}" y="${y(w.clan_stars)}" width="${bw}" height="${y(0) - y(w.clan_stars)}" rx="2" fill="var(--wl-accent1, #ff9c2a)"/>
+          <rect x="${x + bw + 2}" y="${y(w.opponent_stars)}" width="${bw}" height="${y(0) - y(w.opponent_stars)}" rx="2" fill="#64748b"/>
+          <circle cx="${x + bw + 1}" cy="${H - padB + 12}" r="4" fill="${won ? "#22c55e" : "#ef4444"}"/></g>`;
+        if (i % 3 === 0) g += `<text x="${x + bw}" y="${H - 8}" text-anchor="middle">${trDate(w.start_time)}</text>`;
+      });
+      return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${g}</svg>`;
+    }
+    function trDestrChart(wars) {
+      const H = 200, padL = 36, padB = 26, padT = 10, slot = 30;
+      const W = Math.max(640, padL + wars.length * slot + 10);
+      const y = v => padT + (H - padT - padB) * (1 - v / 100);
+      const x = i => padL + i * slot + 15;
+      let g = "";
+      [0, 25, 50, 75, 100].forEach(v => {
+        g += `<line x1="${padL}" x2="${W}" y1="${y(v)}" y2="${y(v)}" stroke="rgba(148,163,184,.15)"/><text x="${padL - 6}" y="${y(v) + 4}" text-anchor="end">${v}%</text>`;
+      });
+      const line = (key, color) => `<polyline fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round" points="${wars.map((w, i) => `${x(i)},${y(w[key])}`).join(" ")}"/>` +
+        wars.map((w, i) => `<circle cx="${x(i)}" cy="${y(w[key])}" r="3.5" fill="${color}"><title>${wpEsc(w.opponent_name)} · ${Number(w[key]).toFixed(1)}%</title></circle>`).join("");
+      g += line("opponent_destruction", "#64748b") + line("clan_destruction", "var(--wl-accent1, #ff9c2a)");
+      return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${g}</svg>`;
+    }
+    function renderTrends(sum, wars) {
+      const view = document.getElementById("wlTrendsView");
+      if (!wars.length) { view.innerHTML = `<div class="wl-empty">No finished wars tracked for this clan yet. Check back after its next war.</div>`; return; }
+      const done = (sum.wins || 0) + (sum.losses || 0) + (sum.ties || 0);
+      const rate = done ? Math.round((sum.wins || 0) / done * 100) : 0;
+      view.innerHTML = `
+        <div class="tr-chips">
+          <div class="tr-chip"><b>${sum.wins || 0} – ${sum.losses || 0}</b><span>Wins – Losses</span></div>
+          <div class="tr-chip"><b>${rate}%</b><span>Win rate</span></div>
+          <div class="tr-chip"><b>${Number(sum.avg_stars_for || 0).toFixed(1)}</b><span>Avg stars for</span></div>
+          <div class="tr-chip"><b>${Number(sum.avg_stars_against || 0).toFixed(1)}</b><span>Avg stars against</span></div>
+        </div>
+        <div class="tr-card">
+          <h3>⭐ Stars per war</h3>
+          <div class="tr-legend"><span><i style="background:var(--wl-accent1, #ff9c2a)"></i>${wpEsc(meta.name)}</span><span><i style="background:#64748b"></i>Opponent</span><span><i style="background:#22c55e;border-radius:50%"></i>Win</span><span><i style="background:#ef4444;border-radius:50%"></i>Loss</span></div>
+          <div class="tr-scroll">${trStarsChart(wars)}</div>
+        </div>
+        <div class="tr-card">
+          <h3>% Destruction per war</h3>
+          <div class="tr-legend"><span><i style="background:var(--wl-accent1, #ff9c2a)"></i>${wpEsc(meta.name)}</span><span><i style="background:#64748b"></i>Opponent</span></div>
+          <div class="tr-scroll">${trDestrChart(wars)}</div>
+        </div>
+        <p class="wp-note">Last ${wars.length} finished wars tracked by StatHut. Tap or hover a bar for details.</p>`;
+      view.querySelectorAll(".tr-scroll").forEach(el => { el.scrollLeft = el.scrollWidth; });
+    }
     loadWarLog();
   </script>
 
