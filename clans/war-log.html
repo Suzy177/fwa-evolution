@@ -361,6 +361,25 @@
       font-size: .85rem;
     }
     .wl-back-link:hover { color: var(--text); }
+
+    /* Players tab (war performance) */
+    .wp-toolbar { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; margin-bottom:14px; }
+    .wp-note { color:var(--text-dim); font-size:.82rem; margin:0 0 16px; }
+    .wp-list { display:flex; flex-direction:column; gap:8px; }
+    .wp-row { display:grid; grid-template-columns:34px minmax(0,1.4fr) minmax(0,2fr) auto; align-items:center; gap:12px;
+      background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px 14px; }
+    .wp-rank { width:28px; height:28px; border-radius:50%; background:var(--surface-2); display:grid; place-items:center; font-weight:800; font-size:.8rem; }
+    .wp-row:nth-child(1) .wp-rank, .wp-row:nth-child(2) .wp-rank, .wp-row:nth-child(3) .wp-rank { background:var(--wl-accent1, var(--accent-fwa)); color:#0a0e1a; }
+    .wp-name { font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .wp-sub { color:var(--text-dim); font-size:.75rem; }
+    .wp-bar-track { height:10px; background:var(--surface-2); border-radius:999px; overflow:hidden; }
+    .wp-bar-fill { height:100%; border-radius:999px; background:linear-gradient(90deg, var(--wl-accent2, var(--accent-fwa-2)), var(--wl-accent1, var(--accent-fwa))); }
+    .wp-val { font-weight:800; font-size:1rem; text-align:right; min-width:58px; white-space:nowrap; }
+    @media (max-width:620px) {
+      .wp-row { grid-template-columns:28px minmax(0,1fr) auto; }
+      .wp-row .wp-val { grid-column:3; grid-row:1; }
+      .wp-row .wp-bar-cell { grid-column:2 / 4; grid-row:2; }
+    }
   </style>
   <meta name="description" content="Recent war results and statistics for FWA Evolution clans.">
   <meta property="og:site_name" content="FWA Evolution">
@@ -403,6 +422,7 @@
       <div class="wl-tabs">
         <button class="wl-tab active" data-tab="log">▦ Log</button>
         <button class="wl-tab" data-tab="stats">📈 Statistics</button>
+        <button class="wl-tab" data-tab="players">🏅 Players</button>
       </div>
 
       <div class="wl-filter-row">
@@ -419,6 +439,25 @@
 
       <div id="wlLogView"></div>
       <div id="wlStatsView" style="display:none;"></div>
+      <div id="wlPlayersView" style="display:none;">
+        <div class="wp-toolbar">
+          <div class="wl-pills">
+            <button class="wl-pill active" data-wp-mode="wins">Win Wars</button>
+            <button class="wl-pill" data-wp-mode="all">All Wars</button>
+          </div>
+          <div class="wl-size-select">
+            <span>⚔ Min Attacks</span>
+            <select id="wpMinAttacks">
+              <option value="1">1+</option>
+              <option value="5" selected>5+</option>
+              <option value="10">10+</option>
+              <option value="20">20+</option>
+            </select>
+          </div>
+        </div>
+        <p class="wp-note" id="wpNote"></p>
+        <div class="wp-list" id="wpList"><div class="wl-empty">Loading player stats...</div></div>
+      </div>
 
       <a href="/clans.html" class="wl-back-link">← Back to Clans</a>
 
@@ -666,9 +705,12 @@
       tab.addEventListener("click", () => {
         document.querySelectorAll(".wl-tab").forEach(t => t.classList.remove("active"));
         tab.classList.add("active");
-        const isLog = tab.dataset.tab === "log";
-        document.getElementById("wlLogView").style.display = isLog ? "" : "none";
-        document.getElementById("wlStatsView").style.display = isLog ? "none" : "";
+        const t = tab.dataset.tab;
+        document.getElementById("wlLogView").style.display = t === "log" ? "" : "none";
+        document.getElementById("wlStatsView").style.display = t === "stats" ? "" : "none";
+        document.getElementById("wlPlayersView").style.display = t === "players" ? "" : "none";
+        document.querySelector(".wl-filter-row").style.display = t === "players" ? "none" : "";
+        if (t === "players" && !wpData.wins) loadPlayers();
       });
     });
 
@@ -714,6 +756,59 @@
       };
     });
 
+
+    // ---- Players tab: per-player war performance from app.stathut.in ----
+    const CLAN_TAGS = { "the-shield": "PGPPQRLY", "invidia-bandit": "9VG8P90Q", "village-warriors": "LL2C8L8V" };
+    const wpData = {};
+    let wpMode = "wins";
+    function wpEsc(t) { return String(t == null ? "" : t).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+    async function fetchPlayers(mode) {
+      const url = `https://app.stathut.in/clans/${CLAN_TAGS[slug]}/war-stats` + (mode === "wins" ? "?wins_only=true" : "");
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 10000);
+      try {
+        const res = await fetch(url, { signal: ctrl.signal });
+        if (!res.ok) throw new Error(res.status);
+        return (await res.json()).members || [];
+      } finally { clearTimeout(timer); }
+    }
+    async function loadPlayers() {
+      const list = document.getElementById("wpList");
+      if (!wpData[wpMode]) {
+        list.innerHTML = `<div class="wl-empty">Loading player stats...</div>`;
+        try { wpData[wpMode] = await fetchPlayers(wpMode); }
+        catch (e) { list.innerHTML = `<div class="wl-empty">Couldn't load player stats right now. Try again later.</div>`; return; }
+      }
+      renderPlayers();
+    }
+    function renderPlayers() {
+      const list = document.getElementById("wpList");
+      const min = parseInt(document.getElementById("wpMinAttacks").value, 10);
+      const rows = (wpData[wpMode] || []).filter(m => m.total_attacks >= min);
+      document.getElementById("wpNote").textContent = wpMode === "wins"
+        ? "Counting attacks from win-wars only — in FWA lose-wars, low hits are part of the plan."
+        : "Counting attacks from every war, including FWA lose-wars.";
+      if (!rows.length) { list.innerHTML = `<div class="wl-empty">No players match this filter yet.</div>`; return; }
+      list.innerHTML = rows.map((m, i) => `
+        <div class="wp-row">
+          <div class="wp-rank">${i + 1}</div>
+          <div style="min-width:0">
+            <div class="wp-name">${wpEsc(m.attacker_name)}</div>
+            <div class="wp-sub">${m.three_star_count}/${m.total_attacks} triples · ${Number(m.avg_destruction || 0).toFixed(1)}%</div>
+          </div>
+          <div class="wp-bar-cell"><div class="wp-bar-track"><div class="wp-bar-fill" style="width:${(m.avg_stars / 3) * 100}%"></div></div></div>
+          <div class="wp-val">⭐ ${Number(m.avg_stars).toFixed(2)}</div>
+        </div>`).join("");
+    }
+    document.querySelectorAll("[data-wp-mode]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("[data-wp-mode]").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        wpMode = btn.dataset.wpMode;
+        loadPlayers();
+      });
+    });
+    document.getElementById("wpMinAttacks").addEventListener("change", renderPlayers);
     loadWarLog();
   </script>
 
